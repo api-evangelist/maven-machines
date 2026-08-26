@@ -1,0 +1,207 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Manifest Commands API",
+    "description": "Documentation for Manifest Command API",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "https://integrations.mavenmachines.com"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "apiKey"
+      }
+    },
+    "schemas": {
+      "ManifestEventSourceRequestDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "example": "12345678",
+            "description": "Unique identifier of the user who performed the command (optional)"
+          },
+          "displayName": {
+            "type": "string",
+            "example": "Last, First",
+            "description": "Display name of the user who performed the command (optional)"
+          },
+          "system": {
+            "type": "string",
+            "example": "AS400",
+            "description": "Name of system where the command origination from (i.e. Scheduler, AS400, TMS, etc...)"
+          }
+        }
+      },
+      "ManifestCommandRequestDto": {
+        "type": "object",
+        "properties": {
+          "commandType": {
+            "type": "string",
+            "example": "CreateManifest",
+            "description": "Command name"
+          },
+          "payload": {
+            "type": "object",
+            "example": {
+              "manifestNumber": "Manifest",
+              "trailerNumber": "Trailer",
+              "driverCode": "Driver",
+              "originLocationCode": "PITT",
+              "originDoorNumber": "3",
+              "destinationLocationCode": "PHL",
+              "destinationDoorNumber": "5",
+              "status": "Planning",
+              "currentLocation": "IN_TRANSIT",
+              "scheduledStartLoadingTime": "2024-05-30T18:00:00Z",
+              "scheduledStartUnloadingTime": "2024-05-30T19:00:00Z",
+              "scheduledFinishUnloadingTime": "2024-05-30T19:45:00Z",
+              "scheduledCloseTime": "2024-05-30T20:00:00Z",
+              "associatedProNumbers": [
+                {
+                  "proNumber": "pro-1234",
+                  "status": "planned"
+                }
+              ],
+              "associatedMovements": [
+                {
+                  "sequenceNumber": 0,
+                  "referenceIds": {
+                    "hookNumber": "hook-1234"
+                  }
+                }
+              ],
+              "hazmat": true,
+              "poison": false,
+              "food": true
+            }
+          },
+          "referenceIds": {
+            "type": "object",
+            "example": {
+              "loadNumber": "12345678"
+            },
+            "description": "A set of references that defines an identifier"
+          },
+          "eventSource": {
+            "$ref": "#/components/schemas/ManifestEventSourceRequestDto"
+          }
+        },
+        "required": [
+          "commandType",
+          "payload",
+          "referenceIds"
+        ]
+      },
+      "ManifestCommandsRequestDto": {
+        "type": "object",
+        "properties": {
+          "commands": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ManifestCommandRequestDto"
+            }
+          }
+        },
+        "required": [
+          "commands"
+        ]
+      },
+      "ManifestCommandResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false,
+            "description": "Determines whether the command was successfully executed"
+          },
+          "errors": {
+            "example": [
+              "Driver with the specified driver code not found"
+            ],
+            "description": "List of errors that occurred during command processing",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "success"
+        ]
+      },
+      "ManifestCommandResponsesDto": {
+        "type": "object",
+        "properties": {
+          "commandResponses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ManifestCommandResponseDto"
+            }
+          }
+        },
+        "required": [
+          "commandResponses"
+        ]
+      }
+    }
+  },
+  "paths": {
+    "/manifests/commands": {
+      "post": {
+        "operationId": "ManifestCommandsController_applyManifestCommands",
+        "summary": "POST /manifests/commands",
+        "description": "API to send manifest and movement commands",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManifestCommandsRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returned when command processing is completed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManifestCommandResponsesDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Returned when a request fails due to an error in the request from the client."
+          },
+          "500": {
+            "description": "Returned when an unknown server error has occurred."
+          }
+        },
+        "tags": [
+          "Manifests"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+  },
+  "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+  }
+}

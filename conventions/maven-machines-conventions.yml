@@ -1,0 +1,173 @@
+generated: '2026-08-25'
+method: searched
+source: >-
+  https://maven-machines.readme.io/docs/basic-concepts.md,
+  https://maven-machines.readme.io/docs/pagination.md,
+  https://maven-machines.readme.io/docs/commands-and-event-sourcing.md,
+  https://maven-machines.readme.io/docs/command-reference.md,
+  https://maven-machines.readme.io/docs/return-events.md,
+  https://maven-machines.readme.io/docs/standard-tms-integration.md,
+  and openapi/*.json
+auth:
+  style: api-key-header
+  header: apiKey
+  scope: >-
+    One key per fleet per environment. The key both authenticates and selects the company — one
+    spec response describes a 401 as "This endpoint may only be executed for company 1". The
+    planning-and-dispatch definition additionally templates the company into the server URL
+    (https://integrations.mavenmachines.com/companies/{companyKey}/).
+  oauth: false
+  see: authentication/maven-machines-authentication.yml
+idempotency:
+  supported: partial
+  mechanism: upsert-by-caller-supplied-key
+  header: null
+  detail: >-
+    Maven publishes NO `Idempotency-Key` header. Retry safety instead comes from upsert semantics
+    keyed on identifiers the caller owns. The master-data and transactional write endpoints are
+    explicitly documented as add-or-update: `POST /shipment` "Adds or updates a shipment in the
+    Maven system" and is "designed to take in continuous updates"; `POST /shipments/bulkUpsert`,
+    `POST /shipment-locations` ("adding or updating"), `POST /linehaul/manifest` and
+    `POST /linehaul/trip` are named upserts; `POST /customers` "Adds or updates a customer record".
+    Re-sending the same payload converges on the same state.
+  not_idempotent:
+  - surface: POST /manifests/commands
+    reason: >-
+      The linehaul commands API is event-sourced. A command that validates produces an immutable
+      appended event ("Events ... can be created, or read, but they can't be updated or deleted"),
+      so re-sending a command appends history rather than converging. `referenceIds` identify the
+      target object, not the command instance, and no dedupe key is documented.
+  - surface: POST /vehicles, POST /trailers
+    reason: >-
+      Create-only. "If the vehicleNumber already exists, the request will be rejected" — a retry
+      after a successful create returns an error rather than a no-op.
+  retention: not published
+pagination:
+  styles:
+  - name: cursor-time
+    detail: >-
+      Time-cursor pagination for event-shaped endpoints. The caller passes an ISO 8601 datetime and
+      receives everything generated after it, then advances the cursor. Documented against
+      `GET /return-events`.
+    params:
+    - startTime
+    example: 'GET https://integrations.mavenmachines.com/return-events?startTime=2024-01-01T17:01:00.000Z'
+  - name: offset
+    detail: >-
+      Offset pagination on collection reads. `GET /company-locations` is documented as retrieving
+      "all company location records in the Maven system with an offset parameter"; the reports
+      endpoint is described as paginated.
+    params:
+    - offset
+  source: https://maven-machines.readme.io/docs/pagination
+  note: >-
+    Maven states plainly that "a few of Maven's API utilize pagination patterns" — pagination is
+    per-endpoint, not a global convention, and each endpoint's parameters must be read from its
+    reference page.
+field_expansion:
+  supported: false
+metadata:
+  supported: true
+  mechanism: referenceIds
+  detail: >-
+    The commands API carries a `referenceIds` object "defined by the integrating system", which
+    "must be unique and remain constant throughout the lifecycle of the object" — Maven's external
+    correlation-id surface. `eventSource` (userId, displayName, system) carries provenance for
+    audit.
+request_tracing:
+  request_id_header: null
+  detail: >-
+    No request-id or correlation header is documented, and none appears in any published spec.
+    Auditing is done through the `eventSource` block on commands, not through transport headers.
+versioning:
+  in_path: false
+  see: lifecycle/maven-machines-lifecycle.yml
+error_envelope:
+  shape: '{ "type": <CODE>, "message": <string> }'
+  media_type: application/json
+  rfc9457: false
+  see: errors/maven-machines-problem-types.yml
+rate_limit_signaling:
+  headers: []
+  status_on_exhaustion: null
+  detail: >-
+    No rate-limit headers, quotas, or 429 responses are documented anywhere in the developer hub,
+    and no published operation declares a 429 response.
+  see: rate-limits/maven-machines-rate-limits.yml
+dry_run_mode:
+  supported: false
+  detail: >-
+    No dry-run, preview, or validate-only parameter exists on any published operation. The nearest
+    equivalent is the separate staging environment, which is a full parallel deployment rather than
+    a per-request rehearsal.
+reversibility:
+  grade: documented
+  grade_rationale: >-
+    Reversal operations exist and are documented by name for every major write surface, but Maven
+    publishes no time window for any of them. Per the rubric that is `documented` (0.4), not
+    `verified` — and inventing a window here would be worse than recording its absence, because a
+    dispatcher acting on a wrong window moves real freight.
+  write_surface: true
+  reversals:
+  - action: Create / update a P&D or linehaul manifest
+    operation: POST /manifests/commands (commandType CancelManifest)
+    operationId: ManifestCommandsController_applyManifestCommands
+    reversal: CancelManifest
+    window: not stated
+    effect: >-
+      "Used to cancel the Manifest and any associated Movements. This will remove the Manifest from
+      the Maven User Interface." Reversible in turn — "A canceled Manifest can be updated utilizing
+      other commands and as a result will be visible in the User Interface" — but "New Movements
+      cannot be added to a canceled manifest."
+    docs: https://maven-machines.readme.io/docs/command-reference
+  - action: Add a movement to a manifest
+    operation: POST /manifests/commands (commandType DeleteMovement)
+    operationId: ManifestCommandsController_applyManifestCommands
+    reversal: DeleteMovement
+    window: not stated
+    effect: Deletes a movement from the manifest.
+    docs: https://maven-machines.readme.io/docs/command-reference
+  - action: Plan / load shipments on a manifest
+    operation: POST /manifests/commands
+    operationId: ManifestCommandsController_applyManifestCommands
+    reversal: RemoveShipmentsFromManifest / UnloadShipmentsOnManifest
+    window: not stated
+    effect: Paired inverse commands exist for both the plan and the load steps.
+    docs: https://maven-machines.readme.io/docs/command-reference
+  - action: Create a truckload trip
+    operation: POST /truckload/trips
+    operationId: TruckloadController_createTrip
+    reversal: DELETE /truckload/trips (TruckloadController_deleteTrip)
+    window: not stated
+    effect: Deletes the trip in the Maven system.
+    docs: https://maven-machines.readme.io/reference/truckloadcontroller_deletetrip
+  - action: Create a truckload stop
+    operation: POST /truckload/stops
+    operationId: TruckloadController_createStop
+    reversal: DELETE /truckload/stops (TruckloadController_deleteStop)
+    window: not stated
+    effect: '"Deletes a stop in the Maven system. If the stop does not exist, we error out."'
+    docs: https://maven-machines.readme.io/reference/truckloadcontroller_deletestop
+  - action: Submit a pickup request
+    operation: POST /shipment
+    operationId: post-shipment
+    reversal: POST /pickupRequests/cancel (post-pickuprequestscancel)
+    window: not stated
+    effect: '"Cancels a pickup request in the Maven system."'
+    docs: https://maven-machines.readme.io/reference/post-pickuprequestscancel
+  - action: Upsert a Reddy Ice case (middleware)
+    operation: PUT /cases/{caseNumber}
+    operationId: ReddyIceCaseController_upsertCase
+    reversal: DELETE /cases/{caseNumber} (ReddyIceCaseController_deleteCase)
+    window: not stated
+    effect: Deletes the case.
+    docs: https://docs.mavenmachines.com/
+  irreversible:
+  - surface: return-events queue
+    detail: >-
+      Return events are immutable and expire on a fixed 30-day retention; there is no replay or
+      restore path once an event ages out.
+  - surface: event stream
+    detail: >-
+      By design — "You can't rewrite history." Cancellation is modelled as a new compensating
+      command, never as an erasure of the prior event.

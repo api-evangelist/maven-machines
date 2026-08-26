@@ -1,0 +1,36 @@
+overlay: 1.0.0
+info:
+  title: Maven Machines averitt-middleware — API Evangelist enhancements
+  version: 1.0.0
+extends: ../openapi/maven-machines-averitt-middleware-openapi.json
+x-generated: '2026-08-25'
+x-method: generated
+x-source: openapi/maven-machines-averitt-middleware-openapi.json
+actions:
+- target: $
+  description: Add the staging environment Maven documents alongside production.
+  update:
+    servers:
+    - url: https://integrations.mavenmachines.com
+    - url: https://integrations-staging.mavenmachines.com
+      description: Staging (separate data store, no SLA)
+- target: $
+  description: Apply the declared apiKey scheme as a document-level security requirement. The published
+    document defines the scheme but never applies it, so a generated client authenticates nothing by default.
+  update:
+    security:
+    - api_key: []
+- target: $.info
+  description: Add the published support and documentation contacts.
+  update:
+    contact:
+      name: Maven Machines Support
+      url: https://help.mavenmachines.com/
+      email: info@mavenmachines.com
+- target: $.info
+  description: Record API Evangelist provenance for this profile.
+  update:
+    x-api-evangelist:
+      profile: https://github.com/api-evangelist/maven-machines
+      harvested: '2026-08-25'
+      source: https://maven-machines.readme.io/

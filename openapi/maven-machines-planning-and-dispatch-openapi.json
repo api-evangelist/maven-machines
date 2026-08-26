@@ -1,0 +1,2202 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "planning-and-dispatch",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://integrations.mavenmachines.com/companies/{companyKey}/",
+      "variables": {
+        "companyKey": {
+          "default": "companyKey"
+        }
+      }
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "sec0": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "apiKey"
+      }
+    }
+  },
+  "security": [
+    {
+      "sec0": []
+    }
+  ],
+  "paths": {
+    "/customers": {
+      "post": {
+        "summary": "POST /customers",
+        "description": "Adds or updates a customer record in the Maven system.",
+        "operationId": "post-companiescompanyidcustomers",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "customerNumber",
+                  "customerName"
+                ],
+                "properties": {
+                  "customerNumber": {
+                    "type": "string",
+                    "description": "(Req) External identifier for the customer record. If customerNumber already known, will update the record."
+                  },
+                  "customerName": {
+                    "type": "string",
+                    "description": "Name of customer"
+                  },
+                  "customerName2": {
+                    "type": "string",
+                    "description": "Additional name of customer"
+                  },
+                  "customerPhoneDay": {
+                    "type": "string",
+                    "description": "Daytime phone number of customer"
+                  },
+                  "customerPhoneNight": {
+                    "type": "string",
+                    "description": "Evening phone number of customer"
+                  },
+                  "addressStreet": {
+                    "type": "string",
+                    "description": "Address of the customer"
+                  },
+                  "addressStreet2": {
+                    "type": "string",
+                    "description": "Address 2 of the customer"
+                  },
+                  "addressCity": {
+                    "type": "string",
+                    "description": "City of the customer"
+                  },
+                  "addressState": {
+                    "type": "string",
+                    "description": "State of the customer. Must be specified as 2-char ISO state code."
+                  },
+                  "addressZip": {
+                    "type": "string",
+                    "description": "Zip code of the customer"
+                  },
+                  "addressCountry": {
+                    "type": "string",
+                    "description": "Country of the customer. Must be specified as 2-char or 3-char ISO country code."
+                  },
+                  "terminalCode": {
+                    "type": "string",
+                    "description": "Terminal code associated with this customer"
+                  },
+                  "timezone": {
+                    "type": "string",
+                    "description": "Timezone where customer is located. Must be a valid timezone name."
+                  },
+                  "notes": {
+                    "type": "string",
+                    "description": "Additional information about this customer"
+                  },
+                  "attributes": {
+                    "type": "object",
+                    "description": "Key / Value object of custom records Maven will store and return with every request related to this customer record.",
+                    "properties": {}
+                  },
+                  "availability": {
+                    "type": "array",
+                    "description": "Open/Close times for customer",
+                    "items": {
+                      "properties": {
+                        "dayOfWeek": {
+                          "type": "string",
+                          "description": "Day of week for availability segment",
+                          "enum": [
+                            "su",
+                            "mo",
+                            "tu",
+                            "we",
+                            "th",
+                            "fr",
+                            "sa"
+                          ]
+                        },
+                        "availability": {
+                          "type": "boolean",
+                          "description": "Is customer available during these hours?"
+                        },
+                        "forPickups": {
+                          "type": "boolean",
+                          "description": "Can pickups be made during these hours?"
+                        },
+                        "forDeliveries": {
+                          "type": "boolean",
+                          "description": "Can deliveries be made during these hours?"
+                        },
+                        "fromTime": {
+                          "type": "string",
+                          "description": "Start time for this availability window. 24 hour, HH:mm:ss format"
+                        },
+                        "tillTime": {
+                          "type": "string",
+                          "description": "End time for this availability window. 24 hour, HH:mm:ss format"
+                        }
+                      },
+                      "required": [
+                        "dayOfWeek",
+                        "availability",
+                        "forPickups",
+                        "forDeliveries",
+                        "fromTime",
+                        "tillTime"
+                      ],
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "{}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "{\n\t\"type\": \"BAD_REQUEST\",\n\t\"message\": \"text description of error\"\n}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "BAD_REQUEST"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "text description of error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "{\n\t\"type\": \"SERVER_ERROR\",\n  \"message\": \"A server error has occurred\"\n}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "SERVER_ERROR"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "A server error has occurred"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/pickupRequests/cancel": {
+      "post": {
+        "summary": "POST /pickupRequests/cancel",
+        "description": "Cancels a pickup request in the Maven system",
+        "operationId": "post-pickuprequestscancel",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "refNumber",
+                  "terminalCode"
+                ],
+                "properties": {
+                  "refNumber": {
+                    "type": "string",
+                    "description": "TMS-assigned shipment reference for pickup"
+                  },
+                  "terminalCode": {
+                    "type": "string",
+                    "description": "Terminal code associated with this pickup request"
+                  },
+                  "pickupSequenceNumber": {
+                    "type": "integer",
+                    "description": "For fleets that associate more than one shipment to a pickup request, the pickupSequenceNumber can be used to differentiate shipments. The combination of refNumber and pickupSequenceNumber must be unique.",
+                    "format": "int32"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Result": {
+                    "value": "{}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "{\n\t\"type\": \"BAD_REQUEST\",\n\t\"message\": \"text description of error\"\n}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "BAD_REQUEST"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "text description of error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "{\n\t\"type\": \"SERVER_ERROR\",\n  \"message\": \"A server error has occurred\"\n}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "SERVER_ERROR"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "A server error has occurred"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/shipment": {
+      "post": {
+        "summary": "POST /shipment",
+        "description": "Adds or updates a shipment in the Maven system",
+        "operationId": "post-shipment",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "associatedShipment"
+                ],
+                "properties": {
+                  "associatedRouteCode": {
+                    "type": "string",
+                    "description": "Override update, default null. Route code this shipment is associated with. Must be set up beforehand during integration phase. See \"manifestNumber special considerations\" in documentation."
+                  },
+                  "terminalCode": {
+                    "type": "string",
+                    "description": "Not patch or override: either required, or a higher priority field takes precedence. The terminal that owns the shipment. See \"Duplicated fields\" in documentation."
+                  },
+                  "manifestNumber": {
+                    "type": "string",
+                    "description": "Patch update, no default (will not unassign if not provided). External identifier of the manifest. If provided, will assign shipment to that manifest."
+                  },
+                  "associatedShipment": {
+                    "type": "object",
+                    "description": "Associated shipment information",
+                    "required": [
+                      "shipmentType"
+                    ],
+                    "properties": {
+                      "shipmentType": {
+                        "type": "string",
+                        "description": "Type classification for this shipment record",
+                        "enum": [
+                          "pickup",
+                          "delivery",
+                          "checkstop",
+                          "lunch"
+                        ]
+                      },
+                      "proNumber": {
+                        "type": "string",
+                        "description": "Patch update. TMS-assigned PRO Number. Required if shipmentType is \"delivery\". Default is null."
+                      },
+                      "refNumber": {
+                        "type": "string",
+                        "description": "Patch update. TMS-assigned shipment reference. Required if shipmentType is \"pickup\". Default is null."
+                      },
+                      "pickupSequenceNumber": {
+                        "type": "integer",
+                        "description": "For fleets that associate more than one shipment to a pickup request, the pickupSequenceNumber can be used to differentiate shipments. The combination of refNumber and pickupSequenceNumber must be unique.",
+                        "format": "int32"
+                      },
+                      "pickupDate": {
+                        "type": "string",
+                        "description": "Patch update. Default is null. Requested date for this order (as a pickup) to be handled. See \"Duplicated fields\" in documentation.",
+                        "format": "date"
+                      },
+                      "deliveryDate": {
+                        "type": "string",
+                        "description": "Patch update. Default is null. Requested date for this order (as a delivery) to be handled. See \"Duplicated fields\" in documentation.",
+                        "format": "date"
+                      },
+                      "deliveryServiceStartDate": {
+                        "type": "string",
+                        "description": "The earliest date the delivery can be made.",
+                        "format": "date"
+                      },
+                      "deliveryServiceDueDate": {
+                        "type": "string",
+                        "description": "The latest date the delivery can be made. Duplicated deliveryDate.",
+                        "format": "date"
+                      },
+                      "completionCode": {
+                        "type": "string",
+                        "description": "4 digit completion code. When filled in, marks the pickup or delivery as completed in Maven."
+                      },
+                      "shipperCustomerNumber": {
+                        "type": "string",
+                        "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. ID of the shipper (for the pickup) customer. Can be provided in place of manually specifying name, address, etc. See \"Duplicated fields\" in documentation."
+                      },
+                      "shipperCustomerName": {
+                        "type": "string",
+                        "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. Name of the shipper customer associated with the shipment."
+                      },
+                      "shipperCustomerName2": {
+                        "type": "string",
+                        "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. Optional additional name of shipper customer associated with the shipment. See \"Duplicated fields\" in documentation."
+                      },
+                      "shipperCustomerAddress": {
+                        "type": "string",
+                        "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. Address of shipper customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                      },
+                      "shipperCustomerAddress2": {
+                        "type": "string",
+                        "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. Optional address 2 of shipper customer. See \"Duplicated fields\" in documentation."
+                      },
+                      "shipperCustomerCity": {
+                        "type": "string",
+                        "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. City of customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                      },
+                      "shipperCustomerState": {
+                        "type": "string",
+                        "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. State of customer. 2 char ISO state code. Used for geocoding. See \"Duplicated fields\" in documentation."
+                      },
+                      "shipperCustomerZip": {
+                        "type": "string",
+                        "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. Zip of customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                      },
+                      "shipperCustomerCountry": {
+                        "type": "string",
+                        "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. Country of customer. 2 or 3 char ISO country code. Used for geocoding. See \"Duplicated fields\" in documentation."
+                      },
+                      "shipperContactName": {
+                        "type": "string",
+                        "description": "Override for pickup, patch for delivery. Default is null. The name of the person to contact at the shipper."
+                      },
+                      "shipperContactPhone": {
+                        "type": "string",
+                        "description": "Override for pickup, patch for delivery. Default is null. The phone number of the person to contact at the shipper."
+                      },
+                      "shipperContactEmail": {
+                        "type": "string",
+                        "description": "Override for pickup, patch for delivery. Default is null. The email of the person to contact at the shipper."
+                      },
+                      "customerOrderNumber": {
+                        "type": "string",
+                        "description": "Order identification number provided by the shipper.",
+                        "default": ""
+                      },
+                      "consigneeCustomerNumber": {
+                        "type": "string",
+                        "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. ID of the consignee (for the delivery) customer. Can be provided in place of manually specifying name, address, etc. See \"Duplicated fields\" in documentation."
+                      },
+                      "consigneeCustomerName": {
+                        "type": "string",
+                        "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. Name of the consignee customer associated with the shipment."
+                      },
+                      "consigneeCustomerName2": {
+                        "type": "string",
+                        "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. Optional additional name of consignee customer associated with the shipment. See \"Duplicated fields\" in documentation."
+                      },
+                      "consigneeCustomerAddress": {
+                        "type": "string",
+                        "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. Address of consignee customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                      },
+                      "consigneeCustomerAddress2": {
+                        "type": "string",
+                        "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. Optional address 2 of consignee customer. See \"Duplicated fields\" in documentation."
+                      },
+                      "consigneeCustomerCity": {
+                        "type": "string",
+                        "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. City of consignee customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                      },
+                      "consigneeCustomerState": {
+                        "type": "string",
+                        "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. State of consignee customer. 2 char ISO state code. Used for geocoding. See \"Duplicated fields\" in documentation."
+                      },
+                      "consigneeCustomerZip": {
+                        "type": "string",
+                        "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. Zip of consignee customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                      },
+                      "consigneeCustomerCountry": {
+                        "type": "string",
+                        "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. Country of consignee customer. 2 or 3 char ISO country code. Used for geocoding. See \"Duplicated fields\" in documentation."
+                      },
+                      "consigneeContactName": {
+                        "type": "string",
+                        "description": "Override for delivery, patch for pickup. Default is null. The name of the person to contact at the consignee."
+                      },
+                      "consigneeContactPhone": {
+                        "type": "string",
+                        "description": "Override for delivery, patch for pickup. Default is null. The phone number of the person to contact at the consignee."
+                      },
+                      "consigneeContactEmail": {
+                        "type": "string",
+                        "description": "Override for delivery, patch for pickup. Default is null. The email of the person to contact at the consignee."
+                      },
+                      "originTerminalCode": {
+                        "type": "string",
+                        "description": "Patch update: originTerminal information will not be overridden for delivery, required for pickup. The terminal code of where the shipment originated (picked up). See \"Duplicated fields\" in documentation."
+                      },
+                      "destinationTerminalCode": {
+                        "type": "string",
+                        "description": "Patch update: destinationTerminal information will not be overridden for pickup, required for delivery. The terminal code destination of the shipment (when the shipment is a delivery). See \"Duplicated fields\" in documentation."
+                      },
+                      "destinationZipCode": {
+                        "type": "string",
+                        "description": "Patch update. The zipcode destination of the shipment when the consignee is not yet known."
+                      },
+                      "destinationCity": {
+                        "type": "string",
+                        "description": "The city destination of the shipment. Used if the consignee address is not yet known."
+                      },
+                      "destinationState": {
+                        "type": "string",
+                        "description": "The state destination of the shipment. Used if the consignee address is not yet known."
+                      },
+                      "destinationTerminalETA": {
+                        "type": "string",
+                        "description": "Override update. Default is null. The ETA of when the shipment will arrive at the destination terminal.",
+                        "format": "date"
+                      },
+                      "atDestinationTerminal": {
+                        "type": "boolean",
+                        "description": "Override update. Default is false. Whether the shipment is currently at the destination terminal or not."
+                      },
+                      "instructions": {
+                        "type": "string",
+                        "description": "Override update. Default is null. Instructions related to order. Will be shown to driver."
+                      },
+                      "comments": {
+                        "type": "string",
+                        "description": "Override update. Default is null. Comments related to order. Will be shown to driver."
+                      },
+                      "windowStart": {
+                        "type": "string",
+                        "description": "Override update. Default is null. 24 hour HH:mm format. Beginning time when the customer is ready for the driver. In the terminal's timezone."
+                      },
+                      "windowEnd": {
+                        "type": "string",
+                        "description": "Override update. Default is null. 24 hour HH:mm format. Ending time when the customer is ready for the driver. In the terminal's timezone."
+                      },
+                      "serviceTime": {
+                        "type": "integer",
+                        "description": "Override update. Default is null. Estimated service time, in seconds, for this shipment at the customer/location.",
+                        "format": "int32"
+                      },
+                      "signatureRequired": {
+                        "type": "boolean",
+                        "description": "Override update. Default is false. Whether a signature is required during pickup or delivery"
+                      },
+                      "shipmentTotalWeight": {
+                        "type": "number",
+                        "description": "Override update. Total weight of the shipment. See \"Duplicated fields\" in documentation.",
+                        "format": "float"
+                      },
+                      "shipmentTotalPalletEquivalents": {
+                        "type": "number",
+                        "description": "Override update. Total pallet equivalents of the shipment. See \"Duplicated fields\" in documentation.",
+                        "format": "float"
+                      },
+                      "shipmentTotalPalletSpaces": {
+                        "type": "number",
+                        "description": "Override update. Total volume of the shipment, in pallets. See \"Duplicated fields\" in documentation.",
+                        "format": "float"
+                      },
+                      "shipmentTotalHandlingUnits": {
+                        "type": "number",
+                        "description": "Override update. Total handling units of the shipment. See \"Duplicated fields\" in documentation.",
+                        "format": "float"
+                      },
+                      "shipmentTotalPieces": {
+                        "type": "integer",
+                        "description": "Override update. Total pieces of the shipment. See \"Duplicated fields\" in documentation.",
+                        "format": "int32"
+                      },
+                      "shipmentItems": {
+                        "type": "array",
+                        "description": "Array of shipmentItem objects. Override update. See \"Duplicated fields\" in documentation.",
+                        "items": {
+                          "properties": {
+                            "description": {
+                              "type": "string",
+                              "description": "Description of line item for shipment"
+                            },
+                            "sku": {
+                              "type": "string",
+                              "description": "SKU of line item."
+                            },
+                            "weight": {
+                              "type": "number",
+                              "description": "Weight of line item",
+                              "format": "float"
+                            },
+                            "palletEquivalents": {
+                              "type": "number",
+                              "description": "Number of pallet equivalents of line item",
+                              "format": "float"
+                            },
+                            "palletSpaces": {
+                              "type": "number",
+                              "description": "Number of pallet spaces of line item",
+                              "format": "float"
+                            },
+                            "pieces": {
+                              "type": "number",
+                              "description": "Number of pieces of the line item",
+                              "format": "float"
+                            },
+                            "handlingUnits": {
+                              "type": "number",
+                              "description": "Number of handling units of line item",
+                              "format": "float"
+                            },
+                            "hazmat": {
+                              "type": "boolean",
+                              "description": "Whether the line item contains any hazardous materials.",
+                              "default": false
+                            },
+                            "quantities": {
+                              "type": "array",
+                              "description": "Quantity of the line item.",
+                              "items": {
+                                "properties": {
+                                  "unit": {
+                                    "type": "string",
+                                    "description": "Unit of measurement."
+                                  },
+                                  "quantity": {
+                                    "type": "number",
+                                    "description": "Quantity.",
+                                    "default": 1,
+                                    "format": "float"
+                                  }
+                                },
+                                "type": "object"
+                              }
+                            }
+                          },
+                          "type": "object"
+                        }
+                      },
+                      "shipmentAccessorials": {
+                        "type": "array",
+                        "description": "Array of strings. Override update. Default is an empty array. Accessorials associated with the shipment.",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "shipmentTags": {
+                        "type": "array",
+                        "description": "Array of strings. Override update. Default is an empty array. Tags associated with the shipment.",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "callAheadPhone": {
+                        "type": "string",
+                        "description": "Override update. Default is null. A phone number available for the driver to click to call the customer for pickup/delivery."
+                      },
+                      "callAheadMinutes": {
+                        "type": "integer",
+                        "description": "Override update. Default is null. The number of minutes ahead of the stop that the driver should be instructed to call to confirm pickup/delivery",
+                        "format": "int32"
+                      },
+                      "inboundInterlineCarrierName": {
+                        "type": "string",
+                        "description": "The name of the partner carrier who is giving you freight to deliver."
+                      },
+                      "inboundInterlineProNumber": {
+                        "type": "string",
+                        "description": "The PRO number given by the partner carrier who is giving you freight to deliver."
+                      },
+                      "outboundInterlineCarrierName": {
+                        "type": "string",
+                        "description": "The name of the partner carrier who you are handing the freight off to for later delivery."
+                      },
+                      "outboundInterlineProNumber": {
+                        "type": "string",
+                        "description": "The PRO number given by the partner carrier who you are handing the freight off to for later delivery."
+                      },
+                      "inboundPlanningStatus": {
+                        "type": "string",
+                        "description": "[\"unplanned\", \"planning\"]"
+                      },
+                      "requiresCOD": {
+                        "type": "boolean",
+                        "description": "Requires cash on delivery?",
+                        "default": false
+                      },
+                      "requestedDate": {
+                        "type": "string",
+                        "description": "[deprecated. Use deliveryDate or pickupDate]. Not patch or override: either required, or a higher priority field takes precedence. Requested date for this order to be handled. See \"Duplicated fields\" in documentation.",
+                        "format": "date"
+                      },
+                      "customerNumber": {
+                        "type": "string",
+                        "description": "[deprecated. Use consigeeCustomerNumber or shipperCustomerNumber] Not patch or override: either required, or a higher priority field takes precedence. ID of the customer. Can be provided in place of manually specifying name, address, etc. See \"Duplicated fields\" in documentation."
+                      },
+                      "customerName": {
+                        "type": "string",
+                        "description": "[deprecated. Use consigeeCustomerName or shipperCustomerName] Not patch or override: either required, or a higher priority field takes precedence. Name of the customer associated with the shipment. See \"Duplicated fields\" in documentation."
+                      },
+                      "customerName2": {
+                        "type": "string",
+                        "description": "[deprecated. Use consigeeCustomerName2 or shipperCustomerName2] Not patch or override: either required, or a higher priority field takes precedence. Additional name of customer associated with the shipment. See \"Duplicated fields\" in documentation."
+                      },
+                      "customerAddress": {
+                        "type": "string",
+                        "description": "[deprecated. Use consigeeCustomerAddress or shipperCustomerAddress] Not patch or override: either required, or a higher priority field takes precedence. Address of customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                      },
+                      "customerAddress2": {
+                        "type": "string",
+                        "description": "[deprecated. Use consigeeCustomerAddress2 or shipperCustomerAddress2] Not patch or override: either required, or a higher priority field takes precedence. Address 2 of customer. See \"Duplicated fields\" in documentation."
+                      },
+                      "customerCity": {
+                        "type": "string",
+                        "description": "[deprecated. Use consigeeCustomerCity or shipperCustomerCity] Not patch or override: either required, or a higher priority field takes precedence. City of customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                      },
+                      "customerState": {
+                        "type": "string",
+                        "description": "[deprecated. Use consigeeCustomerState or shipperCustomerState] Not patch or override: either required, or a higher priority field takes precedence. State of customer. 2-char ISO state code. Used for geocoding. See \"Duplicated fields\" in documentation."
+                      },
+                      "customerZip": {
+                        "type": "string",
+                        "description": "[deprecated. Use consigeeCustomerZip or shipperCustomerZip] Not patch or override: either required, or a higher priority field takes precedence. Zip of customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                      },
+                      "customerCountry": {
+                        "type": "string",
+                        "description": "[deprecated. Use consigeeCustomerCountry or shipperCustomerCountry] Not patch or override: either required, or a higher priority field takes precedence. Country of customer. 2 or 3 char ISO country code. Used for geocoding. See \"Duplicated fields\" in documentation."
+                      },
+                      "deliveryPriorityLevel": {
+                        "type": "integer",
+                        "description": "The priority level of the shipment. 1 to 4, 4 being highest.",
+                        "format": "int32"
+                      },
+                      "currentTerminalCode": {
+                        "type": "string",
+                        "description": "The string code for the terminal the shipment is currently located at. This takes precedence over atDestinationTerminal."
+                      },
+                      "referenceIds": {
+                        "type": "array",
+                        "description": "Reference IDs of shipment. Used to look up and uniquely identify a shipment. For more details see the section \"Reference IDs\" in <a href=\"https://maven-machines.readme.io/docs/commands-and-event-sourcing\">this guide</a>.",
+                        "items": {
+                          "properties": {
+                            "<referenceIdName>": {
+                              "type": "string",
+                              "description": "User definable referenceID key/value pair. When provided the referenceID is used to look up the shipment in Maven. If multiple IDs are provided and associate to more than one shipment, an error will be returned.",
+                              "default": "<referenceIdValue>"
+                            }
+                          },
+                          "type": "object"
+                        }
+                      },
+                      "linehaulDueDate": {
+                        "type": "string",
+                        "description": "Indicates the due date of the shipment for arrival at the destination terminal by the linehaul network",
+                        "format": "date"
+                      }
+                    }
+                  },
+                  "associatedLinehaul": {
+                    "type": "object",
+                    "description": "Patch update, no default (will not remove from a linehaul collection if not provided).",
+                    "required": [
+                      "manifestNumber"
+                    ],
+                    "properties": {
+                      "manifestNumber": {
+                        "type": "string",
+                        "description": "The external identifier for this linehaul."
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Override update. Default is null. The name of this linehaul"
+                      },
+                      "status": {
+                        "type": "string",
+                        "description": "Override update. Default is \"not started\".",
+                        "enum": [
+                          "not started",
+                          "in transit",
+                          "completed"
+                        ]
+                      },
+                      "originTerminalCode": {
+                        "type": "string",
+                        "description": "Override update. Default is null. The terminal where this linehaul is starting"
+                      },
+                      "originTerminalTimezone": {
+                        "type": "string",
+                        "description": "Override update. Default is null. The timezone that the originTerminal is a part of (https://www.iana.org/time-zones). If we already know about the originTerminal, based on the originTerminalCode, and the timezone with this originTerminal is different than the one provided here, the one previously known about will win."
+                      },
+                      "destinationTerminalCode": {
+                        "type": "string",
+                        "description": "Override update. Default is null. The terminal where this linehaul is finishing"
+                      },
+                      "destinationTerminalTimezone": {
+                        "type": "string",
+                        "description": "Override update. Default is null. The timezone that the destinationTerminal is a part of (https://www.iana.org/time-zones). If we already know about the destinationTerminal, based on the destinationTerminalCode, and the timezone with this destinationTerminal is different than the one provided here, the one previously known about will win."
+                      },
+                      "departureTimestamp": {
+                        "type": "string",
+                        "description": "Override update. Default is null. When the linehaul trip has departed from it's originTerminal (24 hour), in the originTerminal's timezone.  If the originTerminal's timezone is unknown (terminalCode not already in Maven, originTerminalTimezone not provided or not a valid timezone) this will not be stored.",
+                        "format": "date"
+                      },
+                      "expectedArrivalTimestamp": {
+                        "type": "string",
+                        "description": "Override update. Default is null. When the linehaul trip is expected to arrive at it's destinationTerminal (24 hour), in the destinationTerminal's timezone.  If the destinationTerminal's timezone is unknown (terminalCode not already in Maven, destinationTerminalTimezone not provided or not a valid timezone) this will not be stored.",
+                        "format": "date"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": {}
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "{\n\t\"type\": \"BAD_REQUEST\",\n\t\"message\": \"text description of error\"\n}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "BAD_REQUEST"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "text description of error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "{\n\t\"type\": \"SERVER_ERROR\",\n  \"message\": \"A server error has occurred\"\n}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "SERVER_ERROR"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "A server error has occurred"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/shipment/bulkUpsert": {
+      "post": {
+        "summary": "POST /shipments/bulkUpsert",
+        "description": "",
+        "operationId": "shipmentbulkupsert",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "shipments": {
+                    "type": "array",
+                    "description": "List of shipments to be created or updated.",
+                    "items": {
+                      "properties": {
+                        "shipmentType": {
+                          "type": "string",
+                          "description": "Type classification for this shipment record",
+                          "enum": [
+                            "pickup",
+                            "delivery",
+                            "checkstop",
+                            "lunch"
+                          ]
+                        },
+                        "proNumber": {
+                          "type": "string",
+                          "description": "Patch update. TMS-assigned PRO Number. Required if shipmentType is \"delivery\". Default is null."
+                        },
+                        "refNumber": {
+                          "type": "string",
+                          "description": "Patch update. TMS-assigned shipment reference. Required if shipmentType is \"pickup\". Default is null."
+                        },
+                        "pickupSequenceNumber": {
+                          "type": "integer",
+                          "description": "For fleets that associate more than one shipment to a pickup request, the pickupSequenceNumber can be used to differentiate shipments. The combination of refNumber and pickupSequenceNumber must be unique.",
+                          "format": "int32"
+                        },
+                        "pickupDate": {
+                          "type": "string",
+                          "description": "Patch update. Default is null. Requested date for this order (as a pickup) to be handled. See \"Duplicated fields\" in documentation.",
+                          "format": "date"
+                        },
+                        "deliveryDate": {
+                          "type": "string",
+                          "description": "Patch update. Default is null. Requested date for this order (as a delivery) to be handled. See \"Duplicated fields\" in documentation.",
+                          "format": "date"
+                        },
+                        "deliveryServiceStartDate": {
+                          "type": "string",
+                          "description": "The earliest date the delivery can be made.",
+                          "format": "date"
+                        },
+                        "deliveryServiceDueDate": {
+                          "type": "string",
+                          "description": "The latest date the delivery can be made. Duplicated deliveryDate.",
+                          "format": "date"
+                        },
+                        "completionCode": {
+                          "type": "string",
+                          "description": "4 digit completion code. When filled in, marks the pickup or delivery as completed in Maven."
+                        },
+                        "shipperCustomerNumber": {
+                          "type": "string",
+                          "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. ID of the shipper (for the pickup) customer. Can be provided in place of manually specifying name, address, etc. See \"Duplicated fields\" in documentation."
+                        },
+                        "shipperCustomerName": {
+                          "type": "string",
+                          "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. Name of the shipper customer associated with the shipment."
+                        },
+                        "shipperCustomerName2": {
+                          "type": "string",
+                          "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. Optional additional name of shipper customer associated with the shipment. See \"Duplicated fields\" in documentation."
+                        },
+                        "shipperCustomerAddress": {
+                          "type": "string",
+                          "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. Address of shipper customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "shipperCustomerAddress2": {
+                          "type": "string",
+                          "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. Optional address 2 of shipper customer. See \"Duplicated fields\" in documentation."
+                        },
+                        "shipperCustomerCity": {
+                          "type": "string",
+                          "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. City of customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "shipperCustomerState": {
+                          "type": "string",
+                          "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. State of customer. 2 char ISO state code. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "shipperCustomerZip": {
+                          "type": "string",
+                          "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. Zip of customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "shipperCustomerCountry": {
+                          "type": "string",
+                          "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. Country of customer. 2 or 3 char ISO country code. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "shipperContactName": {
+                          "type": "string",
+                          "description": "Override for pickup, patch for delivery. Default is null. The name of the person to contact at the shipper."
+                        },
+                        "shipperContactPhone": {
+                          "type": "string",
+                          "description": "Override for pickup, patch for delivery. Default is null. The phone number of the person to contact at the shipper."
+                        },
+                        "shipperContactEmail": {
+                          "type": "string",
+                          "description": "Override for pickup, patch for delivery. Default is null. The email of the person to contact at the shipper."
+                        },
+                        "customerOrderNumber": {
+                          "type": "string",
+                          "description": "[In Development] Order identification number provided by the shipper.",
+                          "default": "1234"
+                        },
+                        "consigneeCustomerNumber": {
+                          "type": "string",
+                          "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. ID of the consignee (for the delivery) customer. Can be provided in place of manually specifying name, address, etc. See \"Duplicated fields\" in documentation."
+                        },
+                        "consigneeCustomerName": {
+                          "type": "string",
+                          "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. Name of the consignee customer associated with the shipment."
+                        },
+                        "consigneeCustomerName2": {
+                          "type": "string",
+                          "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. Optional additional name of consignee customer associated with the shipment. See \"Duplicated fields\" in documentation."
+                        },
+                        "consigneeCustomerAddress": {
+                          "type": "string",
+                          "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. Address of consignee customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "consigneeCustomerAddress2": {
+                          "type": "string",
+                          "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. Optional address 2 of consignee customer. See \"Duplicated fields\" in documentation."
+                        },
+                        "consigneeCustomerCity": {
+                          "type": "string",
+                          "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. City of consignee customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "consigneeCustomerState": {
+                          "type": "string",
+                          "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. State of consignee customer. 2 char ISO state code. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "consigneeCustomerZip": {
+                          "type": "string",
+                          "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. Zip of consignee customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "consigneeCustomerCountry": {
+                          "type": "string",
+                          "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. Country of consignee customer. 2 or 3 char ISO country code. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "consigneeContactName": {
+                          "type": "string",
+                          "description": "Override for delivery, patch for pickup. Default is null. The name of the person to contact at the consignee."
+                        },
+                        "consigneeContactPhone": {
+                          "type": "string",
+                          "description": "Override for delivery, patch for pickup. Default is null. The phone number of the person to contact at the consignee."
+                        },
+                        "consigneeContactEmail": {
+                          "type": "string",
+                          "description": "Override for delivery, patch for pickup. Default is null. The email of the person to contact at the consignee."
+                        },
+                        "originTerminalCode": {
+                          "type": "string",
+                          "description": "Patch update: originTerminal information will not be overridden for delivery, required for pickup. The terminal code of where the shipment originated (picked up). See \"Duplicated fields\" in documentation."
+                        },
+                        "destinationTerminalCode": {
+                          "type": "string",
+                          "description": "Patch update: destinationTerminal information will not be overridden for pickup, required for delivery. The terminal code destination of the shipment (when the shipment is a delivery). See \"Duplicated fields\" in documentation."
+                        },
+                        "destinationZipCode": {
+                          "type": "string",
+                          "description": "Patch update. The zipcode destination of the shipment when the consignee is not yet known."
+                        },
+                        "destinationCity": {
+                          "type": "string",
+                          "description": "The city destination of the shipment. Used if the consignee address is not yet known."
+                        },
+                        "destinationState": {
+                          "type": "string",
+                          "description": "The state destination of the shipment. Used if the consignee address is not yet known."
+                        },
+                        "destinationTerminalETA": {
+                          "type": "string",
+                          "description": "Override update. Default is null. The ETA of when the shipment will arrive at the destination terminal.",
+                          "format": "date"
+                        },
+                        "atDestinationTerminal": {
+                          "type": "boolean",
+                          "description": "Override update. Default is false. Whether the shipment is currently at the destination terminal or not."
+                        },
+                        "instructions": {
+                          "type": "string",
+                          "description": "Override update. Default is null. Instructions related to order. Will be shown to driver."
+                        },
+                        "comments": {
+                          "type": "string",
+                          "description": "Override update. Default is null. Comments related to order. Will be shown to driver."
+                        },
+                        "windowStart": {
+                          "type": "string",
+                          "description": "Override update. Default is null. 24 hour HH:mm format. Beginning time when the customer is ready for the driver. In the terminal's timezone."
+                        },
+                        "windowEnd": {
+                          "type": "string",
+                          "description": "Override update. Default is null. 24 hour HH:mm format. Ending time when the customer is ready for the driver. In the terminal's timezone."
+                        },
+                        "serviceTime": {
+                          "type": "integer",
+                          "description": "Override update. Default is null. Estimated service time, in seconds, for this shipment at the customer/location.",
+                          "format": "int32"
+                        },
+                        "signatureRequired": {
+                          "type": "boolean",
+                          "description": "Override update. Default is false. Whether a signature is required during pickup or delivery"
+                        },
+                        "shipmentTotalWeight": {
+                          "type": "number",
+                          "description": "Override update. Total weight of the shipment. See \"Duplicated fields\" in documentation.",
+                          "format": "float"
+                        },
+                        "shipmentTotalPalletEquivalents": {
+                          "type": "number",
+                          "description": "Override update. Total pallet equivalents of the shipment. See \"Duplicated fields\" in documentation.",
+                          "format": "float"
+                        },
+                        "shipmentTotalPalletSpaces": {
+                          "type": "number",
+                          "description": "Override update. Total volume of the shipment, in pallets. See \"Duplicated fields\" in documentation.",
+                          "format": "float"
+                        },
+                        "shipmentTotalHandlingUnits": {
+                          "type": "number",
+                          "description": "Override update. Total handling units of the shipment. See \"Duplicated fields\" in documentation.",
+                          "format": "float"
+                        },
+                        "shipmentTotalPieces": {
+                          "type": "integer",
+                          "description": "Override update. Total pieces of the shipment. See \"Duplicated fields\" in documentation.",
+                          "format": "int32"
+                        },
+                        "shipmentItems": {
+                          "type": "array",
+                          "description": "Array of shipmentItem objects. Override update. See \"Duplicated fields\" in documentation.",
+                          "items": {
+                            "properties": {
+                              "description": {
+                                "type": "string",
+                                "description": "Description of line item for shipment"
+                              },
+                              "sku": {
+                                "type": "string",
+                                "description": "SKU of line item."
+                              },
+                              "weight": {
+                                "type": "number",
+                                "description": "Weight of line item",
+                                "format": "float"
+                              },
+                              "palletEquivalents": {
+                                "type": "number",
+                                "description": "Number of pallet equivalents of line item",
+                                "format": "float"
+                              },
+                              "palletSpaces": {
+                                "type": "number",
+                                "description": "Number of pallet spaces of line item",
+                                "format": "float"
+                              },
+                              "pieces": {
+                                "type": "number",
+                                "description": "Number of pieces of the line item",
+                                "format": "float"
+                              },
+                              "handlingUnits": {
+                                "type": "number",
+                                "description": "Number of handling units of line item",
+                                "format": "float"
+                              },
+                              "hazmat": {
+                                "type": "boolean",
+                                "description": "Whether the line item contains any hazardous materials.",
+                                "default": false
+                              },
+                              "quantities": {
+                                "type": "array",
+                                "description": "Quantity of the line item.",
+                                "items": {
+                                  "properties": {
+                                    "unit": {
+                                      "type": "string",
+                                      "description": "Unit of measurement."
+                                    },
+                                    "quantity": {
+                                      "type": "number",
+                                      "description": "Quantity.",
+                                      "default": 1,
+                                      "format": "float"
+                                    }
+                                  },
+                                  "type": "object"
+                                }
+                              }
+                            },
+                            "type": "object"
+                          }
+                        },
+                        "shipmentAccessorials": {
+                          "type": "array",
+                          "description": "Array of strings. Override update. Default is an empty array. Accessorials associated with the shipment.",
+                          "default": [],
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "shipmentTags": {
+                          "type": "array",
+                          "description": "Array of strings. Override update. Default is an empty array. Tags associated with the shipment.",
+                          "default": [],
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "callAheadPhone": {
+                          "type": "string",
+                          "description": "Override update. Default is null. A phone number available for the driver to click to call the customer for pickup/delivery."
+                        },
+                        "callAheadMinutes": {
+                          "type": "integer",
+                          "description": "Override update. Default is null. The number of minutes ahead of the stop that the driver should be instructed to call to confirm pickup/delivery",
+                          "format": "int32"
+                        },
+                        "inboundInterlineCarrierName": {
+                          "type": "string",
+                          "description": "The name of the partner carrier who is giving you freight to deliver."
+                        },
+                        "inboundInterlineProNumber": {
+                          "type": "string",
+                          "description": "The PRO number given by the partner carrier who is giving you freight to deliver."
+                        },
+                        "outboundInterlineCarrierName": {
+                          "type": "string",
+                          "description": "The name of the partner carrier who you are handing the freight off to for later delivery."
+                        },
+                        "outboundInterlineProNumber": {
+                          "type": "string",
+                          "description": "The PRO number given by the partner carrier who you are handing the freight off to for later delivery."
+                        },
+                        "inboundPlanningStatus": {
+                          "type": "string",
+                          "description": "[\"unplanned\", \"planning\"]"
+                        },
+                        "requiresCOD": {
+                          "type": "boolean",
+                          "description": "Requires cash on delivery?",
+                          "default": false
+                        },
+                        "requestedDate": {
+                          "type": "string",
+                          "description": "[deprecated. Use deliveryDate or pickupDate]. Not patch or override: either required, or a higher priority field takes precedence. Requested date for this order to be handled. See \"Duplicated fields\" in documentation.",
+                          "format": "date"
+                        },
+                        "customerNumber": {
+                          "type": "string",
+                          "description": "[deprecated. Use consigeeCustomerNumber or shipperCustomerNumber] Not patch or override: either required, or a higher priority field takes precedence. ID of the customer. Can be provided in place of manually specifying name, address, etc. See \"Duplicated fields\" in documentation."
+                        },
+                        "customerName": {
+                          "type": "string",
+                          "description": "[deprecated. Use consigeeCustomerName or shipperCustomerName] Not patch or override: either required, or a higher priority field takes precedence. Name of the customer associated with the shipment. See \"Duplicated fields\" in documentation."
+                        },
+                        "customerName2": {
+                          "type": "string",
+                          "description": "[deprecated. Use consigeeCustomerName2 or shipperCustomerName2] Not patch or override: either required, or a higher priority field takes precedence. Additional name of customer associated with the shipment. See \"Duplicated fields\" in documentation."
+                        },
+                        "customerAddress": {
+                          "type": "string",
+                          "description": "[deprecated. Use consigeeCustomerAddress or shipperCustomerAddress] Not patch or override: either required, or a higher priority field takes precedence. Address of customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "customerAddress2": {
+                          "type": "string",
+                          "description": "[deprecated. Use consigeeCustomerAddress2 or shipperCustomerAddress2] Not patch or override: either required, or a higher priority field takes precedence. Address 2 of customer. See \"Duplicated fields\" in documentation."
+                        },
+                        "customerCity": {
+                          "type": "string",
+                          "description": "[deprecated. Use consigeeCustomerCity or shipperCustomerCity] Not patch or override: either required, or a higher priority field takes precedence. City of customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "customerState": {
+                          "type": "string",
+                          "description": "[deprecated. Use consigeeCustomerState or shipperCustomerState] Not patch or override: either required, or a higher priority field takes precedence. State of customer. 2-char ISO state code. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "customerZip": {
+                          "type": "string",
+                          "description": "[deprecated. Use consigeeCustomerZip or shipperCustomerZip] Not patch or override: either required, or a higher priority field takes precedence. Zip of customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "customerCountry": {
+                          "type": "string",
+                          "description": "[deprecated. Use consigeeCustomerCountry or shipperCustomerCountry] Not patch or override: either required, or a higher priority field takes precedence. Country of customer. 2 or 3 char ISO country code. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "deliveryPriorityLevel": {
+                          "type": "integer",
+                          "description": "The priority level of the shipment. 1 to 4, 4 being highest.",
+                          "format": "int32"
+                        },
+                        "currentTerminalCode": {
+                          "type": "string",
+                          "description": "The string code for the terminal the shipment is currently located at. This takes precedence over atDestinationTerminal."
+                        },
+                        "referenceIds": {
+                          "type": "array",
+                          "description": "Reference IDs of shipment. Used to look up and uniquely identify a shipment. For more details see the section \"Reference IDs\" in <a href=\"https://maven-machines.readme.io/docs/commands-and-event-sourcing\">this guide</a>.",
+                          "items": {
+                            "properties": {
+                              "<referenceIdName>": {
+                                "type": "string",
+                                "description": "User definable referenceID key/value pair. When provided the referenceID is used to look up the shipment in Maven. If multiple IDs are provided and associate to more than one shipment, an error will be returned.",
+                                "default": "<referenceIdValue>"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        }
+                      },
+                      "required": [
+                        "shipmentType"
+                      ],
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "{\n  requestStatusUrl: \"https://integrations.mavenmachines.com/requestStatus/bulkShipmentUpsert?requestId=16f269b3-6ce8-49aa-bdca-2a0f5635a9ce\",\n  requestId: \"16f269b3-6ce8-49aa-bdca-2a0f5635a9ce\"\n}"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "errors: [{\n  proNumber: \"23902321\",\n  error: \"Delivery date reqired\"\"\n}]"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/manifests": {
+      "post": {
+        "summary": "POST /manifests",
+        "description": "Creates or updates a manifest in the Maven system",
+        "operationId": "post-manifests",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "manifestStatus",
+                  "manifestNumber",
+                  "terminalCode"
+                ],
+                "properties": {
+                  "associatedRouteCode": {
+                    "type": "string",
+                    "description": "Route code this manifest is associated with. Required field for manifests to be shown on Grid View. Must be set up beforehand during integration phase."
+                  },
+                  "manifestStatus": {
+                    "type": "string",
+                    "description": "Status of the manifest",
+                    "enum": [
+                      "planning",
+                      "closed",
+                      "dispatched",
+                      "completed"
+                    ]
+                  },
+                  "manifestNumber": {
+                    "type": "string",
+                    "description": "External identifier of the manifest. Will trigger an update operation if request is sent in with a manifestNumber that already exists in the Maven system."
+                  },
+                  "routeUniqueId": {
+                    "type": "string",
+                    "description": "The unique ID generated when a route is created. This is an auto-generated field that can be used to uniquely identify a route."
+                  },
+                  "manifestName": {
+                    "type": "string",
+                    "description": "Displayed name for this manifest in the driver app and dispatcher portal."
+                  },
+                  "manifestDate": {
+                    "type": "string",
+                    "description": "The day that the manifest is going to be started. Defaults to the current date.",
+                    "format": "date"
+                  },
+                  "terminalCode": {
+                    "type": "string",
+                    "description": "The terminal that owns the manifest."
+                  },
+                  "driverCode": {
+                    "type": "string",
+                    "description": "The driver assigned to the manifest."
+                  },
+                  "driverName": {
+                    "type": "string",
+                    "description": "The name of the driver on the manifest. If a driverCode is present, this field will be ignored."
+                  },
+                  "vehicleNumber": {
+                    "type": "string",
+                    "description": "The vehicle assigned to the manifest."
+                  },
+                  "trailerNumber": {
+                    "type": "string",
+                    "description": "The trailer assigned to the manifest"
+                  },
+                  "dock": {
+                    "type": "integer",
+                    "description": "The dock number where the manifest is loaded.",
+                    "format": "int32"
+                  },
+                  "associatedShipments": {
+                    "type": "array",
+                    "description": "Shipments associated with the manifest",
+                    "items": {
+                      "properties": {
+                        "shipmentType": {
+                          "type": "string",
+                          "description": "Type classification for this shipment record",
+                          "enum": [
+                            "pickup",
+                            "delivery",
+                            "checkstop",
+                            "lunch"
+                          ]
+                        },
+                        "proNumber": {
+                          "type": "string",
+                          "description": "Patch update. TMS-assigned PRO Number. Required if shipmentType is \"delivery\". Default is null."
+                        },
+                        "refNumber": {
+                          "type": "string",
+                          "description": "Patch update. TMS-assigned shipment reference. Required if shipmentType is \"pickup\". Default is null."
+                        },
+                        "pickupSequenceNumber": {
+                          "type": "integer",
+                          "description": "For fleets that associate more than one shipment to a pickup request, the pickupSequenceNumber can be used to differentiate shipments. The combination of refNumber and pickupSequenceNumber must be unique.",
+                          "format": "int32"
+                        },
+                        "pickupDate": {
+                          "type": "string",
+                          "description": "Patch update. Default is null. Requested date for this order (as a pickup) to be handled. See \"Duplicated fields\" in documentation.",
+                          "format": "date"
+                        },
+                        "deliveryDate": {
+                          "type": "string",
+                          "description": "Patch update. Default is null. Requested date for this order (as a delivery) to be handled. See \"Duplicated fields\" in documentation.",
+                          "format": "date"
+                        },
+                        "deliveryServiceStartDate": {
+                          "type": "string",
+                          "description": "The earliest date the delivery can be made.",
+                          "format": "date"
+                        },
+                        "deliveryServiceDueDate": {
+                          "type": "string",
+                          "description": "The latest date the delivery can be made. Duplicated deliveryDate.",
+                          "format": "date"
+                        },
+                        "completionCode": {
+                          "type": "string",
+                          "description": "4 digit completion code. When filled in, marks the pickup or delivery as completed in Maven."
+                        },
+                        "shipperCustomerNumber": {
+                          "type": "string",
+                          "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. ID of the shipper (for the pickup) customer. Can be provided in place of manually specifying name, address, etc. See \"Duplicated fields\" in documentation."
+                        },
+                        "shipperCustomerName": {
+                          "type": "string",
+                          "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. Name of the shipper customer associated with the shipment."
+                        },
+                        "shipperCustomerName2": {
+                          "type": "string",
+                          "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. Optional additional name of shipper customer associated with the shipment. See \"Duplicated fields\" in documentation."
+                        },
+                        "shipperCustomerAddress": {
+                          "type": "string",
+                          "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. Address of shipper customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "shipperCustomerAddress2": {
+                          "type": "string",
+                          "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. Optional address 2 of shipper customer. See \"Duplicated fields\" in documentation."
+                        },
+                        "shipperCustomerCity": {
+                          "type": "string",
+                          "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. City of customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "shipperCustomerState": {
+                          "type": "string",
+                          "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. State of customer. 2 char ISO state code. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "shipperCustomerZip": {
+                          "type": "string",
+                          "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. Zip of customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "shipperCustomerCountry": {
+                          "type": "string",
+                          "description": "Patch update: shipper information will not be overridden for delivery, required for pickup. Country of customer. 2 or 3 char ISO country code. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "shipperContactName": {
+                          "type": "string",
+                          "description": "Override for pickup, patch for delivery. Default is null. The name of the person to contact at the shipper."
+                        },
+                        "shipperContactPhone": {
+                          "type": "string",
+                          "description": "Override for pickup, patch for delivery. Default is null. The phone number of the person to contact at the shipper."
+                        },
+                        "shipperContactEmail": {
+                          "type": "string",
+                          "description": "Override for pickup, patch for delivery. Default is null. The email of the person to contact at the shipper."
+                        },
+                        "customerOrderNumber": {
+                          "type": "string",
+                          "description": "[In Development] Order identification number provided by the shipper.",
+                          "default": "1234"
+                        },
+                        "consigneeCustomerNumber": {
+                          "type": "string",
+                          "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. ID of the consignee (for the delivery) customer. Can be provided in place of manually specifying name, address, etc. See \"Duplicated fields\" in documentation."
+                        },
+                        "consigneeCustomerName": {
+                          "type": "string",
+                          "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. Name of the consignee customer associated with the shipment."
+                        },
+                        "consigneeCustomerName2": {
+                          "type": "string",
+                          "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. Optional additional name of consignee customer associated with the shipment. See \"Duplicated fields\" in documentation."
+                        },
+                        "consigneeCustomerAddress": {
+                          "type": "string",
+                          "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. Address of consignee customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "consigneeCustomerAddress2": {
+                          "type": "string",
+                          "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. Optional address 2 of consignee customer. See \"Duplicated fields\" in documentation."
+                        },
+                        "consigneeCustomerCity": {
+                          "type": "string",
+                          "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. City of consignee customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "consigneeCustomerState": {
+                          "type": "string",
+                          "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. State of consignee customer. 2 char ISO state code. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "consigneeCustomerZip": {
+                          "type": "string",
+                          "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. Zip of consignee customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "consigneeCustomerCountry": {
+                          "type": "string",
+                          "description": "Patch update: consignee information will not be overridden for pickup, required for delivery. Country of consignee customer. 2 or 3 char ISO country code. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "consigneeContactName": {
+                          "type": "string",
+                          "description": "Override for delivery, patch for pickup. Default is null. The name of the person to contact at the consignee."
+                        },
+                        "consigneeContactPhone": {
+                          "type": "string",
+                          "description": "Override for delivery, patch for pickup. Default is null. The phone number of the person to contact at the consignee."
+                        },
+                        "consigneeContactEmail": {
+                          "type": "string",
+                          "description": "Override for delivery, patch for pickup. Default is null. The email of the person to contact at the consignee."
+                        },
+                        "originTerminalCode": {
+                          "type": "string",
+                          "description": "Patch update: originTerminal information will not be overridden for delivery, required for pickup. The terminal code of where the shipment originated (picked up). See \"Duplicated fields\" in documentation."
+                        },
+                        "destinationTerminalCode": {
+                          "type": "string",
+                          "description": "Patch update: destinationTerminal information will not be overridden for pickup, required for delivery. The terminal code destination of the shipment (when the shipment is a delivery). See \"Duplicated fields\" in documentation."
+                        },
+                        "destinationZipCode": {
+                          "type": "string",
+                          "description": "Patch update. The zipcode destination of the shipment when the consignee is not yet known."
+                        },
+                        "destinationCity": {
+                          "type": "string",
+                          "description": "The city destination of the shipment. Used if the consignee address is not yet known."
+                        },
+                        "destinationState": {
+                          "type": "string",
+                          "description": "The state destination of the shipment. Used if the consignee address is not yet known."
+                        },
+                        "destinationTerminalETA": {
+                          "type": "string",
+                          "description": "Override update. Default is null. The ETA of when the shipment will arrive at the destination terminal.",
+                          "format": "date"
+                        },
+                        "atDestinationTerminal": {
+                          "type": "boolean",
+                          "description": "Override update. Default is false. Whether the shipment is currently at the destination terminal or not."
+                        },
+                        "instructions": {
+                          "type": "string",
+                          "description": "Override update. Default is null. Instructions related to order. Will be shown to driver."
+                        },
+                        "comments": {
+                          "type": "string",
+                          "description": "Override update. Default is null. Comments related to order. Will be shown to driver."
+                        },
+                        "windowStart": {
+                          "type": "string",
+                          "description": "Override update. Default is null. 24 hour HH:mm format. Beginning time when the customer is ready for the driver. In the terminal's timezone."
+                        },
+                        "windowEnd": {
+                          "type": "string",
+                          "description": "Override update. Default is null. 24 hour HH:mm format. Ending time when the customer is ready for the driver. In the terminal's timezone."
+                        },
+                        "serviceTime": {
+                          "type": "integer",
+                          "description": "Override update. Default is null. Estimated service time, in seconds, for this shipment at the customer/location.",
+                          "format": "int32"
+                        },
+                        "signatureRequired": {
+                          "type": "boolean",
+                          "description": "Override update. Default is false. Whether a signature is required during pickup or delivery"
+                        },
+                        "shipmentTotalWeight": {
+                          "type": "number",
+                          "description": "Override update. Total weight of the shipment. See \"Duplicated fields\" in documentation.",
+                          "format": "float"
+                        },
+                        "shipmentTotalPalletEquivalents": {
+                          "type": "number",
+                          "description": "Override update. Total pallet equivalents of the shipment. See \"Duplicated fields\" in documentation.",
+                          "format": "float"
+                        },
+                        "shipmentTotalPalletSpaces": {
+                          "type": "number",
+                          "description": "Override update. Total volume of the shipment, in pallets. See \"Duplicated fields\" in documentation.",
+                          "format": "float"
+                        },
+                        "shipmentTotalHandlingUnits": {
+                          "type": "number",
+                          "description": "Override update. Total handling units of the shipment. See \"Duplicated fields\" in documentation.",
+                          "format": "float"
+                        },
+                        "shipmentTotalPieces": {
+                          "type": "integer",
+                          "description": "Override update. Total pieces of the shipment. See \"Duplicated fields\" in documentation.",
+                          "format": "int32"
+                        },
+                        "shipmentItems": {
+                          "type": "array",
+                          "description": "Array of shipmentItem objects. Override update. See \"Duplicated fields\" in documentation.",
+                          "items": {
+                            "properties": {
+                              "description": {
+                                "type": "string",
+                                "description": "Description of line item for shipment"
+                              },
+                              "sku": {
+                                "type": "string",
+                                "description": "SKU of line item."
+                              },
+                              "weight": {
+                                "type": "number",
+                                "description": "Weight of line item",
+                                "format": "float"
+                              },
+                              "palletEquivalents": {
+                                "type": "number",
+                                "description": "Number of pallet equivalents of line item",
+                                "format": "float"
+                              },
+                              "palletSpaces": {
+                                "type": "number",
+                                "description": "Number of pallet spaces of line item",
+                                "format": "float"
+                              },
+                              "pieces": {
+                                "type": "number",
+                                "description": "Number of pieces of the line item",
+                                "format": "float"
+                              },
+                              "handlingUnits": {
+                                "type": "number",
+                                "description": "Number of handling units of line item",
+                                "format": "float"
+                              },
+                              "hazmat": {
+                                "type": "boolean",
+                                "description": "Whether the line item contains any hazardous materials.",
+                                "default": false
+                              },
+                              "quantities": {
+                                "type": "array",
+                                "description": "Quantity of the line item.",
+                                "items": {
+                                  "properties": {
+                                    "unit": {
+                                      "type": "string",
+                                      "description": "Unit of measurement."
+                                    },
+                                    "quantity": {
+                                      "type": "number",
+                                      "description": "Quantity.",
+                                      "default": 1,
+                                      "format": "float"
+                                    }
+                                  },
+                                  "type": "object"
+                                }
+                              }
+                            },
+                            "type": "object"
+                          }
+                        },
+                        "shipmentAccessorials": {
+                          "type": "array",
+                          "description": "Array of strings. Override update. Default is an empty array. Accessorials associated with the shipment.",
+                          "default": [],
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "shipmentTags": {
+                          "type": "array",
+                          "description": "Array of strings. Override update. Default is an empty array. Tags associated with the shipment.",
+                          "default": [],
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "callAheadPhone": {
+                          "type": "string",
+                          "description": "Override update. Default is null. A phone number available for the driver to click to call the customer for pickup/delivery."
+                        },
+                        "callAheadMinutes": {
+                          "type": "integer",
+                          "description": "Override update. Default is null. The number of minutes ahead of the stop that the driver should be instructed to call to confirm pickup/delivery",
+                          "format": "int32"
+                        },
+                        "inboundInterlineCarrierName": {
+                          "type": "string",
+                          "description": "The name of the partner carrier who is giving you freight to deliver."
+                        },
+                        "inboundInterlineProNumber": {
+                          "type": "string",
+                          "description": "The PRO number given by the partner carrier who is giving you freight to deliver."
+                        },
+                        "outboundInterlineCarrierName": {
+                          "type": "string",
+                          "description": "The name of the partner carrier who you are handing the freight off to for later delivery."
+                        },
+                        "outboundInterlineProNumber": {
+                          "type": "string",
+                          "description": "The PRO number given by the partner carrier who you are handing the freight off to for later delivery."
+                        },
+                        "inboundPlanningStatus": {
+                          "type": "string",
+                          "description": "[\"unplanned\", \"planning\"]"
+                        },
+                        "requiresCOD": {
+                          "type": "boolean",
+                          "description": "Requires cash on delivery?",
+                          "default": false
+                        },
+                        "requestedDate": {
+                          "type": "string",
+                          "description": "[deprecated. Use deliveryDate or pickupDate]. Not patch or override: either required, or a higher priority field takes precedence. Requested date for this order to be handled. See \"Duplicated fields\" in documentation.",
+                          "format": "date"
+                        },
+                        "customerNumber": {
+                          "type": "string",
+                          "description": "[deprecated. Use consigeeCustomerNumber or shipperCustomerNumber] Not patch or override: either required, or a higher priority field takes precedence. ID of the customer. Can be provided in place of manually specifying name, address, etc. See \"Duplicated fields\" in documentation."
+                        },
+                        "customerName": {
+                          "type": "string",
+                          "description": "[deprecated. Use consigeeCustomerName or shipperCustomerName] Not patch or override: either required, or a higher priority field takes precedence. Name of the customer associated with the shipment. See \"Duplicated fields\" in documentation."
+                        },
+                        "customerName2": {
+                          "type": "string",
+                          "description": "[deprecated. Use consigeeCustomerName2 or shipperCustomerName2] Not patch or override: either required, or a higher priority field takes precedence. Additional name of customer associated with the shipment. See \"Duplicated fields\" in documentation."
+                        },
+                        "customerAddress": {
+                          "type": "string",
+                          "description": "[deprecated. Use consigeeCustomerAddress or shipperCustomerAddress] Not patch or override: either required, or a higher priority field takes precedence. Address of customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "customerAddress2": {
+                          "type": "string",
+                          "description": "[deprecated. Use consigeeCustomerAddress2 or shipperCustomerAddress2] Not patch or override: either required, or a higher priority field takes precedence. Address 2 of customer. See \"Duplicated fields\" in documentation."
+                        },
+                        "customerCity": {
+                          "type": "string",
+                          "description": "[deprecated. Use consigeeCustomerCity or shipperCustomerCity] Not patch or override: either required, or a higher priority field takes precedence. City of customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "customerState": {
+                          "type": "string",
+                          "description": "[deprecated. Use consigeeCustomerState or shipperCustomerState] Not patch or override: either required, or a higher priority field takes precedence. State of customer. 2-char ISO state code. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "customerZip": {
+                          "type": "string",
+                          "description": "[deprecated. Use consigeeCustomerZip or shipperCustomerZip] Not patch or override: either required, or a higher priority field takes precedence. Zip of customer. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "customerCountry": {
+                          "type": "string",
+                          "description": "[deprecated. Use consigeeCustomerCountry or shipperCustomerCountry] Not patch or override: either required, or a higher priority field takes precedence. Country of customer. 2 or 3 char ISO country code. Used for geocoding. See \"Duplicated fields\" in documentation."
+                        },
+                        "deliveryPriorityLevel": {
+                          "type": "integer",
+                          "description": "The priority level of the shipment. 1 to 4, 4 being highest.",
+                          "format": "int32"
+                        },
+                        "currentTerminalCode": {
+                          "type": "string",
+                          "description": "The string code for the terminal the shipment is currently located at. This takes precedence over atDestinationTerminal."
+                        },
+                        "referenceIds": {
+                          "type": "array",
+                          "description": "Reference IDs of shipment. Used to look up and uniquely identify a shipment. For more details see the section \"Reference IDs\" in <a href=\"https://maven-machines.readme.io/docs/commands-and-event-sourcing\">this guide</a>.",
+                          "items": {
+                            "properties": {
+                              "<referenceIdName>": {
+                                "type": "string",
+                                "description": "User definable referenceID key/value pair. When provided the referenceID is used to look up the shipment in Maven. If multiple IDs are provided and associate to more than one shipment, an error will be returned.",
+                                "default": "<referenceIdValue>"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        }
+                      },
+                      "required": [
+                        "shipmentType"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "optimizeStops": {
+                    "type": "boolean",
+                    "description": "If enabled, Maven route optimization will be used to set the recommended order in which shipments on the manifest should be completed."
+                  },
+                  "optimizationOptions": {
+                    "type": "object",
+                    "description": "Additional options that can be configured for Maven route optimization.",
+                    "properties": {
+                      "startLocation": {
+                        "type": "object",
+                        "description": "Starting location of vehicle",
+                        "properties": {
+                          "address": {
+                            "type": "string",
+                            "description": "Full address in the form: street address, city, state, zip, country"
+                          },
+                          "lat": {
+                            "type": "number",
+                            "description": "Latitude",
+                            "format": "float"
+                          },
+                          "lng": {
+                            "type": "number",
+                            "description": "Longitude",
+                            "format": "float"
+                          }
+                        }
+                      },
+                      "endLocation": {
+                        "type": "object",
+                        "description": "Ending location for vehicle after manifest completion",
+                        "properties": {
+                          "address": {
+                            "type": "string",
+                            "description": "Full address in the form: street address, city, state, zip, country"
+                          },
+                          "lat": {
+                            "type": "number",
+                            "description": "Latitude",
+                            "format": "float"
+                          },
+                          "lng": {
+                            "type": "number",
+                            "description": "Longitude",
+                            "format": "float"
+                          }
+                        }
+                      },
+                      "mode": {
+                        "type": "object",
+                        "description": "Optimization modes",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "description": "Type of optimization to perform",
+                            "enum": [
+                              "\"fastest\"",
+                              "\"shortest\""
+                            ]
+                          },
+                          "transport": {
+                            "type": "string",
+                            "description": "Vehicle transport mode",
+                            "enum": [
+                              "\"car\"",
+                              "\"truck\""
+                            ]
+                          },
+                          "traffic": {
+                            "type": "boolean",
+                            "description": "Should real-time traffic be considered when optimizing?"
+                          }
+                        }
+                      },
+                      "improveFor": {
+                        "type": "string",
+                        "description": "Should Maven route optimization return a result based on improving travel time, or improving travel distance",
+                        "enum": [
+                          "\"time\"",
+                          "\"distance\""
+                        ]
+                      },
+                      "truckType": {
+                        "type": "string",
+                        "description": "Type of vehicle assigned to the manifest",
+                        "enum": [
+                          "\"semiTruck\"",
+                          "\"smallBOxTruck\"",
+                          "\"largeBoxTruck\""
+                        ]
+                      }
+                    }
+                  },
+                  "beginDwellTimeMin": {
+                    "type": "integer",
+                    "description": "The number of minutes a driver will spend at the terminal between starting their route and departing the terminal.",
+                    "format": "int32"
+                  },
+                  "endDwellTimeMin": {
+                    "type": "integer",
+                    "description": "The number of minutes a driver will spend at the terminal between arriving at the terminal and ending their route.",
+                    "format": "int32"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "{}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "{\n\t\"type\": \"BAD_REQUEST\",\n\t\"message\": \"text description of error\"\n}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "BAD_REQUEST"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "text description of error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "{\n\t\"type\": \"SERVER_ERROR\",\n  \"message\": \"A server error has occurred\"\n}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "SERVER_ERROR"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "A server error has occurred"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/manifestNumber": {
+      "post": {
+        "summary": "POST /manifestNumber",
+        "description": "Sets a manifest number for a Maven-generated planning manifest",
+        "operationId": "post-manifestnumber",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "routeUniqueId",
+                  "manifestNumber"
+                ],
+                "properties": {
+                  "routeUniqueId": {
+                    "type": "string",
+                    "description": "Maven-generated identifier for this manifest"
+                  },
+                  "manifestNumber": {
+                    "type": "string",
+                    "description": "Manifest Number to be set for this manifest"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "{}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "{\n\t\"type\": \"BAD_REQUEST\",\n\t\"message\": \"text description of error\"\n}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "BAD_REQUEST"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "text description of error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "{\n\t\"type\": \"SERVER_ERROR\",\n\t\"message\": \"A server error has occurred\"\n}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "SERVER_ERROR"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "A server error has occurred"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/events": {
+      "get": {
+        "summary": "GET /events",
+        "description": "Retrieve return events from the Maven system",
+        "operationId": "get-events",
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "{\n\t\"events\": [{\n  \t\"id\": \"11cbf1da-0760-4e9a-8db6-2a5810683471\",\n    \"eventType\": \"departTerminal\",\n    \"timestamp\": \"2023-04-09T21:50:42.123Z\",\n    \"data\": {}\n  }]\n}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "11cbf1da-0760-4e9a-8db6-2a5810683471"
+                          },
+                          "eventType": {
+                            "type": "string",
+                            "example": "departTerminal"
+                          },
+                          "timestamp": {
+                            "type": "string",
+                            "example": "2023-04-09T21:50:42.123Z"
+                          },
+                          "data": {
+                            "type": "object",
+                            "properties": {}
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "x-readme": {
+    "headers": [],
+    "explorer-enabled": true,
+    "proxy-enabled": true
+  },
+  "x-readme-fauxas": true
+}

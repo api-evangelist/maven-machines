@@ -1,0 +1,38 @@
+overlay: 1.0.0
+info:
+  title: Maven Machines messages — API Evangelist enhancements
+  version: 1.0.0
+extends: ../openapi/maven-machines-messages-openapi.json
+x-generated: '2026-08-25'
+x-method: generated
+x-source: openapi/maven-machines-messages-openapi.json
+actions:
+- target: $
+  description: Declare the production base URL Maven documents at https://maven-machines.readme.io/docs/basic-concepts;
+    the published document leaves servers[] empty or blank.
+  update:
+    servers:
+    - url: https://integrations.mavenmachines.com
+      description: Production
+    - url: https://integrations-staging.mavenmachines.com
+      description: Staging (separate data store, no SLA)
+- target: $
+  description: Apply the declared apiKey scheme as a document-level security requirement. The published
+    document defines the scheme but never applies it, so a generated client authenticates nothing by default.
+  update:
+    security:
+    - api_key: []
+- target: $.info
+  description: Add the published support and documentation contacts.
+  update:
+    contact:
+      name: Maven Machines Support
+      url: https://help.mavenmachines.com/
+      email: info@mavenmachines.com
+- target: $.info
+  description: Record API Evangelist provenance for this profile.
+  update:
+    x-api-evangelist:
+      profile: https://github.com/api-evangelist/maven-machines
+      harvested: '2026-08-25'
+      source: https://maven-machines.readme.io/

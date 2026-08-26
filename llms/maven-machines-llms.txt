@@ -1,0 +1,82 @@
+# Maven Machines Documentation
+
+> Documentation for Maven Machines
+
+Append .md to any documentation page URL to get its markdown version.
+
+## Guides
+- [Basic Concepts](https://maven-machines.readme.io/docs/basic-concepts.md)
+- [Pagination](https://maven-machines.readme.io/docs/pagination.md)
+- [Standard TMS Integration](https://maven-machines.readme.io/docs/standard-tms-integration.md)
+- [P&D Stop Lifecycle and Return Events](https://maven-machines.readme.io/docs/pd-stop-lifecycle-and-return-events.md)
+- [Stop Grouping Options](https://maven-machines.readme.io/docs/stop-grouping-options.md)
+- [Manifests and Movements](https://maven-machines.readme.io/docs/manifests-and-movements.md)
+- [Event Sourcing and Commands](https://maven-machines.readme.io/docs/commands-and-event-sourcing.md)
+- [Commands Reference](https://maven-machines.readme.io/docs/command-reference.md)
+- [Overview](https://maven-machines.readme.io/docs/return-events.md)
+- [P&D Return Events](https://maven-machines.readme.io/docs/pd-return-events.md)
+- [Linehaul & Dock App Return Events](https://maven-machines.readme.io/docs/linehaul-dock-app-return-events.md)
+- [ELD Return Events](https://maven-machines.readme.io/docs/eld-return-events.md)
+- [Retrieving Documents](https://maven-machines.readme.io/docs/retrieving-documents-from-return-events.md): How to retrieve bills of lading, shipment photos, signatures, etc. associated with shipments.
+- [Introduction](https://maven-machines.readme.io/docs/introduction.md)
+- [Market App Session](https://maven-machines.readme.io/docs/market-apps-session.md)
+- [Camera Integration](https://maven-machines.readme.io/docs/camera-integration.md)
+- [Demo App](https://maven-machines.readme.io/docs/demo-app.md)
+
+## API Reference
+- [POST /users](https://maven-machines.readme.io/reference/userscontroller_createuser.md): API endpoints for interacting with user records in the Maven system.          Creates a user in the Maven system
+- [PUT /users](https://maven-machines.readme.io/reference/userscontroller_updateuser.md): Updates a user in the Maven system. Either a userId or externalUserId needs to be provided.      If both are provided, Maven will first match on userId.
+- [GET /users](https://maven-machines.readme.io/reference/userscontroller_getusers.md): Retrieves a list of users in the Maven system.      Retrieves a company location record in the Maven system. A companyLocationId or externalCompanyLocationId must be supplied.      If both a supplied, Maven will first search by companyLocationId.
+- [/vehicles](https://maven-machines.readme.io/reference/getallvehiclescontroller_getvehicles.md): Retrieves all company vehicles.
+- [/vehicles/{vehicleNumber}](https://maven-machines.readme.io/reference/getvehiclescontroller_getvehicles.md): Retrieves a list of vehicles for a company.
+- [/vehicles](https://maven-machines.readme.io/reference/createvehiclecontroller_createvehicle.md): Creates a new vehicle. If the vehicleNumber already exists, the request will be rejected.
+- [/vehicles/upload](https://maven-machines.readme.io/reference/uploadvehiclescontroller_upload.md): Upload vehicles API allows you insert, update or deactivate vehicles.       API expects a CSV file with the following columns: ChgType, VehicleStatus, UnitID, VehicleType, Make, Model, Year, VIN, Domicile, CurrentTerm, EquipType, EquipSpecs, Liftgate, Heat, CDL.              Column description:       - ChgType: 1 = Add 2 = Deactivate, 3 = Update;       - Status: ACTIVE or INACTIVE;       - Domicile: Map to an attribute field;       - CurrentTerm: Map to the domicile field;       - Liftgate: Unit is equipped with a liftgate 1 = Yes, 0 = No;       - Heat: Unit is heated.  1 = Yes, 0 = No;       - CDL: Requires driver with CDL.  1 = Yes, 0 = No;        API supports up to 1000 rows in a CSV file.
+- [/vehicles/{vehicleNumber}](https://maven-machines.readme.io/reference/updatevehiclecontroller_updatevehicle.md): Updates a vehicle. Only provided key-value pairs provided are updated.
+- [/trailers](https://maven-machines.readme.io/reference/getalltrailerscontroller_getvehicles.md): Retrieves all company trailers.
+- [/trailers/{trailerNumber}](https://maven-machines.readme.io/reference/gettrailerscontroller_getvehicles.md): Retrieves a list of trailers for a company.
+- [/trailers](https://maven-machines.readme.io/reference/createtrailercontroller_createtrailer.md): Creates a new trailer. If the trailerNumber already exists, the request will be rejected.
+- [/trailers/upload](https://maven-machines.readme.io/reference/uploadtrailercontroller_upload.md): Upload trailers API allows you insert, update or deactivate trailers.       API expects a CSV file with the following columns: ChgType, TrailerStatus, UnitID, TrailerType, Make, Model, Year, VIN, Domicile, CurrentTerm, EquipType, EquipSpecs, Liftgate, Heat, OwnershipStatus, Axles, BodyType, Length, LengthUnits.              Column description:       - ChgType: 1 = Add 2 = Deactivate, 3 = Update;       - TrailerStatus: ACTIVE or INACTIVE;       - UnitID: The trailer number. i.e. RT0992.       - Make: Make of the trailer i.e. Leyland       - Model: Model of the trailer i.e. Actros       - Year: Year of manufacture of the trailer, i.e. 2009       - VIN: Vehicle identification number of trailer, i.e. 4433XJJWEI2422232       - Domicile: Map to an attribute field;       - CurrentTerm: Map to the domicile field;       - Liftgate: Unit is equipped with a liftgate 1 = Yes, 0 = No;       - Heat: Unit is heated.  1 = Yes, 0 = No;       - OwnershipStatus: Unit mode of ownership can be one of 'rented', 'owned', 'leased', 'non-company' or 'other'.       - Axles: Number of axles on trialer i.e. 2, 6, 8.       - BodyType: Bodytype of trailer i.e. flatbed.       - Length: Numeric value indicating length of trailer i.e. 20       - LengthUnits: The unit for the length of the trailer i.e. 'feet', 'meters'        API supports up to 1000 rows in a CSV file.
+- [/trailers/{trailerNumber}](https://maven-machines.readme.io/reference/updatetrailercontroller_updatetrailer.md): Updates a trailer. Only provided key-value pairs provided are updated.
+- [POST /company-locations](https://maven-machines.readme.io/reference/companylocationscontroller_createcompanylocation.md): Creates a company location record in the Maven system.
+- [PATCH /company-locations](https://maven-machines.readme.io/reference/companylocationscontroller_patchcompanylocation.md): Updates a company location record in the Maven system.      A companyLocationId or externalCompanyLocationId must be supplied.      If both a supplied, Maven will first search by companyLocationId.
+- [GET /company-locations](https://maven-machines.readme.io/reference/companylocationscontroller_handlegetcompanylocations.md): Retrieves all company location records in the Maven system     with an offset parameter. Retrieves a company location record in the Maven system     if a companyLocationId or externalCompanyLocationId is supplied.      If both a supplied, Maven will first search by companyLocationId.
+- [POST /customers](https://maven-machines.readme.io/reference/post-companiescompanyidcustomers.md): Adds or updates a customer record in the Maven system.
+- [Shipments](https://maven-machines.readme.io/reference/shipments.md)
+- [POST /shipment/updateShipmentProNumber](https://maven-machines.readme.io/reference/shipmentcontroller_updateshipmentpronumber.md): Updates a shipment's PRO number.
+- [POST /pickupRequests/cancel](https://maven-machines.readme.io/reference/post-pickuprequestscancel.md): Cancels a pickup request in the Maven system
+- [POST /shipment](https://maven-machines.readme.io/reference/post-shipment.md): Adds or updates a shipment in the Maven system
+- [POST /shipments/bulkUpsert](https://maven-machines.readme.io/reference/shipmentbulkupsert.md)
+- [POST /shipment-locations](https://maven-machines.readme.io/reference/shipmentlocationscontroller_upsertshipmentlocations.md): Enables adding or updating shipment(s) current and/or moveTo locations.
+- [POST /linehaul/manifest](https://maven-machines.readme.io/reference/linehaulcontroller_upsertlinehaulmanifest.md): Enables the creation and updating (upsert) of a linehaul manifest.
+- [POST /linehaul/trip](https://maven-machines.readme.io/reference/linehaulcontroller_upsertlinehaultrip.md): Enables the creation and updating (upsert) of a linehaul trip.
+- [Delivery Manifests](https://maven-machines.readme.io/reference/pd-manifests.md)
+- [POST /manifests](https://maven-machines.readme.io/reference/post-manifests.md): Creates or updates a manifest in the Maven system
+- [POST /manifestNumber](https://maven-machines.readme.io/reference/post-manifestnumber.md): Sets a manifest number for a Maven-generated planning manifest
+- [PATCH /manifests/{manifestNumber}](https://maven-machines.readme.io/reference/patch-manifestsmanifestnumber.md): Updates a delivery manifest. Only provided key-value pairs provided are updated.
+- [POST /manifests/commands](https://maven-machines.readme.io/reference/manifestcommandscontroller_applymanifestcommands.md): API to send manifest and movement commands
+- [GET /events](https://maven-machines.readme.io/reference/get-events.md): Retrieve return events from the Maven system
+- [GET /return-events](https://maven-machines.readme.io/reference/get-return-events.md): Retrieve return events from the Maven system
+- [GET /forms](https://maven-machines.readme.io/reference/formdefinitionscontroller_getformdefinitions.md): Below is a list of all the forms that Maven provides for Truckload experience. In general these can be customized by the fleet.        - start trip       - end trip       - arrive stop/terminal       - auto-arrive stop/terminal       - depart stop/terminal       - auto-depart stop/terminal       - workflow (forms associated to specific stop/terminal)         - ex: trailer info, delivery info       - ad-hoc (forms not assigned to a particular stop, but accessible to drivers throughout their day)         - ex: break-down form, time-off request                   Retrieves form definitions from the Maven system.
+- [GET /forms/results](https://maven-machines.readme.io/reference/formresultscontroller_getformresults.md): APIs for interacting with form data from the Maven system.
+- [POST /truckload/stops](https://maven-machines.readme.io/reference/truckloadcontroller_createstop.md): Creates a stop in the Maven system. The stop can be attached to a trip at the desired sequence.
+- [PUT /truckload/stops](https://maven-machines.readme.io/reference/truckloadcontroller_updatestop.md): Updates a stop in the Maven system.
+- [PATCH /truckload/stops](https://maven-machines.readme.io/reference/truckloadcontroller_patchstop.md): Updates a stop in the Maven system.
+- [PATCH /truckload/trips/status](https://maven-machines.readme.io/reference/truckloadcontroller_patchtripsstopsstatus.md): Updates a trips and stops status in the Maven system
+- [GET /truckload/stops](https://maven-machines.readme.io/reference/truckloadcontroller_getstop.md): Get a stop in the Maven system.
+- [DELETE /truckload/stops](https://maven-machines.readme.io/reference/truckloadcontroller_deletestop.md): Deletes a stop in the Maven system. If the stop does not exist, we error out.
+- [POST /truckload/trips](https://maven-machines.readme.io/reference/truckloadcontroller_createtrip.md): The create trip API allows for the creation of a trip and associated stops     in the Maven system.     The apiKey header authenticates and authorizes the request to submit trip     data for a specific company.
+- [PUT /truckload/trips](https://maven-machines.readme.io/reference/truckloadcontroller_updatetrip.md): The update trip API allows for the updating of a trip      in the Maven system.     The apiKey header authenticates and authorizes the request to submit trip     data for a specific company.
+- [PATCH /truckload/trips](https://maven-machines.readme.io/reference/truckloadcontroller_patchtrip.md): The update trip API allows for the updating of a trip      in the Maven system.     The apiKey header authenticates and authorizes the request to submit trip     data for a specific company.
+- [GET /truckload/trips](https://maven-machines.readme.io/reference/truckloadcontroller_gettrip.md): Get truckload trip
+- [DELETE /truckload/trips](https://maven-machines.readme.io/reference/truckloadcontroller_deletetrip.md): The delete trip API allows for the deletion of a trip      in the Maven system.     The apiKey header authenticates and authorizes the request to submit trip     data for a specific company.
+- [POST /hos/dutystatus](https://maven-machines.readme.io/reference/post-hosdutystatus.md)
+- [GET /hos/logs/summary](https://maven-machines.readme.io/reference/get-hoslogssummary.md): Provide summarized ELD information for all active drivers in a given fleet
+- [GET /hos/timers/snapshot](https://maven-machines.readme.io/reference/get-hostimerssnapshot.md)
+- [GET /locations/vehicles](https://maven-machines.readme.io/reference/get-locationsvehicles.md): The vehicle locations API returns a history of all recorded telematics pings for any vehicle that is installed with a Maven Vehicle Data Adapter (VDA).
+- [GET /locations/vehicles/snapshot](https://maven-machines.readme.io/reference/get-locationsvehiclessnapshot.md): The vehicle locations snapshot API returns a list of the latest ping/location for all vehicles in your fleet that are installed with a Maven Vehicle Data Adapter (VDA).
+- [POST /messages](https://maven-machines.readme.io/reference/messagescontroller_createmessages.md): Creates messages from a sender to a list of recipients into the Maven Messages system.      Implementation Notes:     - If both senderUserId and senderExternalUserId are sent in the request, senderUserId will take precedence.     - If both recipientUserIds and recipientExternalUserIds are defined, Maven will take the union of both arrays to determine the final recipient list. Max 50 recipients.
+- [GET /messages](https://maven-machines.readme.io/reference/messagescontroller_getmessages.md): Retrieves messages that have been sent in the Maven system.
+- [GET /marketapps/session](https://maven-machines.readme.io/reference/marketappscontroller_getsession.md): Retrieves market app session
+- [GET /smart/alarmLog](https://maven-machines.readme.io/reference/smartcontroller_getalarmlog.md): Retrieves alarm logs for given machines or all machines and given datetime range.
+- [GET /smart/batchLogging](https://maven-machines.readme.io/reference/smartcontroller_getbatchlogging.md): Retrieves batch logging for given machines or all machines and given datetime range.
+- [GET /reports/vehicle-performance](https://maven-machines.readme.io/reference/reportreadercontroller_getvehicleperformancereport.md): Gets the paginated responses of the vehicle performance report.

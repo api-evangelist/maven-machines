@@ -1,0 +1,225 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "maven-machines",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": ""
+    }
+  ],
+  "components": {
+    "securitySchemes": {}
+  },
+  "security": [
+    {}
+  ],
+  "paths": {
+    "/linehaul/trip": {
+      "post": {
+        "summary": "POST /linehaul/trip",
+        "description": "",
+        "operationId": "post-linehaultrips",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "externalTripId"
+                ],
+                "properties": {
+                  "externalTripId": {
+                    "type": "string",
+                    "description": "Unique Identifier for the trip"
+                  },
+                  "status": {
+                    "type": "string",
+                    "description": "The status of the trip. Statuses include: pending,  started,  departedOrigin,  arrivedDestination,  completed"
+                  },
+                  "driverCode": {
+                    "type": "array",
+                    "description": "HR id of the driver. Not required but if a driver code is provided, the driver code must exist in Maven, otherwise we will reject the trip",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "vehicleNumber": {
+                    "type": "string",
+                    "description": "Number of the vehicle on the trip"
+                  },
+                  "manifestNumber": {
+                    "type": "array",
+                    "description": "array of associated manifests to the trip. This field is optional but if a manifest number is provided, it must exist in Maven otherwise we will reject the trip",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "plannedStartTime": {
+                    "type": "string",
+                    "default": "ISO",
+                    "format": "date"
+                  },
+                  "plannedArrivalTime": {
+                    "type": "string",
+                    "default": "ISO",
+                    "format": "date"
+                  },
+                  "originLocationCode": {
+                    "type": "string",
+                    "description": "Optional but if an originLocationCode is provided, it must exist in Maven otherwise the trip will be rejected"
+                  },
+                  "destinationLocationCode": {
+                    "type": "string",
+                    "description": "Optional but if an destinationLocationCode is provided, it must exist in Maven otherwise the trip will be rejected"
+                  },
+                  "instructions": {
+                    "type": "string",
+                    "description": "Open field to provide additional instructions to the driver about the trip"
+                  },
+                  "attributes": {
+                    "type": "string",
+                    "description": "Key: Value Pairs",
+                    "format": "json"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "{}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "{}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": []
+      }
+    },
+    "/eld/hos/dutystatus/": {
+      "post": {
+        "summary": "POST /hos/dutystatus",
+        "description": "",
+        "operationId": "post-hosdutystatus",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "externalUserId": {
+                    "type": "string",
+                    "description": "REQUIRED. Unique external identifier of driver whose duty status is being inserted",
+                    "default": "SJONES"
+                  },
+                  "dutyStatusTimeStamp": {
+                    "type": "string",
+                    "description": "REQUIRED. Timestamp that the record took place. Must be within the previous 24 hours. Note timezone is required. ISO 8601 compliant.",
+                    "default": "2021-10-04T16:59:44Z",
+                    "format": "date"
+                  },
+                  "dutyStatusType": {
+                    "type": "string",
+                    "description": "REQUIRED. The duty status type. Either \u201cOFF\u201d or \u201cON\u201d.",
+                    "default": "ON",
+                    "enum": [
+                      "OFF",
+                      "ON"
+                    ]
+                  },
+                  "dutyStatusComment": {
+                    "type": "string",
+                    "description": "Duty status comment. The comment is displayed whenever the On or Off Duty event is displayed, including data file transfer.",
+                    "default": "Timeclock punch #839423"
+                  },
+                  "externalVehicleId": {
+                    "type": "string",
+                    "description": "Unique external identifier for the vehicle associated to the duty status change.",
+                    "default": "D83492"
+                  },
+                  "lat": {
+                    "type": "integer",
+                    "description": "Latitude where the duty status took place.",
+                    "default": 43.25356,
+                    "format": "int64"
+                  },
+                  "lng": {
+                    "type": "integer",
+                    "description": "Longitude where the duty status took place.",
+                    "default": -70.23483,
+                    "format": "int64"
+                  },
+                  "terminalId": {
+                    "type": "string",
+                    "description": "Terminal Id where the duty status change took place. Used for providing geolocation.",
+                    "default": "PGH"
+                  },
+                  "driverLocation": {
+                    "type": "string",
+                    "description": "Open text field describing the location of the duty status change if a precise geolocation is not available."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Result": {
+                    "value": "{}"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": []
+      }
+    }
+  },
+  "x-readme": {
+    "headers": [],
+    "explorer-enabled": true,
+    "proxy-enabled": true
+  },
+  "x-readme-fauxas": true
+}

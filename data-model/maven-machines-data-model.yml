@@ -1,0 +1,182 @@
+generated: '2026-08-25'
+method: derived
+source: >-
+  openapi/*.json — 118 component schemas and the id-reference fields across 82 operations in the
+  21 published Maven Machines OpenAPI documents; entity semantics cross-read from
+  https://maven-machines.readme.io/docs/standard-tms-integration.md and
+  https://maven-machines.readme.io/docs/manifests-and-movements.md
+identifier_convention:
+  dual_key: true
+  detail: >-
+    Nearly every Maven entity carries BOTH a Maven-assigned surrogate id and a caller-supplied
+    external id — userId/externalUserId, companyLocationId/externalCompanyLocationId,
+    tripId/externalTripId, stopId/externalStopId, groupId/externalGroupId. Where both are supplied,
+    Maven resolves on the Maven id first: "If both are provided, Maven will first match on userId."
+    This dual key is what makes the upsert endpoints re-runnable from a TMS that owns its own
+    identifiers.
+  business_keys:
+  - vehicleNumber
+  - trailerNumber
+  - manifestNumber
+  - proNumber
+  - companyKey
+  reference_ids: >-
+    The event-sourced commands API adds a third layer — a `referenceIds` object "defined by the
+    integrating system" that "must be unique and remain constant throughout the lifecycle of the
+    object" (e.g. a loadId), used to correlate every later command with the object it created.
+entities:
+- name: Company
+  key: companyKey / companyId
+  detail: >-
+    The tenant. Scopes the apiKey and is templated into the planning-and-dispatch server URL
+    (https://integrations.mavenmachines.com/companies/{companyKey}/).
+- name: User
+  key: userId / externalUserId
+  schemas: [CreateUserRequestDto, UpdateUserRequestDto, GetUsersApiResponse, DriversLicense, UserGroup, UserTerminal, UserConfigurationOverrides, EldConfigurationOverrides, Login, CreateLogin, UpdateLogin]
+  detail: Drivers and admins. Carries a DriversLicense, ELD configuration overrides, terminals and groups.
+- name: Vehicle
+  key: vehicleNumber
+  schemas: [VehicleDTO, CreateVehicleRequest, UpdateVehicleRequestDTO, VehicleAttributesResponse, UploadVehiclesResponseApi]
+- name: Trailer
+  key: trailerNumber
+  schemas: [TrailerDTO, UpdateTrailerRequestDTO, TrailerAttributesResponse, UploadTrailersResponseApi]
+- name: CompanyLocation
+  key: companyLocationId / externalCompanyLocationId
+  schemas: [CompanyLocation, CompanyLocationCreateDto, CompanyLocationPutDto, CompanyLocationPatchDto, CompanyLocationDto, Geofence, Geofences, Geojson, Circle, Availability, FacilityLocation]
+  detail: >-
+    Physical places where the fleet does business — terminals, warehouses, depots and, most
+    commonly, the customers where freight is picked up and delivered. Carries geofences (GeoJSON or
+    circle) and availability windows.
+- name: Customer
+  key: customer_number
+  detail: Billing/consignee party, upserted from the TMS via POST /customers.
+- name: Shipment
+  key: proNumber / customerOrderNumber / purchaseOrderNumber
+  schemas: [ShipmentRequestDto, ShipmentItemDto, ShipmentQuantityDto, UpdateShipmentProNumberDto, AssociatedShipmentDto, UpsertShipmentLocationsDto]
+  detail: >-
+    "The most common (and often the only required) transactional data feed" — designed to take
+    continuous updates from the TMS for reweighs, billing updates and delivery-date adjustments.
+- name: Manifest
+  key: manifestNumber (+ referenceIds)
+  schemas: [ManifestNumberRequestDto, ManifestCommandRequestDto, ManifestCommandsRequestDto, ManifestEventSourceRequestDto, UpsertLinehaulManifestDto]
+  detail: >-
+    A P&D or linehaul manifest. Linehaul manifests are mutated only through the event-sourced
+    commands API, never by CRUD.
+- name: Movement
+  key: movement referenceIds
+  detail: >-
+    A segment of a manifest. "Movements belong to manifests so a movement command really is just a
+    special flavor of a manifest command" — which is why there is no /movements/commands endpoint.
+- name: Trip
+  key: tripId / externalTripId
+  schemas: [Trip, TripCreateRequestDto, TripUpdateRequestDto, TripApiResponse, GetTripApiResponse, UpsertLinehaulTripDto]
+- name: Stop
+  key: stopId / externalStopId
+  schemas: [Stop, CreateStopRequestDto, UpdateStopRequestDto, PatchStopRequestDto, CreateTripStopRequestDto, UpdateTripStopRequestDto, TripsStopsStatusUpdateRequestDto]
+- name: Form
+  key: formId
+  schemas: [Form, FormDefinitions, FormDefinitionsComponents, FormRequestDto, FormResults, FormResultsPagination]
+  detail: >-
+    Driver workflow forms — start/end trip, arrive/depart stop, workflow forms bound to a stop, and
+    ad-hoc forms. Definitions and results are separate read surfaces.
+- name: ReturnEvent
+  key: id
+  detail: >-
+    '{ id, timestamp, eventType, data }'. The only outbound surface; polled, 30-day retention.
+- name: Message
+  key: messageId
+  schemas: [Message, CreateMessageRequest, CreateMessageResponse, GetMessagesResponse]
+- name: MarketAppSession
+  schemas: [GetMarketAppSessionResponse]
+- name: VehiclePerformanceRecord
+  schemas: [VehiclePerformanceRecord, VehiclePerformanceGroup, VehiclePerformancePagination]
+- name: AlarmLog
+  schemas: [AlarmLogResponseDto, AlarmLogApiResponse]
+  detail: Smart (manufacturing) surface — machine alarm logs.
+- name: BatchLog
+  schemas: [BatchLoggingResponseDto, BatchLoggingMaterialResponseDto, BatchLoggingApiResponse]
+  detail: Smart (manufacturing) surface — blender batch and material logging.
+relationships:
+- from: User
+  to: Company
+  type: belongs_to
+  via: companyId
+- from: User
+  to: UserTerminal
+  type: has_many
+  via: externalTerminalId
+- from: User
+  to: UserGroup
+  type: has_many
+  via: externalGroupId
+- from: Vehicle
+  to: Company
+  type: belongs_to
+  via: companyKey (apiKey scope)
+- from: CompanyLocation
+  to: Geofence
+  type: has_many
+  via: geofences
+- from: Shipment
+  to: CompanyLocation
+  type: belongs_to
+  via: consigneeCustomerNumber / shipment locations
+- from: Shipment
+  to: ShipmentItem
+  type: has_many
+  via: shipmentItems
+- from: Manifest
+  to: Shipment
+  type: has_many
+  via: associatedShipments (PlanShipmentsOnManifest / LoadShipmentsOnManifest commands)
+- from: Manifest
+  to: Movement
+  type: has_many
+  via: associatedMovements
+- from: Movement
+  to: CompanyLocation
+  type: belongs_to
+  via: origin / destination
+- from: Trip
+  to: Stop
+  type: has_many
+  via: stops (externalStopId)
+- from: Stop
+  to: CompanyLocation
+  type: belongs_to
+  via: companyLocationId / externalCompanyLocationId
+- from: Stop
+  to: Form
+  type: has_many
+  via: workflow forms bound to a stop
+- from: FormResult
+  to: Form
+  type: belongs_to
+  via: formId
+- from: FormResult
+  to: User
+  type: belongs_to
+  via: userId
+- from: ReturnEvent
+  to: Manifest
+  type: references
+  via: eventType + data payload
+- from: Message
+  to: User
+  type: has_many
+  via: senderUserId / recipientUserIds (max 50 recipients)
+- from: VehiclePerformanceRecord
+  to: Vehicle
+  type: belongs_to
+  via: unitNumber
+- from: AssetDto
+  to: CompanyLocation
+  type: belongs_to
+  via: assetId + LatLongDto
+schema_count: 118
+note: >-
+  Maven publishes no consolidated object reference page, so this graph is derived from the specs'
+  component schemas and id-reference fields rather than from a documented ERD. The Reddy Ice and
+  Bozzuto's middleware documents contribute customer-specific entities (ReddyIceCaseDto,
+  ProductEligibilityItemDto, OrderSnapshotRequestDto, CutoffItemDto) that are NOT part of the
+  general platform model.

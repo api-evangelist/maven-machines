@@ -1,0 +1,346 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Reports",
+    "description": "Documentation for Report APIs",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "https://integrations.mavenmachines.com"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "apiKey"
+      }
+    },
+    "schemas": {
+      "GetVehiclePerformanceReportRequestDto": {
+        "type": "object",
+        "properties": {
+          "groupCode": {
+            "type": "string",
+            "description": "Group code",
+            "example": "TER1"
+          },
+          "startDate": {
+            "type": "string",
+            "description": "Start date",
+            "example": "2024-01-01"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "End date",
+            "example": "2024-01-01"
+          },
+          "timezone": {
+            "type": "string",
+            "enum": [
+              "America/Eastern",
+              "America/Central",
+              "America/Mountain",
+              "America/Pacific",
+              "UTC"
+            ],
+            "description": "Time Zone (America/Eastern, America/Central, America/Mountain, America/Pacific, UTC)",
+            "example": "America/Eastern"
+          },
+          "cursor": {
+            "type": "string",
+            "description": "Cursor",
+            "example": "123456"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Limit",
+            "example": 1000,
+            "default": 1000
+          }
+        },
+        "required": [
+          "groupCode",
+          "startDate",
+          "endDate",
+          "timezone"
+        ]
+      },
+      "VehiclePerformanceGroup": {
+        "type": "object",
+        "properties": {
+          "groupName": {
+            "type": "string",
+            "description": "Group name",
+            "example": "Pittsburgh"
+          },
+          "isTerminal": {
+            "type": "string",
+            "description": "States of the group is a terminal",
+            "example": true
+          }
+        },
+        "required": [
+          "groupName",
+          "isTerminal"
+        ]
+      },
+      "VehiclePerformanceRecord": {
+        "type": "object",
+        "properties": {
+          "powerUnitNumber": {
+            "type": "string",
+            "description": "Power unit number",
+            "example": "105832"
+          },
+          "startDate": {
+            "type": "string",
+            "description": "Start date",
+            "example": "2024-01-01"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "End date",
+            "example": "2024-01-01"
+          },
+          "groups": {
+            "description": "Groups that the power unit belongs to",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VehiclePerformanceGroup"
+            }
+          },
+          "driverNames": {
+            "type": "string",
+            "description": "Names of the drivers",
+            "example": [
+              "John Smith",
+              "Jane Doe"
+            ]
+          },
+          "driverHrIds": {
+            "type": "string",
+            "description": "HR IDs of the drivers",
+            "example": [
+              "JS123",
+              "JD456"
+            ]
+          },
+          "uniqueDrivers": {
+            "type": "number",
+            "description": "Number of unique drivers that used the power unit",
+            "example": 2
+          },
+          "vin": {
+            "type": "string",
+            "description": "Vehicle identification number",
+            "example": "3AKJHHDR8RSUT9234"
+          },
+          "year": {
+            "type": "string",
+            "description": "Year",
+            "example": 2024
+          },
+          "make": {
+            "type": "string",
+            "description": "Make",
+            "example": "Freightliner"
+          },
+          "model": {
+            "type": "string",
+            "description": "Model",
+            "example": "Cascadia"
+          },
+          "engineHours": {
+            "type": "number",
+            "description": "Number of hours the engine was on.",
+            "example": 10
+          },
+          "engineFuelConsumed": {
+            "type": "number",
+            "description": "Gallons of fuel consumed by the power unit.",
+            "example": 10
+          },
+          "totalMpg": {
+            "type": "number",
+            "description": "Total fuel economy of the power unit in mpg.",
+            "example": 10
+          },
+          "driveMpg": {
+            "type": "number",
+            "description": "Fuel economy of the power unit while driving in mpg.",
+            "example": 10
+          },
+          "avgSpeed": {
+            "type": "number",
+            "description": "Average speed of the power unit over the requested date range.",
+            "example": 10
+          },
+          "startOdomer": {
+            "type": "number",
+            "description": "Start odometer value in miles.",
+            "example": 10
+          },
+          "endOdometer": {
+            "type": "number",
+            "description": "End odometer value in miles.",
+            "example": 10
+          },
+          "elapsedOdometer": {
+            "type": "number",
+            "description": "Miles driven by the power unit.",
+            "example": 10
+          },
+          "driveTime": {
+            "type": "number",
+            "description": "Hours the power unit was driving.",
+            "example": 10
+          },
+          "idleTime": {
+            "type": "number",
+            "description": "Hours the power unit was idling.",
+            "example": 10
+          },
+          "idleFuelConsumed": {
+            "type": "number",
+            "description": "Gallons of fuel consumed while idling.",
+            "example": 10
+          },
+          "reportedDays": {
+            "type": "number",
+            "description": "Number of days reported for the power unit.",
+            "example": 30
+          },
+          "vdaDays": {
+            "type": "number",
+            "description": "Number of days in the requested date range there was a paired VDA.",
+            "example": 30
+          },
+          "dataDays": {
+            "type": "number",
+            "description": "Number of days in the requested date range where there was data.",
+            "example": 30
+          }
+        },
+        "required": [
+          "powerUnitNumber",
+          "startDate",
+          "endDate",
+          "groups",
+          "driverNames",
+          "driverHrIds",
+          "uniqueDrivers",
+          "vin",
+          "year",
+          "make",
+          "model",
+          "engineHours",
+          "engineFuelConsumed",
+          "totalMpg",
+          "driveMpg",
+          "avgSpeed",
+          "startOdomer",
+          "endOdometer",
+          "elapsedOdometer",
+          "driveTime",
+          "idleTime",
+          "idleFuelConsumed",
+          "reportedDays",
+          "vdaDays",
+          "dataDays"
+        ]
+      },
+      "VehiclePerformancePagination": {
+        "type": "object",
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "The cursor to get the next page of results. This will be null if no more pages exist",
+            "example": "104222"
+          },
+          "limit": {
+            "type": "number",
+            "description": "The limit on the number of records returned in a single payload. The maximum is 3000.",
+            "example": 1000
+          }
+        },
+        "required": [
+          "cursor",
+          "limit"
+        ]
+      },
+      "GetVehiclePerformanceReportResponseDto": {
+        "type": "object",
+        "properties": {
+          "payload": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VehiclePerformanceRecord"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/VehiclePerformancePagination"
+          }
+        },
+        "required": [
+          "payload",
+          "pagination"
+        ]
+      }
+    }
+  },
+  "paths": {
+    "/reports/vehicle-performance": {
+      "get": {
+        "operationId": "ReportReaderController_getVehiclePerformanceReport",
+        "summary": "GET /reports/vehicle-performance",
+        "description": "\n    Gets the paginated responses of the vehicle performance report.\n    ",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetVehiclePerformanceReportRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetVehiclePerformanceReportResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When a request for the vehicle performance report fails due to wrong client input"
+          },
+          "500": {
+            "description": "Unknown error response."
+          }
+        },
+        "tags": [
+          "reports"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+  },
+  "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+  }
+}

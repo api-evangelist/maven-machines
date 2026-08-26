@@ -1,0 +1,151 @@
+generated: '2026-08-25'
+method: derived
+source: >-
+  SEARCH found nothing. Probed https://mavenmachines.com/.well-known/*,
+  https://integrations.mavenmachines.com/.well-known/*, https://maven-machines.readme.io/ (full
+  llms.txt index) and web search for a Maven Machines MCP server — no hosted endpoint, no npm/PyPI
+  package, no mention in the developer hub. Candidate tools below are DERIVED from
+  openapi/*.json operations.
+status: candidate
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: api-key
+  verified: searched
+note: >-
+  Maven Machines ships no MCP server, hosted or local. This file is a derived candidate tool
+  surface only — nothing here is callable today. Every tool below maps 1:1 onto a published
+  operationId in openapi/, so it is buildable against the real contract; the auth model would be
+  the same per-fleet `apiKey` header the REST API uses. No endpoint URL is invented.
+candidate_tools:
+- name: maven_create_user
+  operation: POST /users
+  operationId: UsersController_createUser
+  category: master-data
+- name: maven_update_user
+  operation: PUT /users
+  operationId: UsersController_updateUser
+  category: master-data
+- name: maven_list_users
+  operation: GET /users
+  operationId: UsersController_getUsers
+  category: master-data
+- name: maven_list_vehicles
+  operation: GET /vehicles
+  operationId: GetAllVehiclesController_getVehicles
+  category: assets
+- name: maven_get_vehicle
+  operation: GET /vehicles/{vehicleNumber}
+  operationId: GetVehiclesController_getVehicles
+  category: assets
+- name: maven_create_vehicle
+  operation: POST /vehicles
+  operationId: CreateVehicleController_createVehicle
+  category: assets
+- name: maven_update_vehicle
+  operation: PATCH /vehicles/{vehicleNumber}
+  operationId: UpdateVehicleController_updateVehicle
+  category: assets
+- name: maven_list_trailers
+  operation: GET /trailers
+  operationId: GetAllTrailersController_getVehicles
+  category: assets
+- name: maven_upsert_company_location
+  operation: POST /company-locations
+  operationId: CompanyLocationsController_createCompanyLocation
+  category: network
+- name: maven_list_company_locations
+  operation: GET /company-locations
+  operationId: CompanyLocationsController_handleGetCompanyLocations
+  category: network
+- name: maven_upsert_shipment
+  operation: POST /shipment
+  operationId: post-shipment
+  category: freight
+- name: maven_bulk_upsert_shipments
+  operation: POST /shipment/bulkUpsert
+  operationId: shipmentbulkupsert
+  category: freight
+- name: maven_cancel_pickup_request
+  operation: POST /pickupRequests/cancel
+  operationId: post-pickuprequestscancel
+  category: freight
+  consequence: reversal
+- name: maven_upsert_manifest
+  operation: POST /manifests
+  operationId: post-manifests
+  category: dispatch
+- name: maven_apply_manifest_commands
+  operation: POST /manifests/commands
+  operationId: ManifestCommandsController_applyManifestCommands
+  category: dispatch
+  note: >-
+    Event-sourced and NOT idempotent — an agent must not blind-retry this tool. Carries the
+    CancelManifest / DeleteMovement / RemoveShipmentsFromManifest reversals.
+- name: maven_upsert_linehaul_manifest
+  operation: POST /linehaul/manifest
+  operationId: LinehaulController_upsertLinehaulManifest
+  category: linehaul
+- name: maven_upsert_linehaul_trip
+  operation: POST /linehaul/trip
+  operationId: LinehaulController_upsertLinehaulTrip
+  category: linehaul
+- name: maven_create_truckload_trip
+  operation: POST /truckload/trips
+  operationId: TruckloadController_createTrip
+  category: truckload
+- name: maven_get_truckload_trip
+  operation: GET /truckload/trips
+  operationId: TruckloadController_getTrip
+  category: truckload
+- name: maven_delete_truckload_trip
+  operation: DELETE /truckload/trips
+  operationId: TruckloadController_deleteTrip
+  category: truckload
+  consequence: reversal
+- name: maven_poll_return_events
+  operation: GET /return-events
+  operationId: get-return-events
+  category: events
+- name: maven_get_hos_summary
+  operation: GET /eld/hos/logs/summary
+  operationId: get-hoslogssummary
+  category: compliance
+- name: maven_get_hos_timers
+  operation: GET /eld/hos/timers/snapshot
+  operationId: get-hostimerssnapshot
+  category: compliance
+- name: maven_get_vehicle_locations
+  operation: GET /locations/vehicles
+  operationId: get-locationsvehicles
+  category: telematics
+- name: maven_get_vehicle_locations_snapshot
+  operation: GET /locations/vehicles/snapshot
+  operationId: get-locationsvehiclessnapshot
+  category: telematics
+- name: maven_send_message
+  operation: POST /messages
+  operationId: MessagesController_createMessages
+  category: comms
+- name: maven_get_form_definitions
+  operation: GET /forms
+  operationId: FormDefinitionsController_getFormDefinitions
+  category: workflow
+- name: maven_get_form_results
+  operation: GET /forms/results
+  operationId: FormResultsController_getFormResults
+  category: workflow
+- name: maven_get_vehicle_performance_report
+  operation: GET /reports/vehicle-performance
+  operationId: ReportReaderController_getVehiclePerformanceReport
+  category: reporting
+probes:
+- url: https://mavenmachines.com/.well-known/ai-plugin.json
+  status: 404
+- url: https://integrations.mavenmachines.com/.well-known/oauth-protected-resource
+  status: 404
+- url: https://maven-machines.readme.io/llms.txt
+  status: 200
+  detail: 17 guides + 56 reference entries; no MCP page.

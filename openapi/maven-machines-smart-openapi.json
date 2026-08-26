@@ -1,0 +1,443 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Smart APIs",
+    "description": "Documentation for Smart APIs",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "https://integrations.mavenmachines.com"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "apiKey"
+      }
+    },
+    "schemas": {
+      "AlarmLogResponseDto": {
+        "type": "object",
+        "properties": {
+          "TimeStamp": {
+            "type": "string",
+            "description": "Time Stamp of the alarm",
+            "example": "2024-05-07T23:45:15Z"
+          },
+          "Shift": {
+            "type": "string",
+            "description": "Shift of the alarm",
+            "example": "Shift1"
+          },
+          "MachineName": {
+            "type": "string",
+            "description": "Machine name of the alarm",
+            "example": "Trueblend at Vish home"
+          },
+          "ProdLine": {
+            "type": "string",
+            "description": "Product line of the alarm",
+            "example": "Line 1"
+          },
+          "BlenderName": {
+            "type": "string",
+            "description": "Blender name of the alarm",
+            "example": "TrueBlend"
+          },
+          "OrderNumber": {
+            "type": "string",
+            "description": "Order number of the alarm",
+            "example": "Order 1"
+          },
+          "AlarmSource": {
+            "type": "string",
+            "description": "Source of the alarm",
+            "example": "System"
+          },
+          "State": {
+            "type": "string",
+            "description": "State of the alarm",
+            "example": "InActive"
+          },
+          "Severity": {
+            "type": "string",
+            "description": "Severity of the alarm",
+            "example": "NA"
+          },
+          "AlarmMsg": {
+            "type": "string",
+            "description": "Alarm message of the alarm",
+            "example": "SQL Server Connection or Query Failure"
+          }
+        },
+        "required": [
+          "TimeStamp",
+          "Shift",
+          "MachineName",
+          "ProdLine",
+          "BlenderName",
+          "OrderNumber",
+          "AlarmSource",
+          "State",
+          "Severity",
+          "AlarmMsg"
+        ]
+      },
+      "PaginationResponseDto": {
+        "type": "object",
+        "properties": {
+          "hasNextPage": {
+            "type": "boolean",
+            "description": "Is there more data",
+            "example": "true"
+          },
+          "nextPageStartTime": {
+            "type": "string",
+            "description": "Time Stamp of the next page",
+            "example": "2024-05-08T13:25:11Z"
+          }
+        },
+        "required": [
+          "hasNextPage",
+          "nextPageStartTime"
+        ]
+      },
+      "AlarmLogApiResponse": {
+        "type": "object",
+        "properties": {
+          "alarms": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AlarmLogResponseDto"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationResponseDto"
+          }
+        },
+        "required": [
+          "alarms",
+          "pagination"
+        ]
+      },
+      "BatchLoggingMaterialResponseDto": {
+        "type": "object",
+        "properties": {
+          "BlenderBatchID": {
+            "type": "number",
+            "description": "Unique ID of the batch. Cross ref with ID.",
+            "example": "8345"
+          },
+          "CompNum": {
+            "type": "number",
+            "description": "Component Number of the batch material",
+            "example": "5"
+          },
+          "CompName": {
+            "type": "string",
+            "description": "Component Name of the batch material.",
+            "example": "Component 6"
+          },
+          "MaterialID": {
+            "type": "string",
+            "description": "Material ID of the batch material.",
+            "example": "Resin 0"
+          },
+          "MaterialType": {
+            "type": "string",
+            "description": "Material Type of the batch material.",
+            "example": "NAT"
+          },
+          "FeedOrder": {
+            "type": "number",
+            "description": "Feed Order of the batch material",
+            "example": "3"
+          },
+          "FeedTime": {
+            "type": "number",
+            "description": "Feed Time of the batch material",
+            "example": "400"
+          },
+          "SetPart": {
+            "type": "number",
+            "description": "Set Part of the batch material",
+            "example": "5"
+          },
+          "ActPart": {
+            "type": "number",
+            "description": "Actual Part of the batch material",
+            "example": "5.0852"
+          },
+          "SetWeight": {
+            "type": "number",
+            "description": "Set Weight of the batch material",
+            "example": "22.6796"
+          },
+          "ActWeight": {
+            "type": "number",
+            "description": "Actual Weight of the batch material",
+            "example": "22.1771"
+          },
+          "Tolerance": {
+            "type": "number",
+            "description": "Tolerance of the batch material",
+            "example": "0.8982"
+          }
+        },
+        "required": [
+          "BlenderBatchID",
+          "CompNum",
+          "CompName",
+          "MaterialID",
+          "MaterialType",
+          "FeedOrder",
+          "FeedTime",
+          "SetPart",
+          "ActPart",
+          "SetWeight",
+          "ActWeight",
+          "Tolerance"
+        ]
+      },
+      "BatchLoggingResponseDto": {
+        "type": "object",
+        "properties": {
+          "TimeStamp": {
+            "type": "string",
+            "description": "Time Stamp of the batch",
+            "example": "2024-05-07T23:45:15Z"
+          },
+          "ID": {
+            "type": "number",
+            "description": "Unique ID of the batch",
+            "example": "8345"
+          },
+          "Shift": {
+            "type": "string",
+            "description": "Shift of the batch",
+            "example": "Shift1"
+          },
+          "MachineName": {
+            "type": "string",
+            "description": "Machine name of the batch",
+            "example": "Trueblend at Vish home"
+          },
+          "ProdLine": {
+            "type": "string",
+            "description": "Product line of the batch",
+            "example": "Line 1"
+          },
+          "BlenderName": {
+            "type": "string",
+            "description": "Blender name of the batch",
+            "example": "TrueBlend"
+          },
+          "RecipeName": {
+            "type": "string",
+            "description": "Recipe name of the batch",
+            "example": "Recipe 1"
+          },
+          "RecipeNumber": {
+            "type": "number",
+            "description": "Recipe number of the batch",
+            "example": "5"
+          },
+          "OrderNumber": {
+            "type": "string",
+            "description": "Order number of the batch",
+            "example": "Order 1"
+          },
+          "BatchNumber": {
+            "type": "number",
+            "description": "Batch Number of the batch",
+            "example": "925"
+          },
+          "BatchTotal": {
+            "type": "number",
+            "description": "Batch Total of the batch",
+            "example": "436.1084"
+          },
+          "materials": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BatchLoggingMaterialResponseDto"
+            }
+          }
+        },
+        "required": [
+          "TimeStamp",
+          "ID",
+          "Shift",
+          "MachineName",
+          "ProdLine",
+          "BlenderName",
+          "RecipeName",
+          "RecipeNumber",
+          "OrderNumber",
+          "BatchNumber",
+          "BatchTotal",
+          "materials"
+        ]
+      },
+      "BatchLoggingApiResponse": {
+        "type": "object",
+        "properties": {
+          "batch": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BatchLoggingResponseDto"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationResponseDto"
+          }
+        },
+        "required": [
+          "batch",
+          "pagination"
+        ]
+      }
+    }
+  },
+  "paths": {
+    "/smart/alarmLog": {
+      "get": {
+        "operationId": "SmartController_getAlarmLog",
+        "summary": "GET /smart/alarmLog",
+        "description": "\n    Retrieves alarm logs for given machines or all machines and given datetime range.\n    ",
+        "parameters": [
+          {
+            "name": "startTime",
+            "required": true,
+            "in": "query",
+            "description": "Required. The ISO8601 alarm creation timestamp of the first data being polled (inclusive)",
+            "example": "2024-05-07T23:45:15Z",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endTime",
+            "required": false,
+            "in": "query",
+            "description": "Optional. The ISO8601 alarm creation timestamp of the last data being polled (inclusive). Defaults to current timestamp.",
+            "example": "2024-05-07T23:55:08Z",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "machines",
+            "required": false,
+            "in": "query",
+            "description": "An array of machine names for the return alarm data. Missing or null implies all machines.",
+            "example": [
+              "Franklin SB-5 Blender Simulator",
+              "Franklin SB-3 Blender Simulator"
+            ],
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlarmLogApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "smart"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/smart/batchLogging": {
+      "get": {
+        "operationId": "SmartController_getBatchLogging",
+        "summary": "GET /smart/batchLogging",
+        "description": "\n    Retrieves batch logging for given machines or all machines and given datetime range.\n    ",
+        "parameters": [
+          {
+            "name": "startTime",
+            "required": true,
+            "in": "query",
+            "description": "Required. The ISO8601 batch creation timestamp of the first data being polled (inclusive)",
+            "example": "2024-05-07T23:45:15Z",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endTime",
+            "required": false,
+            "in": "query",
+            "description": "Optional. The ISO8601 batch creation timestamp of the last data being polled (inclusive). Defaults to current timestamp.",
+            "example": "2024-05-07T23:55:08Z",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "machines",
+            "required": false,
+            "in": "query",
+            "description": "An array of machine names for the return batch data. Missing or null implies all machines.",
+            "example": [
+              "Franklin SB-5 Blender Simulator",
+              "Franklin SB-3 Blender Simulator"
+            ],
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchLoggingApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "smart"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+  },
+  "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+  }
+}

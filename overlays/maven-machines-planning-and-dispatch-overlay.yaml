@@ -1,0 +1,33 @@
+overlay: 1.0.0
+info:
+  title: Maven Machines planning-and-dispatch — API Evangelist enhancements
+  version: 1.0.0
+extends: ../openapi/maven-machines-planning-and-dispatch-openapi.json
+x-generated: '2026-08-25'
+x-method: generated
+x-source: openapi/maven-machines-planning-and-dispatch-openapi.json
+actions:
+- target: $
+  description: Add the staging environment Maven documents alongside production.
+  update:
+    servers:
+    - url: https://integrations.mavenmachines.com/companies/{companyKey}/
+      variables:
+        companyKey:
+          default: companyKey
+    - url: https://integrations-staging.mavenmachines.com
+      description: Staging (separate data store, no SLA)
+- target: $.info
+  description: Add the published support and documentation contacts.
+  update:
+    contact:
+      name: Maven Machines Support
+      url: https://help.mavenmachines.com/
+      email: info@mavenmachines.com
+- target: $.info
+  description: Record API Evangelist provenance for this profile.
+  update:
+    x-api-evangelist:
+      profile: https://github.com/api-evangelist/maven-machines
+      harvested: '2026-08-25'
+      source: https://maven-machines.readme.io/

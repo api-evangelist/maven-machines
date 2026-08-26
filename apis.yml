@@ -1,23 +1,193 @@
 aid: maven-machines
 name: Maven Machines
-description: 'Maven Machines is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  Maven Machines (branded "Maven") is a Pittsburgh, Pennsylvania software company that builds a
+  cloud platform for automating the planning and execution of daily trucking operations. The
+  product suite spans route planning and optimization, dispatch execution, driver workflow, ELD /
+  hours-of-service compliance, telematics and fleet management, delivered through a web portal for
+  planners and dispatchers and an Android driver application. Maven publishes a public developer
+  hub at maven-machines.readme.io covering fifteen separate OpenAPI definitions against a single
+  production base URL, https://integrations.mavenmachines.com, secured with an `apiKey` request
+  header. The integration model is TMS-to-Maven — master data (users, vehicles, trailers, company
+  locations), transactional data (shipments, P&D manifests, linehaul manifests and trips, truckload
+  trips and stops) flows in, and business activity flows back out through a polled
+  `GET /return-events` queue and an event-sourced manifest/movement commands API. Maven also
+  operates per-customer integration middleware services on <customer>.middleware.mavenmachines.com,
+  several of which publish their own Swagger/OpenAPI documents publicly.
 url: https://raw.githubusercontent.com/api-evangelist/maven-machines/refs/heads/main/apis.yml
+image: https://mavenmachines.com/apple-touch-icon.png
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-25'
 modified: '2026-08-25'
 tags:
-- Company
-apis: []
+- Transportation
+- Logistics
+- Trucking
+- Fleet Management
+- Telematics
+- ELD
+- Route Optimization
+- Dispatch
+- Supply Chain
+- Freight
+apis:
+- aid: maven-machines-integrations-api
+  name: Maven Integrations API
+  description: >-
+    Maven's public REST API for integrating a fleet's TMS and other IT systems with the Maven
+    platform. Fifteen published OpenAPI definitions cover users, vehicles and trailers, company
+    locations, customers, shipments and shipment locations, P&D manifests, linehaul manifests and
+    trips, truckload trips and stops, forms and form results, messages, market app sessions, ELD /
+    hours-of-service, vehicle telematics locations, Smart (manufacturing) alarm and batch logs,
+    reports, and the polled return-events queue. Every call is authenticated with an `apiKey`
+    request header; production and staging environments are separate and do not share data.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - Transportation
+  - Logistics
+  - Fleet Management
+  - ELD
+  - Dispatch
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-users-openapi.json
+  - type: OpenAPI
+    url: openapi/maven-machines-assets-openapi.json
+  - type: OpenAPI
+    url: openapi/maven-machines-company-locations-openapi.json
+  - type: OpenAPI
+    url: openapi/maven-machines-shipments-openapi.json
+  - type: OpenAPI
+    url: openapi/maven-machines-shipment-locations-openapi.json
+  - type: OpenAPI
+    url: openapi/maven-machines-linehaul-openapi.json
+  - type: OpenAPI
+    url: openapi/maven-machines-manifest-commands-openapi.json
+  - type: OpenAPI
+    url: openapi/maven-machines-planning-and-dispatch-openapi.json
+  - type: OpenAPI
+    url: openapi/maven-machines-workflow-openapi.json
+  - type: OpenAPI
+    url: openapi/maven-machines-messages-openapi.json
+  - type: OpenAPI
+    url: openapi/maven-machines-market-apps-openapi.json
+  - type: OpenAPI
+    url: openapi/maven-machines-smart-openapi.json
+  - type: OpenAPI
+    url: openapi/maven-machines-reports-openapi.json
+  - type: OpenAPI
+    url: openapi/maven-machines-rest-service-manual-openapi.json
+  - type: OpenAPI
+    url: openapi/maven-machines-eld-hos-openapi.json
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+  - type: Overlay
+    url: overlays/_index.yml
+- aid: maven-machines-customer-middleware
+  name: Maven Customer Integration Middleware
+  description: >-
+    Per-customer middleware services Maven operates on <customer>.middleware.mavenmachines.com that
+    translate a specific shipper or carrier's message formats into Maven platform calls. Six of
+    these services publish a Swagger/OpenAPI document publicly — AAA Cooper, Averitt, Bozzuto's,
+    Reddy Ice, Roy Miller and Triple S Steel — covering shipment, bulk shipment, manifest, manifest
+    command, order snapshot/cutoff, route plan, case and service-tech asset endpoints. All are
+    authenticated with the same `apiKey` header as the platform API.
+  humanURL: https://maven-machines.readme.io/docs/maven-bozzutos-integration
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - Logistics
+  - Freight
+  - Integration
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-aaa-cooper-middleware-openapi.json
+  - type: OpenAPI
+    url: openapi/maven-machines-averitt-middleware-openapi.json
+  - type: OpenAPI
+    url: openapi/maven-machines-bozzutos-middleware-openapi.json
+  - type: OpenAPI
+    url: openapi/maven-machines-reddy-ice-middleware-openapi.json
+  - type: OpenAPI
+    url: openapi/maven-machines-roy-miller-middleware-openapi.json
+  - type: OpenAPI
+    url: openapi/maven-machines-triple-s-steel-middleware-openapi.json
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/maven-machines-domain-security.yml
 - type: Website
-  url: https://www.nasdaqprivatemarket.com/
+  url: https://mavenmachines.com/
+- type: DeveloperPortal
+  url: https://maven-machines.readme.io/
+- type: Documentation
+  url: https://maven-machines.readme.io/
+- type: APIReference
+  url: https://maven-machines.readme.io/reference/post-shipment
+- type: GettingStarted
+  url: https://maven-machines.readme.io/docs/basic-concepts
+- type: Support
+  url: https://help.mavenmachines.com/
+- type: HelpCenter
+  url: https://help.mavenmachines.com/
+- type: Blog
+  url: https://mavenmachines.com/blog/
+- type: GitHubOrganization
+  url: https://github.com/Maven-Machines
+- type: SignUp
+  url: https://accounts.mavenmachines.com/
+- type: Login
+  url: https://accounts.mavenmachines.com/
+- type: PrivacyPolicy
+  url: https://mavenmachines.com/privacy-policy/
+- type: StatusPage
+  url: https://mavenmachines.statuspage.io/
+- type: Lifecycle
+  url: lifecycle/maven-machines-lifecycle.yml
+- type: Authentication
+  url: authentication/maven-machines-authentication.yml
+- type: Conventions
+  url: conventions/maven-machines-conventions.yml
+- type: Idempotency
+  url: conventions/maven-machines-conventions.yml
+- type: ErrorCatalog
+  url: errors/maven-machines-problem-types.yml
+- type: Conformance
+  url: conformance/maven-machines-conformance.yml
+- type: DataModel
+  url: data-model/maven-machines-data-model.yml
+- type: Sandbox
+  url: sandbox/maven-machines-sandbox.yml
+- type: Packages
+  url: packages/maven-machines-packages.yml
+- type: LLMsTxt
+  url: llms/maven-machines-llms.txt
+- type: MCPServer
+  url: mcp/maven-machines-mcp.yml
+- type: Plans
+  url: plans/maven-machines-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/maven-machines-rate-limits.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: EventCatalog
+  url: asyncapi/maven-machines-return-events.yml
+- type: Overlay
+  url: overlays/_index.yml
+- type: WellKnownProbe
+  url: well-known/maven-machines-well-known.yml
+x-enrichment:
+  date: '2026-08-25'
+  status: enriched
+  artifacts_added: 64
+  pass: local-v1

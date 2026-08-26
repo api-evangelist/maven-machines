@@ -1,0 +1,62 @@
+generated: '2026-08-25'
+method: searched
+source: >-
+  registry.npmjs.org search + package metadata, pypi.org, api.github.com org listings, and the
+  Maven developer hub (https://maven-machines.readme.io/). Registries queried unauthenticated on
+  2026-08-25.
+note: >-
+  Maven publishes no first-party API client SDK in any language. The one first-party npm package
+  found is a shared TypeScript type package, not a client library — it ships domain projection and
+  view types, has no HTTP client, and is not referenced from the developer hub. PyPI, RubyGems and
+  the two GitHub orgs carry nothing. Because no client SDK exists, no `SDKs` pointer is emitted in
+  apis.yml; only `Packages`.
+sdk_count: 0
+package_count: 1
+packages:
+- name: '@mavenmachines/transport-execution-types'
+  registry: npm
+  url: https://www.npmjs.com/package/@mavenmachines/transport-execution-types
+  official: true
+  official_evidence: >-
+    Published under the @mavenmachines npm scope; repository field points at
+    bitbucket.org/mavenmachines/transport-execution-types.
+  kind: types
+  language: TypeScript
+  description: Shared transport execution domain projection and view types.
+  license: ISC
+  repository: https://bitbucket.org/mavenmachines/transport-execution-types
+  version: 1.2.5
+  published: '2026-08-11'
+  first_published: '2026-05-08'
+  release_count: 11
+  note: >-
+    Type definitions only — no HTTP client, no authentication helper, and no coverage of the
+    published Integrations API surface. Actively maintained (11 releases between 2026-05-08 and
+    2026-08-11), which makes it a live internal artifact rather than an abandoned SDK.
+registries_checked:
+- registry: npm
+  query: 'scope + text search for mavenmachines / maven machines'
+  result: 1 package
+- registry: pypi
+  query: mavenmachines, maven-machines
+  result: 404 on both
+- registry: rubygems
+  query: maven-machines
+  result: none
+- registry: github
+  query: orgs/Maven-Machines, orgs/MavenMachines
+  result: >-
+    Maven-Machines has one public repo (market-apps-demo, JavaScript, last pushed 2022-07-07);
+    MavenMachines has one empty repo from 2014. Neither is an SDK.
+repositories:
+- name: market-apps-demo
+  url: https://github.com/Maven-Machines/market-apps-demo
+  official: true
+  language: JavaScript
+  kind: sample
+  version: null
+  published: null
+  note: >-
+    Reference implementation for Maven Market Apps (embeddable driver-facing apps). No registry
+    release; version/published are null because a GitHub sample repo has no registry metadata
+    endpoint. Last updated 2022-07-07.

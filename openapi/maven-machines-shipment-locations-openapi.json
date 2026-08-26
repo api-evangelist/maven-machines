@@ -1,0 +1,135 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Shipment Locations APIs",
+    "description": "Documentation for Shipment Locations APIs",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "https://integrations.mavenmachines.com"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "apiKey"
+      }
+    },
+    "schemas": {
+      "FacilityLocation": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of facility location. Example: '1' or '10'"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of facility location. Example: 'door'/'aisle'/'bay'",
+            "enum": [
+              "door",
+              "aisle",
+              "bay"
+            ]
+          },
+          "terminalCode": {
+            "type": "string",
+            "description": "Company terminal identifier"
+          }
+        },
+        "required": [
+          "name",
+          "type",
+          "terminalCode"
+        ]
+      },
+      "UpsertShipmentLocationsDto": {
+        "type": "object",
+        "properties": {
+          "shipmentProNumbers": {
+            "description": "Array of shipment PRO numbers",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "shipmentReferenceNumbers": {
+            "description": "Array of shipment reference numbers",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "currentLocation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FacilityLocation"
+              },
+              {
+                "description": "Facility location where shipment(s) are"
+              }
+            ]
+          },
+          "moveToLocation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FacilityLocation"
+              },
+              {
+                "description": "Facility location where shipment(s) should be moved to"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/shipment-locations": {
+      "post": {
+        "operationId": "ShipmentLocationsController_upsertShipmentLocations",
+        "summary": "POST /shipment-locations",
+        "description": "\n    Enables adding or updating shipment(s) current and/or moveTo locations.\n    ",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertShipmentLocationsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": ""
+          },
+          "400": {
+            "description": "When a request to upsert shipment(s) locations fails due to wrong client input"
+          },
+          "500": {
+            "description": "Unknown error response from the server"
+          }
+        },
+        "tags": [
+          "shipment-locations"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+  },
+  "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+  }
+}

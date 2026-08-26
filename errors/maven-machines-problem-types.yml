@@ -1,0 +1,86 @@
+generated: '2026-08-25'
+method: derived
+source: >-
+  openapi/*.json 4xx/5xx responses across all 21 published Maven Machines OpenAPI documents, plus a
+  live unauthenticated probe of https://integrations.mavenmachines.com/ (HTTP 404) that returned the
+  envelope verbatim.
+format: vendor-json
+rfc9457: false
+note: >-
+  Maven does not use RFC 9457 problem+json. Errors are returned as `application/json` with a flat
+  two-field envelope, `{ "type": <SCREAMING_SNAKE code>, "message": <human string> }`. The envelope
+  is declared inline per operation rather than as a shared component schema, and Maven publishes no
+  consolidated error-code reference page, so the type vocabulary below is only what the specs and a
+  live probe actually exposed — it is not the complete set.
+envelope:
+  media_type: application/json
+  fields:
+  - name: type
+    description: Machine-readable error class in SCREAMING_SNAKE_CASE.
+    example: BAD_REQUEST
+  - name: message
+    description: Human-readable description of what went wrong.
+    example: text description of error
+  observed_live:
+    url: https://integrations.mavenmachines.com/
+    http_status: 404
+    body: '{"type":"NOT_FOUND","message":"Requested resource not found"}'
+status_coverage:
+  '400': 37
+  '401': 8
+  '404': 8
+  '4XX': 1
+  '500': 28
+  '503': 1
+  '5XX': 1
+problem_types:
+- type: BAD_REQUEST
+  status: 400
+  title: Bad request
+  detail: >-
+    Request failed validation or violated a business rule — malformed payload, missing required
+    field, or an identifier that does not resolve. Declared on 37 operations.
+  remediation: >-
+    Read the `message` field; correct the payload and retry. Where an operation accepts both an
+    internal id and an external id (userId/externalUserId, companyLocationId/
+    externalCompanyLocationId), Maven matches on the internal id first.
+  source: openapi (37 operations)
+- type: UNAUTHORIZED
+  status: 401
+  title: Missing or invalid apiKey
+  detail: >-
+    The `apiKey` request header was absent, malformed, or is not authorized for the company the
+    request targets. One spec states the condition explicitly as "This endpoint may only be
+    executed for company 1", i.e. the key is scoped to a single fleet.
+  remediation: >-
+    Send a valid `apiKey` header issued for the target fleet and environment. Staging and
+    production keys are not interchangeable.
+  source: openapi (8 operations)
+- type: NOT_FOUND
+  status: 404
+  title: Requested resource not found
+  detail: >-
+    The addressed record does not exist — unknown route, unknown case number, unknown asset
+    barcode, or a referenced product that is not in the catalog.
+  remediation: Verify the path and the identifier before retrying; a retry of the same request will not succeed.
+  source: openapi (8 operations) + live probe of the API root
+- type: SERVER_ERROR
+  status: 500
+  title: A server error has occurred
+  detail: An unknown server-side failure. Declared on 28 operations.
+  remediation: >-
+    Safe to retry idempotent (upsert) operations with backoff. Repeated failures should go to Maven
+    support via https://help.mavenmachines.com/ — Maven publishes no documented retry budget.
+  source: openapi (28 operations)
+- type: SERVICE_UNAVAILABLE
+  status: 503
+  title: Downstream archive failed
+  detail: >-
+    Declared only on the Bozzuto's middleware order-snapshot endpoint, when the configured archive
+    bucket write fails.
+  remediation: Retry the snapshot; the failure is in a downstream archive, not the ingest.
+  source: openapi/maven-machines-bozzutos-middleware-openapi.json
+gaps:
+- No shared `components.schemas` error object — the envelope is repeated inline on each operation.
+- No published error-code reference page in the developer hub.
+- 401 and 4XX/5XX responses declare no response body content type at all in several specs.

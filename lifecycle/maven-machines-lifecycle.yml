@@ -1,0 +1,75 @@
+generated: '2026-08-25'
+method: searched
+source: >-
+  https://maven-machines.readme.io/docs/basic-concepts.md,
+  https://maven-machines.readme.io/docs/return-events.md,
+  https://mavenmachines.statuspage.io/api/v2/summary.json (probed 2026-08-25),
+  and openapi/*.json
+versioning:
+  scheme: none-in-path
+  detail: >-
+    No version segment appears in any path and no version header is documented. Endpoints are
+    served flat off the base URL (POST https://integrations.mavenmachines.com/users). The
+    `info.version` field in the published specs is "1.0" or "1.0.0" and is not surfaced to callers.
+  breaking_change_policy: >-
+    Not published. Maven does document that a feature-flag and staged-deployment system means
+    "customers testing new or beta functionality may notice differences in API request and response
+    schemas and feature behavior between staging and production" — i.e. schema drift between
+    environments is expected and managed per fleet.
+  source: https://maven-machines.readme.io/docs/basic-concepts
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  deprecated_operations: 0
+  detail: >-
+    No deprecation policy, no RFC 8594 Sunset/Deprecation headers, and no operation in any of the
+    21 published specs carries `deprecated: true`. Nothing in the developer hub describes how or
+    when an endpoint is retired.
+status_page:
+  published: true
+  url: https://mavenmachines.statuspage.io/
+  provider: Atlassian Statuspage
+  page_id: gh4lvyk31tqg
+  api: https://mavenmachines.statuspage.io/api/v2/summary.json
+  components:
+  - Maven Fleet
+  - Maven Dispatch
+  observed:
+    fetched: '2026-08-25'
+    http_status: 200
+    indicator: none
+    description: All Systems Operational
+  note: >-
+    The status page is not linked from mavenmachines.com or from the developer hub; it was found by
+    probing the vendor-default statuspage.io hostname. It covers only two components (Fleet and
+    Dispatch) — the Integrations API itself is not a listed component.
+sla:
+  published: false
+  detail: >-
+    Maven states that "the production environment ... is under the governance of Maven's
+    production SLAs for uptime, performance, and monitoring" but does not publish the SLA terms,
+    numbers, or credits publicly. Staging carries no SLA.
+  source: https://maven-machines.readme.io/docs/basic-concepts
+data_retention:
+- surface: return-events queue
+  window: 30 days
+  detail: >-
+    "Each event in the Maven system is stored for 30 days from the date of creation. After 30 days,
+    the event is deleted from the system and can no longer be read."
+  source: https://maven-machines.readme.io/docs/return-events
+environments:
+- name: production
+  base_url: https://integrations.mavenmachines.com/
+  sla: governed by Maven production SLAs (terms not published)
+- name: staging
+  base_url: https://integrations-staging.mavenmachines.com/
+  sla: none
+  detail: Separate data store; records created in staging never appear in production.
+changelog:
+  published: false
+  detail: >-
+    No changelog surface. https://maven-machines.readme.io/changelog returns 404, and the developer
+    hub exposes no releases or release-notes section. Individual doc pages carry an `updatedAt`
+    timestamp in their markdown frontmatter (ranging 2025-01-28 to 2026-02-09), which is the only
+    dated change signal available.

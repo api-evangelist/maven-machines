@@ -1,0 +1,25 @@
+generated: '2026-08-25'
+method: searched
+source: >-
+  https://mavenmachines.com/ (site navigation + footer), https://mavenmachines.com/page-sitemap.xml
+  (full published page inventory), https://mavenmachines.com/contact/,
+  https://maven-machines.readme.io/llms.txt
+plan_count: 0
+pricing_model: contact-sales
+note: >-
+  Maven publishes no pricing. https://mavenmachines.com/pricing and /pricing/ both return HTTP 404,
+  and the WordPress page sitemap — the complete list of pages the site publishes — contains no
+  pricing, plans, or packages page at all. Acquisition runs through a HubSpot demo-request form and
+  the contact page; there is no self-serve signup, no published tiers, no metered rates and no
+  developer-tier free plan. The API is available to contracted fleets, whose `apiKey` is issued per
+  fleet per environment.
+plans: []
+evidence:
+- url: https://mavenmachines.com/pricing/
+  status: 404
+- url: https://mavenmachines.com/page-sitemap.xml
+  status: 200
+  detail: 17 published pages; none is a pricing page.
+- url: https://mavenmachines.com/contact/
+  status: 200
+  detail: HubSpot form; "Request a demo" is the published route to commercial terms.

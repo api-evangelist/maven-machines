@@ -1,0 +1,106 @@
+generated: '2026-08-25'
+method: searched
+source: >-
+  https://maven-machines.readme.io/docs/return-events.md,
+  https://maven-machines.readme.io/docs/pd-return-events.md,
+  https://maven-machines.readme.io/docs/linehaul-dock-app-return-events.md,
+  https://maven-machines.readme.io/docs/eld-return-events.md,
+  https://maven-machines.readme.io/docs/retrieving-documents-from-return-events.md
+asyncapi_published: false
+webhooks_published: false
+delivery: pull
+note: >-
+  Maven has a substantial, fully catalogued event surface — but it is NOT a webhook surface and
+  there is NO AsyncAPI document. Events are consumed by POLLING `GET /return-events`; Maven
+  publishes no callback registration, no delivery retry policy, no signing secret, and no
+  `callbacks`/`webhooks` block in any of the 21 OpenAPI documents. For that reason NO `Webhooks`
+  and NO `AsyncAPI` pointer is emitted in apis.yml — an honest absence, recorded rather than
+  papered over. The catalog below is what Maven actually documents.
+transport:
+  operation: GET /return-events
+  operationId: get-return-events
+  alias: GET /events (operationId get-events, planning-and-dispatch definition)
+  style: polled queue, ordered by generation time
+  cursor: startTime (ISO 8601 UTC)
+  recommended_interval: every 30 seconds to 1 minute
+  retention: >-
+    30 days — "Each event in the Maven system is stored for 30 days from the date of creation.
+    After 30 days, the event is deleted from the system and can no longer be read."
+  envelope:
+    id: Unique event identifier.
+    timestamp: UTC ISO 8601, when the return event was produced.
+    eventType: Describes the format of the return event data.
+    data: The event payload.
+event_families:
+- family: P&D (pickup and delivery)
+  docs: https://maven-machines.readme.io/docs/pd-return-events
+  event_types:
+  - arriveTerminal
+  - customerCreated
+  - customerUpdated
+  - departTerminal
+  - geofenceStopDeparture
+  - geofenceTerminalArrival
+  - geofenceTerminalDeparture
+  - manifestClosed
+  - manifestCreated
+  - manifestDispatched
+  - manifestPlanned
+  - manifestRouteUpdated
+  - manifestUpdated
+  - parentStopMerged
+  - routeComplete
+  - routeETAUpdate
+  - routeReturn
+  - routeStart
+  - routeStopListUpdated
+  - shipmentAssignment
+  - shipmentComplete
+  - shipmentCreated
+  - shipmentRecomplete
+  - shipmentUnassignment
+  - shipmentUpdated
+  - shipmentUpdatedInMaven
+  - stopArrival
+  - stopAssignment
+  - stopBegin
+  - stopComplete
+  - stopDeparture
+  - stopRouteUpdated
+  - stopUnassignment
+- family: Linehaul & Dock App
+  docs: https://maven-machines.readme.io/docs/linehaul-dock-app-return-events
+  note: >-
+    PascalCase names here, camelCase in the P&D family — the two families do not share a naming
+    convention, which an event router has to account for.
+  event_types:
+  - ManifestCreated
+  - ManifestDetailsUpdated
+  - StartedUnloadingManifest
+  - FinishedUnloadingManifest
+  - ManifestCompleted
+  - MovementCreated
+  - MovementDetailsUpdated
+  - MovementAssignedToDriver
+  - MovementUnassignedFromDriver
+  - MovementUnassignedFromManifest
+  - MovementReassignedToManifest
+  - MovementArrived
+  - MovementDeparted
+  - MovementDeleted
+- family: ELD / hours-of-service
+  docs: https://maven-machines.readme.io/docs/eld-return-events
+  event_types:
+  - violationCreated
+  - violationInvalidated
+documents:
+  detail: >-
+    Bills of lading, shipment photos and signatures associated with a shipment are not embedded in
+    the event; they are retrieved separately.
+  docs: https://maven-machines.readme.io/docs/retrieving-documents-from-return-events
+gaps:
+- No AsyncAPI or CloudEvents description of any of these 49 event types.
+- No push delivery — every consumer must run a polling loop and manage its own cursor.
+- >-
+  No dead-letter or replay beyond the 30-day window; a consumer that is down for a month loses the
+  events permanently.

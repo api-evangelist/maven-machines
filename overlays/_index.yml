@@ -1,0 +1,69 @@
+generated: '2026-08-25'
+method: generated
+source: openapi/*.json
+note: One OpenAPI Overlay 1.0.0 document per published Maven Machines spec, capturing API Evangelist enhancements.
+  The originals in openapi/ are never mutated.
+overlays:
+- overlay: overlays/maven-machines-aaa-cooper-middleware-overlay.yaml
+  extends: openapi/maven-machines-aaa-cooper-middleware-openapi.json
+  actions: 4
+- overlay: overlays/maven-machines-assets-overlay.yaml
+  extends: openapi/maven-machines-assets-openapi.json
+  actions: 4
+- overlay: overlays/maven-machines-averitt-middleware-overlay.yaml
+  extends: openapi/maven-machines-averitt-middleware-openapi.json
+  actions: 4
+- overlay: overlays/maven-machines-bozzutos-middleware-overlay.yaml
+  extends: openapi/maven-machines-bozzutos-middleware-openapi.json
+  actions: 3
+- overlay: overlays/maven-machines-company-locations-overlay.yaml
+  extends: openapi/maven-machines-company-locations-openapi.json
+  actions: 4
+- overlay: overlays/maven-machines-eld-hos-overlay.yaml
+  extends: openapi/maven-machines-eld-hos-openapi.json
+  actions: 3
+- overlay: overlays/maven-machines-linehaul-overlay.yaml
+  extends: openapi/maven-machines-linehaul-openapi.json
+  actions: 4
+- overlay: overlays/maven-machines-manifest-commands-overlay.yaml
+  extends: openapi/maven-machines-manifest-commands-openapi.json
+  actions: 4
+- overlay: overlays/maven-machines-market-apps-overlay.yaml
+  extends: openapi/maven-machines-market-apps-openapi.json
+  actions: 4
+- overlay: overlays/maven-machines-messages-overlay.yaml
+  extends: openapi/maven-machines-messages-openapi.json
+  actions: 4
+- overlay: overlays/maven-machines-planning-and-dispatch-overlay.yaml
+  extends: openapi/maven-machines-planning-and-dispatch-openapi.json
+  actions: 3
+- overlay: overlays/maven-machines-reddy-ice-middleware-overlay.yaml
+  extends: openapi/maven-machines-reddy-ice-middleware-openapi.json
+  actions: 4
+- overlay: overlays/maven-machines-reports-overlay.yaml
+  extends: openapi/maven-machines-reports-openapi.json
+  actions: 4
+- overlay: overlays/maven-machines-rest-service-manual-overlay.yaml
+  extends: openapi/maven-machines-rest-service-manual-openapi.json
+  actions: 3
+- overlay: overlays/maven-machines-roy-miller-middleware-overlay.yaml
+  extends: openapi/maven-machines-roy-miller-middleware-openapi.json
+  actions: 4
+- overlay: overlays/maven-machines-shipment-locations-overlay.yaml
+  extends: openapi/maven-machines-shipment-locations-openapi.json
+  actions: 4
+- overlay: overlays/maven-machines-shipments-overlay.yaml
+  extends: openapi/maven-machines-shipments-openapi.json
+  actions: 4
+- overlay: overlays/maven-machines-smart-overlay.yaml
+  extends: openapi/maven-machines-smart-openapi.json
+  actions: 4
+- overlay: overlays/maven-machines-triple-s-steel-middleware-overlay.yaml
+  extends: openapi/maven-machines-triple-s-steel-middleware-openapi.json
+  actions: 4
+- overlay: overlays/maven-machines-users-overlay.yaml
+  extends: openapi/maven-machines-users-openapi.json
+  actions: 4
+- overlay: overlays/maven-machines-workflow-overlay.yaml
+  extends: openapi/maven-machines-workflow-openapi.json
+  actions: 4

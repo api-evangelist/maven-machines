@@ -1,0 +1,82 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Shipments APIs",
+    "description": "Documentation for Shipments APIs",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "apiKey"
+      }
+    },
+    "schemas": {
+      "UpdateShipmentProNumberDto": {
+        "type": "object",
+        "properties": {
+          "currentProNumber": {
+            "type": "string",
+            "description": "The current PRO number of the shipment"
+          },
+          "newProNumber": {
+            "type": "string",
+            "description": "The new PRO number of the shipment"
+          }
+        },
+        "required": [
+          "currentProNumber",
+          "newProNumber"
+        ]
+      }
+    }
+  },
+  "paths": {
+    "/shipment/updateShipmentProNumber": {
+      "post": {
+        "operationId": "ShipmentController_updateShipmentProNumber",
+        "summary": "POST /shipment/updateShipmentProNumber",
+        "description": "\n    Updates a shipment's PRO number.\n    ",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateShipmentProNumberDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": ""
+          },
+          "400": {
+            "description": "When a request to update a shipment's PRO number fails due to wrong client input"
+          },
+          "500": {
+            "description": "Unknown error response."
+          }
+        },
+        "tags": [
+          "shipment"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+  },
+  "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+  }
+}

@@ -1,0 +1,877 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Company Locations APIs",
+    "description": "Documentation for Company Locations APIs",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "https://integrations.mavenmachines.com"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "apiKey"
+      }
+    },
+    "schemas": {
+      "GeojsonProperties": {
+        "type": "object",
+        "properties": {
+          "radius": {
+            "type": "number",
+            "description": "The radius of a circle geofence in meters, to 2 decimal points of precision.",
+            "example": 500.75
+          }
+        }
+      },
+      "GeojsonGeometry": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "Polygon",
+              "Point"
+            ],
+            "description": "geometry type is either Polygon or Point.",
+            "example": "Point"
+          },
+          "coordinates": {
+            "description": "The coordinates for a circle or polygon.",
+            "example": [
+              [
+                -122.12748,
+                37.43297
+              ]
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "type",
+          "coordinates"
+        ]
+      },
+      "Geojson": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "Feature"
+            ],
+            "description": "Geojson type is always Feature.",
+            "example": "Feature"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/GeojsonProperties"
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/GeojsonGeometry"
+          }
+        },
+        "required": [
+          "type",
+          "geometry"
+        ]
+      },
+      "Geofences": {
+        "type": "object",
+        "properties": {
+          "isDeparture": {
+            "type": "boolean",
+            "description": "this geofence is for departing. Defaults to false.",
+            "example": false
+          },
+          "isArrival": {
+            "type": "boolean",
+            "description": "this geofence is for arriving. Defaults to false.",
+            "example": true
+          },
+          "name": {
+            "type": "string",
+            "description": "name of the geofence. defaults to Geofence.",
+            "example": "Geofence-Arrival"
+          },
+          "geojson": {
+            "$ref": "#/components/schemas/Geojson"
+          }
+        },
+        "required": [
+          "geojson"
+        ]
+      },
+      "AvailabilityResponse": {
+        "type": "object",
+        "properties": {
+          "dayOfWeek": {
+            "type": "string",
+            "description": "one of : mo tu we th fr sa su",
+            "example": "mo"
+          },
+          "availability": {
+            "type": "boolean",
+            "description": "indicates if available (1) or not (0).",
+            "example": 1
+          },
+          "forPickups": {
+            "type": "boolean",
+            "description": "for pickups.",
+            "example": 1
+          },
+          "forDeliveries": {
+            "type": "boolean",
+            "description": "for deliveries.",
+            "example": 1
+          },
+          "fromTime": {
+            "type": "string",
+            "description": "from time",
+            "example": "10:00:00"
+          },
+          "tillTime": {
+            "type": "string",
+            "description": "till time",
+            "example": "22:30:00"
+          }
+        },
+        "required": [
+          "dayOfWeek",
+          "availability",
+          "forPickups",
+          "forDeliveries",
+          "fromTime",
+          "tillTime"
+        ]
+      },
+      "CompanyLocationDto": {
+        "type": "object",
+        "properties": {
+          "externalCompanyLocationId": {
+            "type": "string",
+            "description": "Unique external identifier for location",
+            "example": "MAVEN-MACHINES"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of location",
+            "example": "Maven Machines"
+          },
+          "address1": {
+            "type": "string",
+            "description": "Street address of location",
+            "example": "4117 Liberty Ave"
+          },
+          "address2": {
+            "type": "string",
+            "description": "Secondary address line of location",
+            "example": "BLDG 1"
+          },
+          "city": {
+            "type": "string",
+            "description": "City of location",
+            "example": "Pittsburgh"
+          },
+          "state": {
+            "type": "string",
+            "description": "State of location",
+            "example": "PA"
+          },
+          "zip": {
+            "type": "string",
+            "description": "Zip/postal code of location",
+            "example": "15224"
+          },
+          "country": {
+            "type": "string",
+            "description": "Country of location",
+            "example": "US"
+          },
+          "latitude": {
+            "type": "number",
+            "description": "Latitude - double  - 5 decimal places (between -90 and 90)",
+            "example": 40.12345
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitude - double  - 5 decimal places (between -180 and 180)",
+            "example": -79.12345
+          },
+          "notes": {
+            "type": "string",
+            "description": "Free-form notes about location",
+            "example": "Please call ahead of time"
+          },
+          "attributes": {
+            "type": "object",
+            "example": {
+              "customField": "customValue"
+            },
+            "description": "key/value object of custom user defined fields. Max 10 fields allowed."
+          },
+          "locationTagNames": {
+            "type": "array",
+            "description": "Array of strings. Location tags are used to add properties to the location.",
+            "example": [
+              "liftgage",
+              "callahead"
+            ]
+          },
+          "locationCategoryNames": {
+            "type": "array",
+            "description": "Array of strings. Location categories are used to identify and separate company locations.",
+            "example": [
+              "dropyard"
+            ]
+          },
+          "terminalCode": {
+            "type": "string",
+            "description": "Terminal code of the terminal linked to the company location",
+            "example": "PGH"
+          },
+          "geofences": {
+            "description": "Geofences data object",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Geofences"
+            }
+          },
+          "availability": {
+            "description": "Availability data object",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AvailabilityResponse"
+            }
+          },
+          "companyLocationId": {
+            "type": "number",
+            "description": "Unique identifier for the company location",
+            "example": 35689
+          }
+        },
+        "required": [
+          "externalCompanyLocationId",
+          "name",
+          "address1",
+          "city",
+          "state",
+          "country",
+          "companyLocationId"
+        ]
+      },
+      "GlobalPagination": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "number",
+            "description": "Total number of records",
+            "example": 15
+          },
+          "hasNextPage": {
+            "type": "boolean",
+            "description": "Bool to indicate if there is another page of data to request.",
+            "example": false
+          },
+          "nextPageOffset": {
+            "type": "number",
+            "description": "For subsequent requests, set offset to the value of this field to get the next page",
+            "example": null
+          }
+        },
+        "required": [
+          "total",
+          "hasNextPage",
+          "nextPageOffset"
+        ]
+      },
+      "CompanyLocationsResponseApi": {
+        "type": "object",
+        "properties": {
+          "companyLocations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CompanyLocationDto"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/GlobalPagination"
+          }
+        },
+        "required": [
+          "companyLocations"
+        ]
+      },
+      "Availability": {
+        "type": "object",
+        "properties": {
+          "daysOfWeek": {
+            "type": "string",
+            "description": "Days of week. An array of days: [\"mo\",\"tu\",\"we\",\"th\",\"fr\",\"sa\",\"su\"]",
+            "example": [
+              "mo"
+            ]
+          },
+          "forPickups": {
+            "type": "boolean",
+            "description": "for pickups. Defaults to false.",
+            "example": true
+          },
+          "forDeliveries": {
+            "type": "boolean",
+            "description": "for deliveries. Defaults to false.",
+            "example": true
+          },
+          "fromTime": {
+            "type": "string",
+            "description": "from time",
+            "example": "10:00:00"
+          },
+          "tillTime": {
+            "type": "string",
+            "description": "till time",
+            "example": "22:30:00"
+          }
+        },
+        "required": [
+          "daysOfWeek",
+          "forPickups",
+          "forDeliveries",
+          "fromTime",
+          "tillTime"
+        ]
+      },
+      "CompanyLocationCreateDto": {
+        "type": "object",
+        "properties": {
+          "externalCompanyLocationId": {
+            "type": "string",
+            "description": "Unique external identifier for location",
+            "example": "MAVEN-MACHINES"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of location",
+            "example": "Maven Machines"
+          },
+          "address1": {
+            "type": "string",
+            "description": "Street address of location",
+            "example": "4117 Liberty Ave"
+          },
+          "address2": {
+            "type": "string",
+            "description": "Secondary address line of location",
+            "example": "BLDG 1"
+          },
+          "city": {
+            "type": "string",
+            "description": "City of location",
+            "example": "Pittsburgh"
+          },
+          "state": {
+            "type": "string",
+            "description": "State of location",
+            "example": "PA"
+          },
+          "zip": {
+            "type": "string",
+            "description": "Zip/postal code of location",
+            "example": "15224"
+          },
+          "country": {
+            "type": "string",
+            "description": "Country of location",
+            "example": "US"
+          },
+          "latitude": {
+            "type": "number",
+            "description": "Latitude - double  - 5 decimal places (between -90 and 90)",
+            "example": 40.12345
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitude - double  - 5 decimal places (between -180 and 180)",
+            "example": -79.12345
+          },
+          "notes": {
+            "type": "string",
+            "description": "Free-form notes about location",
+            "example": "Please call ahead of time"
+          },
+          "attributes": {
+            "type": "object",
+            "example": {
+              "customField": "customValue"
+            },
+            "description": "key/value object of custom user defined fields. Max 10 fields allowed."
+          },
+          "locationTagNames": {
+            "type": "array",
+            "description": "Array of strings. Location tags are used to add properties to the location.",
+            "example": [
+              "liftgage",
+              "callahead"
+            ]
+          },
+          "locationCategoryNames": {
+            "type": "array",
+            "description": "Array of strings. Location categories are used to identify and separate company locations.",
+            "example": [
+              "dropyard"
+            ]
+          },
+          "terminalCode": {
+            "type": "string",
+            "description": "Terminal code of the terminal linked to the company location",
+            "example": "PGH"
+          },
+          "geofences": {
+            "description": "Geofences data object",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Geofences"
+            }
+          },
+          "availability": {
+            "description": "Availability data object",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Availability"
+            }
+          }
+        },
+        "required": [
+          "externalCompanyLocationId",
+          "name",
+          "address1",
+          "city",
+          "state",
+          "country"
+        ]
+      },
+      "CompanyLocationPutDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of location",
+            "example": "Maven Machines"
+          },
+          "address1": {
+            "type": "string",
+            "description": "Street address of location",
+            "example": "4117 Liberty Ave"
+          },
+          "address2": {
+            "type": "string",
+            "description": "Secondary address line of location",
+            "example": "BLDG 1"
+          },
+          "city": {
+            "type": "string",
+            "description": "City of location",
+            "example": "Pittsburgh"
+          },
+          "state": {
+            "type": "string",
+            "description": "State of location",
+            "example": "PA"
+          },
+          "zip": {
+            "type": "string",
+            "description": "Zip/postal code of location",
+            "example": "15224"
+          },
+          "country": {
+            "type": "string",
+            "description": "Country of location",
+            "example": "US"
+          },
+          "latitude": {
+            "type": "number",
+            "description": "Latitude - double  - 5 decimal places (between -90 and 90)",
+            "example": 40.12345
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitude - double  - 5 decimal places (between -180 and 180)",
+            "example": -79.12345
+          },
+          "notes": {
+            "type": "string",
+            "description": "Free-form notes about location",
+            "example": "Knock before entering"
+          },
+          "attributes": {
+            "type": "object",
+            "example": {
+              "customField": "customValue"
+            },
+            "description": "key/value object of custom user defined fields. Max 10 fields allowed."
+          },
+          "locationTagNames": {
+            "type": "array",
+            "description": "Array of strings. Location tags are used to add properties to the location.",
+            "example": [
+              "liftgage",
+              "callahead"
+            ]
+          },
+          "locationCategoryNames": {
+            "type": "array",
+            "description": "Array of strings. Location categories are used to identify and separate company locations.",
+            "example": [
+              "dropyard"
+            ]
+          },
+          "terminalCode": {
+            "type": "string",
+            "description": "The Terminal Code of the terminal linked to the location.",
+            "example": "PGH"
+          },
+          "geofences": {
+            "description": "Geofences data object",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Geofences"
+            }
+          },
+          "availability": {
+            "description": "Availability data object",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Availability"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "address1",
+          "city",
+          "state",
+          "country"
+        ]
+      },
+      "CompanyLocationPatchDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of location",
+            "example": "Maven Machines"
+          },
+          "address1": {
+            "type": "string",
+            "description": "Street address of location",
+            "example": "4117 Liberty Ave"
+          },
+          "address2": {
+            "type": "string",
+            "description": "Secondary address line of location",
+            "example": "BLDG 1"
+          },
+          "city": {
+            "type": "string",
+            "description": "City of location",
+            "example": "Pittsburgh"
+          },
+          "state": {
+            "type": "string",
+            "description": "State of location",
+            "example": "PA"
+          },
+          "zip": {
+            "type": "string",
+            "description": "Zip/postal code of location",
+            "example": "15224"
+          },
+          "country": {
+            "type": "string",
+            "description": "Country of location",
+            "example": "US"
+          },
+          "latitude": {
+            "type": "number",
+            "description": "Latitude - double  - 5 decimal places (between -90 and 90)",
+            "example": 40.12345
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitude - double  - 5 decimal places (between -180 and 180)",
+            "example": -79.12345
+          },
+          "notes": {
+            "type": "string",
+            "description": "Free-form notes about location",
+            "example": "Knock before entering"
+          },
+          "attributes": {
+            "type": "object",
+            "example": {
+              "customField": "customValue"
+            },
+            "description": "key/value object of custom user defined fields. Max 10 fields allowed."
+          },
+          "locationTagNames": {
+            "type": "array",
+            "description": "Array of strings. Location tags are used to add properties to the location.",
+            "example": [
+              "liftgage",
+              "callahead"
+            ]
+          },
+          "locationCategoryNames": {
+            "type": "array",
+            "description": "Array of strings. Location categories are used to identify and separate company locations.",
+            "example": [
+              "dropyard"
+            ]
+          },
+          "terminalCode": {
+            "type": "string",
+            "description": "The Terminal Code of the terminal linked to the location.",
+            "example": "PGH"
+          },
+          "geofences": {
+            "description": "Geofences data object",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Geofences"
+            }
+          },
+          "availability": {
+            "description": "Availability data object",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Availability"
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/company-locations": {
+      "get": {
+        "operationId": "CompanyLocationsController_handleGetCompanyLocations",
+        "summary": "GET /company-locations",
+        "description": "Retrieves all company location records in the Maven system\n    with an offset parameter. Retrieves a company location record in the Maven system\n    if a companyLocationId or externalCompanyLocationId is supplied. \n    If both a supplied, Maven will first search by companyLocationId.",
+        "parameters": [
+          {
+            "name": "companyLocationId",
+            "required": false,
+            "in": "query",
+            "description": "Unique identifier for location",
+            "example": 25812,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "externalCompanyLocationId",
+            "required": false,
+            "in": "query",
+            "description": "Unique external identifier for location",
+            "example": "TMS_PLACE123",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "description": "Pagination result offset",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of company location records or successful API \n    response for fetching a location by companyLocationId \n    or externalCompanyLocationId parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyLocationsResponseApi"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "company-locations"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "CompanyLocationsController_createCompanyLocation",
+        "summary": "POST /company-locations",
+        "description": "Creates a company location record in the Maven system.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompanyLocationCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "A successful API response for company location record creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyLocationDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "company-locations"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "CompanyLocationsController_updateCompanyLocation",
+        "summary": "PUT /company-locations",
+        "description": "Updates a company location record in the Maven system. \n    A companyLocationId or externalCompanyLocationId must be supplied. \n    If both a supplied, Maven will first search by companyLocationId.",
+        "parameters": [
+          {
+            "name": "companyLocationId",
+            "required": false,
+            "in": "query",
+            "description": "Unique identifier for location",
+            "example": 25812,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "externalCompanyLocationId",
+            "required": false,
+            "in": "query",
+            "description": "Unique external identifier for location",
+            "example": "TMS_PLACE123",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompanyLocationPutDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful API response for company location record update",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyLocationDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "company-locations"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "CompanyLocationsController_patchCompanyLocation",
+        "summary": "PATCH /company-locations",
+        "description": "Updates a company location record in the Maven system. \n    A companyLocationId or externalCompanyLocationId must be supplied. \n    If both a supplied, Maven will first search by companyLocationId.",
+        "parameters": [
+          {
+            "name": "companyLocationId",
+            "required": false,
+            "in": "query",
+            "description": "Unique identifier for location",
+            "example": 25812,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "externalCompanyLocationId",
+            "required": false,
+            "in": "query",
+            "description": "Unique external identifier for location",
+            "example": "TMS_PLACE123",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompanyLocationPatchDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful API response for company location record update",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyLocationDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "company-locations"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+  },
+  "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+  }
+}

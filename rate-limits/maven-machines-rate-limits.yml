@@ -1,0 +1,33 @@
+generated: '2026-08-25'
+method: searched
+source: >-
+  https://maven-machines.readme.io/llms.txt (full doc index), every guide page under
+  https://maven-machines.readme.io/docs/*.md, and all 21 published OpenAPI documents in openapi/
+limit_count: 0
+note: >-
+  Maven publishes no rate limits. Every guide page in the developer hub was fetched and searched;
+  no quota, throttle, burst, 429 status, `X-RateLimit-*`, `RateLimit-*` or `Retry-After` header is
+  documented anywhere, and not one of the 82 operations across the 21 published specs declares a
+  429 response. The only volume ceilings Maven states are per-request payload caps, not
+  request-rate limits, and they are recorded below because an agent still has to respect them.
+limits: []
+response_headers: []
+status_on_exhaustion: null
+payload_caps:
+- surface: POST /vehicles/upload
+  cap: 1000 rows per CSV file
+  source: https://maven-machines.readme.io/reference/uploadvehiclescontroller_upload
+- surface: POST /trailers/upload
+  cap: 1000 rows per CSV file
+  source: https://maven-machines.readme.io/reference/uploadtrailercontroller_upload
+- surface: POST /messages
+  cap: 50 recipients per message
+  source: https://maven-machines.readme.io/reference/messagescontroller_createmessages
+polling_guidance:
+- surface: GET /return-events
+  recommended_interval: every 30 seconds to 1 minute
+  detail: >-
+    Maven recommends a fixed-interval polling program rather than specifying a limit — "it is
+    recommended to create a program that polls this endpoint at a fixed time interval (every 30
+    seconds - 1 minute is common)."
+  source: https://maven-machines.readme.io/docs/return-events

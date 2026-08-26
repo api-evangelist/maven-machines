@@ -1,0 +1,1440 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "AppController_getHello",
+        "summary": "Health Check",
+        "description": "Returns a simple message to verify the middleware is running",
+        "security": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Service is running",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Hello World!"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error"
+          },
+          "5XX": {
+            "description": "Server error"
+          },
+          "4XX": {
+            "description": "Client error"
+          }
+        },
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/product-eligibility": {
+      "post": {
+        "operationId": "ProductEligibilityController_updateProductEligibility",
+        "summary": "Update product eligibility",
+        "description": "Updates company-level products, customer eligibility, pricing, discounts, and payment settings.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EligibilityRequestDto"
+              },
+              "examples": {
+                "productCreation": {
+                  "summary": "Product Creation",
+                  "description": "Company-level product master refresh (no consigneeCustomerNumber).",
+                  "value": {
+                    "associatedShipment": {
+                      "shipmentItems": [
+                        {
+                          "description": "7_LB Bags",
+                          "sku": "7_LB",
+                          "productCode": "200771",
+                          "upc": "00860006114916"
+                        },
+                        {
+                          "description": "16_LB Bags",
+                          "sku": "16_LB",
+                          "productCode": "200772",
+                          "upc": "00860006114917"
+                        },
+                        {
+                          "description": "CC Service Charge",
+                          "sku": "CC_Srvc",
+                          "productCode": "200781",
+                          "upc": "00860006114916"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "productEligibility": {
+                  "summary": "Product Eligibility",
+                  "description": "Customer product eligibility, pricing, payment, and POD settings.",
+                  "value": {
+                    "associatedShipment": {
+                      "consigneeCustomerNumber": "808003052",
+                      "shipmentItems": [
+                        {
+                          "description": "7_LB Bags",
+                          "sku": "7_LB",
+                          "productCode": "200771",
+                          "upc": "00860006114916",
+                          "required": false,
+                          "consignment": false,
+                          "price": 1.17,
+                          "discount": 0.1,
+                          "taxRate": 0.12
+                        },
+                        {
+                          "description": "CC Service Charge",
+                          "sku": "CC_Srvc",
+                          "productCode": "200781",
+                          "upc": "00860006114916",
+                          "required": true,
+                          "consignment": false,
+                          "price": 1,
+                          "discount": 0,
+                          "taxRate": 0
+                        }
+                      ],
+                      "paymentOnDelivery": {
+                        "required": true,
+                        "accept": {
+                          "check": false,
+                          "cash": true,
+                          "credit": false
+                        }
+                      },
+                      "podRequirements": {
+                        "onDeliveryPo": true,
+                        "printNameAndSignature": true,
+                        "storeStampImg": true,
+                        "customerDocumentImg": true
+                      }
+                    }
+                  }
+                },
+                "distributorAssignment": {
+                  "summary": "Distributor Customer Assignment",
+                  "description": "Assign or revoke distributor servicing a customer.",
+                  "value": {
+                    "associatedShipment": {
+                      "consigneeCustomerNumber": "808003052",
+                      "distributorId": "relationship123",
+                      "shipmentItems": [
+                        {
+                          "description": "7_LB Bags",
+                          "sku": "7_LB",
+                          "productCode": "200771",
+                          "upc": "00860006114916",
+                          "required": false,
+                          "consignment": false,
+                          "price": 1.17,
+                          "discount": 0.1,
+                          "taxRate": 0.12
+                        }
+                      ],
+                      "paymentOnDelivery": {
+                        "required": true,
+                        "accept": {
+                          "check": false,
+                          "cash": true,
+                          "credit": false
+                        }
+                      },
+                      "podRequirements": {
+                        "onDeliveryPo": true,
+                        "printNameAndSignature": true,
+                        "storeStampImg": true,
+                        "customerDocumentImg": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Product eligibility updated successfully"
+          },
+          "400": {
+            "description": "Validation failed or business rule violation"
+          },
+          "401": {
+            "description": "Missing or invalid apiKey"
+          },
+          "404": {
+            "description": "Referenced product was not found"
+          }
+        },
+        "tags": [
+          "product-eligibility"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/cases/{caseNumber}": {
+      "get": {
+        "operationId": "ReddyIceCaseController_getCase",
+        "summary": "GET /cases/caseNumber",
+        "description": "\n    API debug endpoint for fetching the task associated with a case in the Maven system.\n    ",
+        "parameters": [
+          {
+            "name": "caseNumber",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Case task found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed or business rule violation"
+          },
+          "401": {
+            "description": "Missing or invalid apiKey"
+          },
+          "404": {
+            "description": "Case not found"
+          }
+        },
+        "tags": [
+          "reddy-ice"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "ReddyIceCaseController_upsertCase",
+        "summary": "PUT /cases/caseNumber",
+        "description": "\n    API endpoint for creating and updating a case in the Maven system.\n    ",
+        "parameters": [
+          {
+            "name": "caseNumber",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReddyIceCaseDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Case create or updated successfully"
+          },
+          "400": {
+            "description": "Validation failed or business rule violation"
+          },
+          "401": {
+            "description": "Missing or invalid apiKey"
+          }
+        },
+        "tags": [
+          "reddy-ice"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "ReddyIceCaseController_deleteCase",
+        "summary": "DELETE /cases/{caseNumber}",
+        "description": "\n    API endpoint for deleting a case in the Maven system.\n    ",
+        "parameters": [
+          {
+            "name": "caseNumber",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful API response for deleting a case"
+          },
+          "400": {
+            "description": "Validation failed or business rule violation"
+          },
+          "401": {
+            "description": "Missing or invalid apiKey"
+          },
+          "404": {
+            "description": "Case not found"
+          }
+        },
+        "tags": [
+          "reddy-ice"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/servicetechs/assets/{barcode}": {
+      "get": {
+        "operationId": "ServiceTechsController_getAssetByBarcode",
+        "summary": "GET /servicetechs/assets/barCode",
+        "description": "API endpoint to get asset information from a barcode scan",
+        "parameters": [
+          {
+            "name": "barcode",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "task-id",
+            "required": false,
+            "in": "query",
+            "description": "Optional Maven task ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "task-type",
+            "required": false,
+            "in": "query",
+            "description": "Optional Maven task type",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "i",
+            "required": false,
+            "in": "query",
+            "description": "Optional field filter(s)",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful asset lookup",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssetResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed or business rule violation"
+          },
+          "401": {
+            "description": "Missing or invalid apiKey"
+          },
+          "404": {
+            "description": "Asset not found"
+          },
+          "500": {
+            "description": "Upstream asset lookup failed"
+          }
+        },
+        "tags": [
+          "servicetechs"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/servicetechs/assets/workflow-data/{assetType}": {
+      "get": {
+        "operationId": "ServiceTechsController_getWorkflowData",
+        "summary": "GET /servicetechs/assets/workflow-data/assetType",
+        "description": "Fetch workflow data for a given asset type",
+        "parameters": [
+          {
+            "name": "assetType",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "i",
+            "required": false,
+            "in": "query",
+            "description": "Optional field filter(s)",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "task-id",
+            "required": false,
+            "in": "query",
+            "description": "Optional Maven task ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "task-type",
+            "required": false,
+            "in": "query",
+            "description": "Optional Maven task type",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful workflow lookup",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkflowResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed or business rule violation"
+          },
+          "401": {
+            "description": "Missing or invalid apiKey"
+          },
+          "500": {
+            "description": "Workflow data lookup failed"
+          }
+        },
+        "tags": [
+          "servicetechs"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/servicetechs/clearCache": {
+      "get": {
+        "operationId": "ServiceTechsController_clearCache",
+        "summary": "Clear servicetechs cache",
+        "description": "Clears cached servicetechs datasets. Restricted to API keys associated with company ID 1.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Cache cleared"
+          },
+          "400": {
+            "description": "Validation failed or business rule violation"
+          },
+          "401": {
+            "description": "This endpoint may only be executed for company 1"
+          }
+        },
+        "tags": [
+          "servicetechs"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
+    "/shipment": {
+      "post": {
+        "operationId": "ShipmentController_createShipment",
+        "summary": "POST /shipment",
+        "description": "API endpoint for creating a new Ice Delivery shipment in the Maven system.\ndestinationTerminalCode, productCode(s), and consignee customer number are all foreign keys that must exist in the system.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShipmentRequestDto"
+              },
+              "examples": {
+                "iceDelivery": {
+                  "summary": "Ice Delivery shipment",
+                  "description": "Extended shipment payload for Ice Deliveries (see Ice Deliveries integration guide).  https://maven-machines.readme.io/docs/ice-deliveries",
+                  "value": {
+                    "associatedShipment": {
+                      "consigneeCustomerNumber": "045037666",
+                      "deliveryServiceStartDate": "2025-12-11",
+                      "deliveryServiceDueDate": "2025-12-10",
+                      "destinationTerminalCode": "206",
+                      "instructions": "printNameAndSignature",
+                      "proNumber": "{{epoch()}}",
+                      "inboundInterlineProNumber": "2025-10-02",
+                      "shipmentItems": [
+                        {
+                          "description": "7_LB Bags",
+                          "quantities": [
+                            {
+                              "quantity": 196,
+                              "unit": "Bags"
+                            }
+                          ],
+                          "pieces": 200,
+                          "weight": 1444,
+                          "palletEquivalents": 1.22,
+                          "sku": "7_LB",
+                          "productCode": "200771",
+                          "upc": "00860006114916",
+                          "consignment": false,
+                          "price": 1.17,
+                          "discount": 0.1,
+                          "taxRate": 0.017
+                        },
+                        {
+                          "description": "16_LB Bags",
+                          "quantities": [
+                            {
+                              "quantity": 0,
+                              "unit": "Bags"
+                            }
+                          ],
+                          "pieces": 0,
+                          "weight": 0,
+                          "palletEquivalents": 0,
+                          "sku": "16_LB",
+                          "productCode": "200772",
+                          "upc": "00860006114917",
+                          "price": 1.17,
+                          "discount": 0.1,
+                          "taxRate": 0.017
+                        }
+                      ],
+                      "paymentOnDelivery": {
+                        "required": false,
+                        "accept": {
+                          "check": true,
+                          "cash": true,
+                          "credit": true
+                        }
+                      },
+                      "podRequirements": {
+                        "onDeliveryPo": false,
+                        "printNameAndSignature": true,
+                        "storeStampImg": false,
+                        "customerDocumentImg": false
+                      },
+                      "customerOrderNumber": "23979620",
+                      "reddyiceGUID": "67d2a718-578a-f011-b4cb-7c1e5280196d",
+                      "shipmentType": "delivery",
+                      "shipmentTags": [
+                        "3P"
+                      ],
+                      "ticketType": "1",
+                      "deliveryPriorityLevel": 4,
+                      "deliveryDate": "2025-11-20"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Shipment created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "taskId": {
+                      "type": "string",
+                      "example": "t:bef3536e-d100-4b25-9725-750b67f89aac"
+                    }
+                  },
+                  "required": [
+                    "taskId"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed or business rule violation"
+          },
+          "401": {
+            "description": "Missing or invalid apiKey"
+          }
+        },
+        "tags": [
+          "shipment"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Reddy Ice Middleware API",
+    "description": "Middleware service that integrates Reddy Ice systems with the Maven Machines platform.\n\n## Authentication\nAll protected endpoints require an API key in the `apiKey` request header.\n\n`GET /` is public and does not require an API key.\n\n## Environment\nThe middleware URL is the same for all tiers. Your `apiKey` determines which Maven\nenvironment (dev, qa, staging, prod) receives the request.",
+    "version": "1.0.0",
+    "contact": {},
+    "license": {
+      "name": "UNLICENSED"
+    }
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "https://reddy-ice.middleware.mavenmachines.com",
+      "description": "Middleware (target env selected by apiKey)"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "apiKey"
+      }
+    },
+    "schemas": {
+      "ProductEligibilityItemDto": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "7_LB Bags"
+          },
+          "sku": {
+            "type": "string",
+            "example": "7_LB"
+          },
+          "productCode": {
+            "type": "string",
+            "description": "FK! - Product code must be the value of an existing Product in the system.  See sales service product_blurb table.",
+            "example": "200771"
+          },
+          "upc": {
+            "type": "string",
+            "example": "00860006114916"
+          },
+          "required": {
+            "type": "boolean",
+            "example": true
+          },
+          "consignment": {
+            "type": "boolean",
+            "example": false
+          },
+          "price": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "example": 1.17
+          },
+          "discount": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "example": 0.1
+          },
+          "taxRate": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "example": 0.017
+          }
+        },
+        "required": [
+          "sku",
+          "productCode",
+          "upc"
+        ]
+      },
+      "PodRequirementsDto": {
+        "type": "object",
+        "properties": {
+          "onDeliveryPo": {
+            "type": "boolean",
+            "example": false
+          },
+          "printNameAndSignature": {
+            "type": "boolean",
+            "example": true
+          },
+          "storeStampImg": {
+            "type": "boolean",
+            "example": false
+          },
+          "customerDocumentImg": {
+            "type": "boolean",
+            "example": false
+          }
+        },
+        "required": [
+          "onDeliveryPo",
+          "printNameAndSignature",
+          "storeStampImg",
+          "customerDocumentImg"
+        ]
+      },
+      "PaymentTypeDto": {
+        "type": "object",
+        "properties": {
+          "check": {
+            "type": "boolean",
+            "example": true
+          },
+          "cash": {
+            "type": "boolean",
+            "example": true
+          },
+          "credit": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "PaymentOnDeliveryDto": {
+        "type": "object",
+        "properties": {
+          "required": {
+            "type": "boolean",
+            "example": false
+          },
+          "accept": {
+            "$ref": "#/components/schemas/PaymentTypeDto"
+          }
+        },
+        "required": [
+          "required",
+          "accept"
+        ]
+      },
+      "EligibilityShipmentDto": {
+        "type": "object",
+        "properties": {
+          "consigneeCustomerNumber": {
+            "type": "string",
+            "example": "045037666"
+          },
+          "distributorId": {
+            "type": "string",
+            "example": "relationship123"
+          },
+          "shipmentItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductEligibilityItemDto"
+            }
+          },
+          "podRequirements": {
+            "$ref": "#/components/schemas/PodRequirementsDto"
+          },
+          "paymentOnDelivery": {
+            "$ref": "#/components/schemas/PaymentOnDeliveryDto"
+          }
+        },
+        "required": [
+          "shipmentItems"
+        ]
+      },
+      "EligibilityRequestDto": {
+        "type": "object",
+        "properties": {
+          "associatedShipment": {
+            "$ref": "#/components/schemas/EligibilityShipmentDto"
+          }
+        },
+        "required": [
+          "associatedShipment"
+        ]
+      },
+      "TaskResponseDto": {
+        "type": "object",
+        "properties": {
+          "companyId": {
+            "type": "number"
+          },
+          "taskId": {
+            "type": "string"
+          },
+          "taskType": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "taskName": {
+            "type": "string"
+          },
+          "companyLocationId": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          },
+          "assignedEmployeeIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "taskContext": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "companyId",
+          "taskId",
+          "taskType",
+          "status",
+          "taskName",
+          "companyLocationId",
+          "assignedEmployeeIds",
+          "taskContext"
+        ]
+      },
+      "ContactDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "contactPhone": {
+            "type": "string"
+          },
+          "contactEmail": {
+            "type": "string"
+          }
+        }
+      },
+      "AssetDto": {
+        "type": "object",
+        "properties": {
+          "unitNumber": {
+            "type": "string"
+          },
+          "make": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "year": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "serviceStatus": {
+            "type": "string"
+          },
+          "capacity": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "unitNumber",
+          "make",
+          "model",
+          "year",
+          "latitude",
+          "longitude",
+          "serviceStatus",
+          "capacity"
+        ]
+      },
+      "ReddyIceCaseDto": {
+        "type": "object",
+        "properties": {
+          "externalCompanyLocationId": {
+            "type": "string"
+          },
+          "terminalCode": {
+            "type": "string"
+          },
+          "serviceStartDate": {
+            "type": "string"
+          },
+          "serviceEndDate": {
+            "type": "string"
+          },
+          "createdOn": {
+            "type": "string"
+          },
+          "caseStatus": {
+            "type": "string"
+          },
+          "caseType": {
+            "type": "string"
+          },
+          "caseSubType": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "contactInformation": {
+            "$ref": "#/components/schemas/ContactDto"
+          },
+          "assetInformation": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AssetDto"
+            }
+          },
+          "parentCaseNumber": {
+            "type": "string"
+          },
+          "incidentId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "externalCompanyLocationId",
+          "terminalCode",
+          "serviceStartDate",
+          "serviceEndDate",
+          "createdOn",
+          "caseStatus",
+          "caseType",
+          "caseSubType",
+          "contactInformation"
+        ]
+      },
+      "GenericItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "displayText": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "displayText"
+        ]
+      },
+      "ChecklistDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GenericItemDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "questions"
+        ]
+      },
+      "LatLongDto": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "longitude": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "required": [
+          "latitude",
+          "longitude"
+        ]
+      },
+      "AssetInfoDto": {
+        "type": "object",
+        "properties": {
+          "barcode": {
+            "type": "string"
+          },
+          "capacity": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "latLon": {
+            "$ref": "#/components/schemas/LatLongDto"
+          },
+          "make": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "serviceStatus": {
+            "type": "string"
+          },
+          "unitNumber": {
+            "type": "string"
+          },
+          "unitType": {
+            "type": "string"
+          },
+          "year": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "required": [
+          "barcode",
+          "capacity",
+          "latLon",
+          "make",
+          "model",
+          "serviceStatus",
+          "unitNumber",
+          "unitType",
+          "year"
+        ]
+      },
+      "AssetResponseDto": {
+        "type": "object",
+        "properties": {
+          "checklist": {
+            "$ref": "#/components/schemas/ChecklistDto"
+          },
+          "parts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GenericItemDto"
+            }
+          },
+          "photoCategories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GenericItemDto"
+            }
+          },
+          "rootCauses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GenericItemDto"
+            }
+          },
+          "services": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GenericItemDto"
+            }
+          },
+          "info": {
+            "$ref": "#/components/schemas/AssetInfoDto"
+          }
+        },
+        "required": [
+          "checklist",
+          "parts",
+          "photoCategories",
+          "rootCauses",
+          "services",
+          "info"
+        ]
+      },
+      "WorkflowResponseDto": {
+        "type": "object",
+        "properties": {
+          "checklist": {
+            "$ref": "#/components/schemas/ChecklistDto"
+          },
+          "parts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GenericItemDto"
+            }
+          },
+          "photoCategories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GenericItemDto"
+            }
+          },
+          "rootCauses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GenericItemDto"
+            }
+          },
+          "services": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GenericItemDto"
+            }
+          }
+        },
+        "required": [
+          "checklist",
+          "parts",
+          "photoCategories",
+          "rootCauses",
+          "services"
+        ]
+      },
+      "ShipmentQuantityDto": {
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "example": 196
+          },
+          "unit": {
+            "type": "string",
+            "example": "Bags"
+          }
+        },
+        "required": [
+          "quantity",
+          "unit"
+        ]
+      },
+      "ShipmentItemDto": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "example": "7_LB Bags"
+          },
+          "sku": {
+            "type": "string",
+            "example": "7_LB"
+          },
+          "productCode": {
+            "type": "string",
+            "description": "FK! - Product code must be the value of an existing Product in the system.  See sales service product_blurb table.",
+            "example": "200771"
+          },
+          "upc": {
+            "type": "string",
+            "example": "00860006114916"
+          },
+          "required": {
+            "type": "boolean",
+            "example": true
+          },
+          "quantities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShipmentQuantityDto"
+            }
+          },
+          "pieces": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "example": 200
+          },
+          "weight": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "example": 1444
+          },
+          "palletEquivalents": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "example": 1.22
+          },
+          "price": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "example": 1.17
+          },
+          "discount": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "example": 0.1
+          },
+          "taxRate": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "example": 0.017
+          }
+        },
+        "required": [
+          "sku",
+          "productCode",
+          "upc",
+          "quantities",
+          "pieces",
+          "weight",
+          "palletEquivalents",
+          "price",
+          "discount",
+          "taxRate"
+        ]
+      },
+      "AssociatedShipmentDto": {
+        "type": "object",
+        "properties": {
+          "consigneeCustomerNumber": {
+            "type": "string",
+            "example": "045037666",
+            "description": "FK! - consignee customer number, if used, must be a valid customer number in the environment."
+          },
+          "distributorId": {
+            "type": "string",
+            "example": "relationship123"
+          },
+          "deliveryServiceStartDate": {
+            "type": "string",
+            "example": "2025-12-11",
+            "format": "date"
+          },
+          "deliveryServiceDueDate": {
+            "type": "string",
+            "example": "2025-12-10",
+            "format": "date"
+          },
+          "destinationTerminalCode": {
+            "type": "string",
+            "description": "FK! - Terminal code must be a valid terminal code in the environment.  See directory service terminalCompanyLocationAssociation table.",
+            "example": "206"
+          },
+          "instructions": {
+            "type": "string",
+            "example": "printNameAndSignature"
+          },
+          "proNumber": {
+            "type": "string",
+            "example": "808003052_168"
+          },
+          "inboundInterlineProNumber": {
+            "type": "string",
+            "example": "2025-10-02"
+          },
+          "shipmentItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShipmentItemDto"
+            }
+          },
+          "podRequirements": {
+            "$ref": "#/components/schemas/PodRequirementsDto"
+          },
+          "paymentOnDelivery": {
+            "$ref": "#/components/schemas/PaymentOnDeliveryDto"
+          },
+          "customerOrderNumber": {
+            "type": "string",
+            "example": "23979620"
+          },
+          "reddyiceGUID": {
+            "type": "string",
+            "example": "67d2a718-578a-f011-b4cb-7c1e5280196d",
+            "format": "uuid"
+          },
+          "purchaseOrderNumber": {
+            "type": "string",
+            "example": "varchar36"
+          },
+          "shipmentTags": {
+            "example": [
+              "3P"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "shipmentType": {
+            "type": "string",
+            "example": "delivery"
+          },
+          "ticketType": {
+            "type": "string",
+            "example": "1"
+          },
+          "deliveryPriorityLevel": {
+            "type": "number",
+            "example": 4,
+            "enum": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          "deliveryDate": {
+            "type": "string",
+            "example": "2025-11-20",
+            "format": "date"
+          }
+        },
+        "required": [
+          "destinationTerminalCode",
+          "proNumber",
+          "shipmentItems",
+          "podRequirements",
+          "paymentOnDelivery",
+          "shipmentType"
+        ]
+      },
+      "ShipmentRequestDto": {
+        "type": "object",
+        "properties": {
+          "associatedShipment": {
+            "$ref": "#/components/schemas/AssociatedShipmentDto"
+          }
+        },
+        "required": [
+          "associatedShipment"
+        ]
+      }
+    }
+  }
+}

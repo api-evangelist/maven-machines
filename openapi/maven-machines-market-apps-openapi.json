@@ -1,0 +1,114 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Market Apps APIs",
+    "description": "Documentation for Market App APIs",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "https://integrations.mavenmachines.com"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "apiKey"
+      }
+    },
+    "schemas": {
+      "GetMarketAppSessionResponse": {
+        "type": "object",
+        "properties": {
+          "expiration": {
+            "type": "string",
+            "description": "ISO8601 timestamp of when the session expires.",
+            "example": "2020-04-09T21:50:42Z"
+          },
+          "companyId": {
+            "type": "number",
+            "description": "Company ID that session belongs to.",
+            "example": 1
+          },
+          "sessionToken": {
+            "type": "string",
+            "description": "Token representing session.",
+            "example": "61496424-f4a9-4705-850c-4b3f2426adb3"
+          },
+          "driver": {
+            "type": "object",
+            "description": "Driver object",
+            "example": {}
+          },
+          "vehicle": {
+            "type": "object",
+            "description": "Vehicle object",
+            "example": {}
+          },
+          "driverVehicleAssociation": {
+            "type": "object",
+            "description": "Driver vehicle assocation object",
+            "example": {}
+          }
+        },
+        "required": [
+          "expiration",
+          "companyId",
+          "sessionToken",
+          "driver",
+          "vehicle",
+          "driverVehicleAssociation"
+        ]
+      }
+    }
+  },
+  "paths": {
+    "/marketapps/session": {
+      "get": {
+        "operationId": "MarketAppsController_getSession",
+        "summary": "GET /marketapps/session",
+        "description": "\n    Retrieves market app session\n    ",
+        "parameters": [
+          {
+            "name": "sessionToken",
+            "required": true,
+            "in": "query",
+            "example": "61496424-f4a9-4705-850c-4b3f2426adb3",
+            "description": "Market app session token",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMarketAppSessionResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "marketapps"
+        ],
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    }
+  },
+  "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+  }
+}

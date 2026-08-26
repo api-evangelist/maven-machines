@@ -1,0 +1,35 @@
+generated: '2026-08-25'
+method: searched
+source: https://maven-machines.readme.io/docs/basic-concepts.md
+published: true
+model: separate-environment
+environments:
+- name: staging
+  base_url: https://integrations-staging.mavenmachines.com/
+  purpose: >-
+    "Intended to be used for integration development and testing. Most fleets start their
+    integration projects on the staging environment and move to using production once final UAT /
+    circle of service testing is performed and validated."
+  data_isolation: >-
+    Full — "The two environments do not share data." Users, vehicles, company locations, shipments,
+    manifests and routes created in staging never appear in production.
+  parity: >-
+    Functional duplicate with three stated caveats: feature flags mean request/response schemas and
+    behavior can differ for fleets on beta functionality; the two environments are provisioned with
+    different compute, so performance differs; and staging carries no SLA.
+  credentials: >-
+    A separate `apiKey` issued per fleet. Maven publishes no self-serve staging key, no shared
+    sandbox key, and no test fixtures — access requires a fleet account.
+- name: production
+  base_url: https://integrations.mavenmachines.com/
+  purpose: Live operations, governed by Maven's production SLAs.
+test_data:
+  published: false
+  detail: >-
+    No test identifiers, magic values, seeded fixtures, trigger tooling or time simulation are
+    published. Testing means exercising a real staging tenant with the fleet's own data.
+console:
+  published: false
+  detail: >-
+    The developer hub is a ReadMe site whose reference pages render a "Try It" request builder, but
+    it requires a caller-supplied `apiKey`; there is no anonymous playground.
