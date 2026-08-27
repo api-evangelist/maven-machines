@@ -33,91 +33,455 @@ tags:
 - Supply Chain
 - Freight
 apis:
-- aid: maven-machines-integrations-api
-  name: Maven Integrations API
-  description: >-
-    Maven's public REST API for integrating a fleet's TMS and other IT systems with the Maven
-    platform. Fifteen published OpenAPI definitions cover users, vehicles and trailers, company
-    locations, customers, shipments and shipment locations, P&D manifests, linehaul manifests and
-    trips, truckload trips and stops, forms and form results, messages, market app sessions, ELD /
-    hours-of-service, vehicle telematics locations, Smart (manufacturing) alarm and batch logs,
-    reports, and the polled return-events queue. Every call is authenticated with an `apiKey`
-    request header; production and staging environments are separate and do not share data.
+- aid: maven-machines:maven-machines-bulk-shipments-api
+  name: Maven Machines Bulk Shipments API
+  description: The bulk-shipments API from Maven Machines — 1 operation(s) for bulk-shipments.
   humanURL: https://maven-machines.readme.io/
   baseURL: https://integrations.mavenmachines.com
   tags:
-  - Transportation
-  - Logistics
-  - Fleet Management
-  - ELD
-  - Dispatch
+  - bulk-shipments
   properties:
   - type: OpenAPI
-    url: openapi/maven-machines-users-openapi.json
-  - type: OpenAPI
-    url: openapi/maven-machines-assets-openapi.json
-  - type: OpenAPI
-    url: openapi/maven-machines-company-locations-openapi.json
-  - type: OpenAPI
-    url: openapi/maven-machines-shipments-openapi.json
-  - type: OpenAPI
-    url: openapi/maven-machines-shipment-locations-openapi.json
-  - type: OpenAPI
-    url: openapi/maven-machines-linehaul-openapi.json
-  - type: OpenAPI
-    url: openapi/maven-machines-manifest-commands-openapi.json
-  - type: OpenAPI
-    url: openapi/maven-machines-planning-and-dispatch-openapi.json
-  - type: OpenAPI
-    url: openapi/maven-machines-workflow-openapi.json
-  - type: OpenAPI
-    url: openapi/maven-machines-messages-openapi.json
-  - type: OpenAPI
-    url: openapi/maven-machines-market-apps-openapi.json
-  - type: OpenAPI
-    url: openapi/maven-machines-smart-openapi.json
-  - type: OpenAPI
-    url: openapi/maven-machines-reports-openapi.json
-  - type: OpenAPI
-    url: openapi/maven-machines-rest-service-manual-openapi.json
-  - type: OpenAPI
-    url: openapi/maven-machines-eld-hos-openapi.json
+    url: openapi/maven-machines-bulk-shipments-api-openapi.yml
   - type: Documentation
     url: https://maven-machines.readme.io/
   - type: APIReference
     url: https://maven-machines.readme.io/reference/post-shipment
   - type: GettingStarted
     url: https://maven-machines.readme.io/docs/basic-concepts
-  - type: Overlay
-    url: overlays/_index.yml
-- aid: maven-machines-customer-middleware
-  name: Maven Customer Integration Middleware
-  description: >-
-    Per-customer middleware services Maven operates on <customer>.middleware.mavenmachines.com that
-    translate a specific shipper or carrier's message formats into Maven platform calls. Six of
-    these services publish a Swagger/OpenAPI document publicly — AAA Cooper, Averitt, Bozzuto's,
-    Reddy Ice, Roy Miller and Triple S Steel — covering shipment, bulk shipment, manifest, manifest
-    command, order snapshot/cutoff, route plan, case and service-tech asset endpoints. All are
-    authenticated with the same `apiKey` header as the platform API.
-  humanURL: https://maven-machines.readme.io/docs/maven-bozzutos-integration
+- aid: maven-machines:maven-machines-company-locations-api
+  name: Maven Machines Company Locations API
+  description: The company-locations API from Maven Machines — 1 operation(s) for company-locations.
+  humanURL: https://maven-machines.readme.io/
   baseURL: https://integrations.mavenmachines.com
   tags:
-  - Logistics
-  - Freight
-  - Integration
+  - company-locations
   properties:
   - type: OpenAPI
-    url: openapi/maven-machines-aaa-cooper-middleware-openapi.json
+    url: openapi/maven-machines-company-locations-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-customers-api
+  name: Maven Machines Customers API
+  description: The Customers API from Maven Machines — 1 operation(s) for customers.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - Customers
+  properties:
   - type: OpenAPI
-    url: openapi/maven-machines-averitt-middleware-openapi.json
+    url: openapi/maven-machines-customers-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-eld-api
+  name: Maven Machines Eld API
+  description: The Eld API from Maven Machines — 3 operation(s) for eld.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - Eld
+  properties:
   - type: OpenAPI
-    url: openapi/maven-machines-bozzutos-middleware-openapi.json
+    url: openapi/maven-machines-eld-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-events-api
+  name: Maven Machines Events API
+  description: The Events API from Maven Machines — 1 operation(s) for events.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - Events
+  properties:
   - type: OpenAPI
-    url: openapi/maven-machines-reddy-ice-middleware-openapi.json
+    url: openapi/maven-machines-events-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-forms-api
+  name: Maven Machines Forms API
+  description: The forms API from Maven Machines — 2 operation(s) for forms.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - forms
+  properties:
   - type: OpenAPI
-    url: openapi/maven-machines-roy-miller-middleware-openapi.json
+    url: openapi/maven-machines-forms-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-health-api
+  name: Maven Machines Health API
+  description: The health API from Maven Machines — 1 operation(s) for health.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - health
+  properties:
   - type: OpenAPI
-    url: openapi/maven-machines-triple-s-steel-middleware-openapi.json
+    url: openapi/maven-machines-health-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-linehaul-api
+  name: Maven Machines Linehaul API
+  description: The Linehaul API from Maven Machines — 2 operation(s) for linehaul.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - Linehaul
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-linehaul-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-locations-api
+  name: Maven Machines Locations API
+  description: The Locations API from Maven Machines — 2 operation(s) for locations.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - Locations
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-locations-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-manifestnumber-api
+  name: Maven Machines Manifest Number API
+  description: The ManifestNumber API from Maven Machines — 1 operation(s) for manifestnumber.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - ManifestNumber
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-manifestnumber-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-manifests-api
+  name: Maven Machines Manifests API
+  description: The manifests API from Maven Machines — 5 operation(s) for manifests.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - manifests
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-manifests-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-marketapps-api
+  name: Maven Machines Marketapps API
+  description: The marketapps API from Maven Machines — 1 operation(s) for marketapps.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - marketapps
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-marketapps-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-messages-api
+  name: Maven Machines Messages API
+  description: The messages API from Maven Machines — 1 operation(s) for messages.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - messages
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-messages-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-orders-api
+  name: Maven Machines Orders API
+  description: The orders API from Maven Machines — 3 operation(s) for orders.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - orders
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-orders-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-pickuprequests-api
+  name: Maven Machines Pickup Requests API
+  description: The PickupRequests API from Maven Machines — 1 operation(s) for pickuprequests.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - PickupRequests
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-pickuprequests-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-product-eligibility-api
+  name: Maven Machines Product Eligibility API
+  description: >-
+    The product-eligibility API from Maven Machines — 1 operation(s) for product-eligibility.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - product-eligibility
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-product-eligibility-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-reddy-ice-api
+  name: Maven Machines Reddy Ice API
+  description: The reddy-ice API from Maven Machines — 1 operation(s) for reddy-ice.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - reddy-ice
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-reddy-ice-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-reports-api
+  name: Maven Machines Reports API
+  description: The reports API from Maven Machines — 1 operation(s) for reports.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - reports
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-reports-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-return-events-api
+  name: Maven Machines Return Events API
+  description: The Return Events API from Maven Machines — 1 operation(s) for return events.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - Return Events
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-return-events-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-routeplans-api
+  name: Maven Machines Routeplans API
+  description: The routeplans API from Maven Machines — 1 operation(s) for routeplans.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - routeplans
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-routeplans-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-servicetechs-api
+  name: Maven Machines Servicetechs API
+  description: The servicetechs API from Maven Machines — 3 operation(s) for servicetechs.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - servicetechs
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-servicetechs-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-shipment-api
+  name: Maven Machines Shipment API
+  description: The shipment API from Maven Machines — 3 operation(s) for shipment.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - shipment
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-shipment-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-shipment-locations-api
+  name: Maven Machines Shipment Locations API
+  description: The shipment-locations API from Maven Machines — 1 operation(s) for shipment-locations.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - shipment-locations
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-shipment-locations-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-smart-api
+  name: Maven Machines Smart API
+  description: The smart API from Maven Machines — 2 operation(s) for smart.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - smart
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-smart-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-trailers-api
+  name: Maven Machines Trailers API
+  description: The Trailers API from Maven Machines — 3 operation(s) for trailers.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - Trailers
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-trailers-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-truckload-api
+  name: Maven Machines Truckload API
+  description: The truckload API from Maven Machines — 3 operation(s) for truckload.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - truckload
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-truckload-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-users-api
+  name: Maven Machines Users API
+  description: The users API from Maven Machines — 1 operation(s) for users.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - users
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-users-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-vehicles-api
+  name: Maven Machines Vehicles API
+  description: The Vehicles API from Maven Machines — 3 operation(s) for vehicles.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - Vehicles
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-vehicles-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
