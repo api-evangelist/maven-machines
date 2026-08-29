@@ -15,6 +15,18 @@ description: >-
   operates per-customer integration middleware services on <customer>.middleware.mavenmachines.com,
   several of which publish their own Swagger/OpenAPI documents publicly.
 url: https://raw.githubusercontent.com/api-evangelist/maven-machines/refs/heads/main/apis.yml
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://mavenmachines.com/apple-touch-icon.png
 x-type: company
 x-source: harvest:secondary-market
