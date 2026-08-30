@@ -1,0 +1,61 @@
+openapi: 3.2.0
+info:
+  title: planning-and-dispatch Events API
+  version: '1.0'
+servers:
+- url: https://integrations.mavenmachines.com/companies/{companyKey}/
+  variables:
+    companyKey:
+      default: companyKey
+security:
+- sec0: []
+tags:
+- name: Events
+paths:
+  /events:
+    get:
+      summary: GET /events
+      description: Retrieve return events from the Maven system
+      operationId: get-events
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n\t\"events\": [{\n  \t\"id\": \"11cbf1da-0760-4e9a-8db6-2a5810683471\",\n    \"eventType\": \"departTerminal\",\n    \"timestamp\": \"2023-04-09T21:50:42.123Z\",\n    \"data\": {}\n  }]\n}"
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 11cbf1da-0760-4e9a-8db6-2a5810683471
+                        eventType:
+                          type: string
+                          example: departTerminal
+                        timestamp:
+                          type: string
+                          example: '2023-04-09T21:50:42.123Z'
+                        data:
+                          type: object
+                          properties: {}
+      deprecated: false
+      tags:
+      - Events
+components:
+  securitySchemes:
+    sec0:
+      type: apiKey
+      in: header
+      name: apiKey
+x-readme:
+  headers: []
+  explorer-enabled: true
+  proxy-enabled: true
+x-readme-fauxas: true

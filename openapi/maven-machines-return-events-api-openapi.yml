@@ -1,0 +1,95 @@
+openapi: 3.2.0
+info:
+  title: rest-service-manual Return Events API
+  version: '1.0'
+servers:
+- url: https://integrations.mavenmachines.com/
+security:
+- sec0: []
+tags:
+- name: Return Events
+paths:
+  /return-events:
+    get:
+      summary: GET /return-events
+      description: Retrieve return events from the Maven system
+      operationId: get-return-events
+      parameters:
+      - name: startTime
+        in: query
+        description: ISO8601 datetime of the first data being polled (inclusive).
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: endTime
+        in: query
+        description: ISO8601 datetime of uploaded timestamp of the last data (inclusive).
+        schema:
+          type: string
+          format: date
+      - name: ids
+        in: query
+        description: Array of Ids of events to be returned.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: apiKey
+        in: header
+        description: Authorization key.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n\t\"events\": [{\n  \t\"id\": \"11cbf1da-0760-4e9a-8db6-2a5810683471\",\n    \"eventType\": \"departTerminal\",\n    \"timestamp\": \"2023-04-09T21:50:42.123Z\",\n    \"data\": {}\n  }],\n  \"pagination\": {\n    \"nextPageStartTime\": \"2023-04-09T21:55::42.000Z\",\n    \"hasNextPage\": true\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 11cbf1da-0760-4e9a-8db6-2a5810683471
+                        eventType:
+                          type: string
+                          example: departTerminal
+                        timestamp:
+                          type: string
+                          example: '2023-04-09T21:50:42.123Z'
+                        data:
+                          type: object
+                          properties: {}
+                  pagination:
+                    type: object
+                    properties:
+                      nextPageStartTime:
+                        type: string
+                        example: 2023-04-09T21:55::42.000Z
+                      hasNextPage:
+                        type: boolean
+                        example: true
+                        default: true
+      deprecated: false
+      tags:
+      - Return Events
+components:
+  securitySchemes:
+    sec0:
+      type: apiKey
+      in: header
+      name: apiKey
+x-readme:
+  headers: []
+  explorer-enabled: true
+  proxy-enabled: true
+x-readme-fauxas: true

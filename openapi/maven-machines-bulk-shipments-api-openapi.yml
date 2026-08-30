@@ -1,0 +1,44 @@
+openapi: 3.2.0
+info:
+  title: Maven Machines Bulk Shipments API
+  version: '1.0'
+  contact: {}
+  description: 'Operations tagged bulk-shipments across 3 of this provider''s published API definitions: maven-machines-aaa-cooper-middleware-openapi.json, maven-machines-averitt-middleware-openapi.json, maven-machines-roy-miller-middleware-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://integrations.mavenmachines.com
+tags:
+- name: bulk-shipments
+paths:
+  /bulkShipments:
+    post:
+      operationId: BulkShipmentsController_handleBulkShipments
+      summary: POST /bulkShipments
+      description: API to send bulk shipment data
+      parameters: []
+      responses:
+        '200':
+          description: A successful API response for bulk shipments.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CredentialsResponseDto'
+      tags:
+      - bulk-shipments
+      security:
+      - api_key: []
+    servers:
+    - url: https://integrations.mavenmachines.com
+components:
+  schemas:
+    CredentialsResponseDto:
+      type: object
+      properties: {}
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: apiKey
+x-refined-from:
+- maven-machines-aaa-cooper-middleware-openapi.json
+- maven-machines-averitt-middleware-openapi.json
+- maven-machines-roy-miller-middleware-openapi.json

@@ -1,0 +1,194 @@
+openapi: 3.2.0
+info:
+  title: Messages API
+  description: Documentation for Maven Messages APIs
+  version: '1.0'
+  contact: {}
+servers: []
+tags:
+- name: messages
+paths:
+  /messages:
+    post:
+      operationId: MessagesController_createMessages
+      summary: POST /messages
+      description: "\n    Creates messages from a sender to a list of recipients into the Maven Messages system.\n\n    Implementation Notes:\n    - If both senderUserId and senderExternalUserId are sent in the request, senderUserId will take precedence.\n    - If both recipientUserIds and recipientExternalUserIds are defined, Maven will take the union of both arrays to determine the final recipient list. Max 50 recipients.\n    "
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMessageRequest'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateMessageResponse'
+      tags:
+      - messages
+      security:
+      - api_key: []
+    get:
+      operationId: MessagesController_getMessages
+      summary: GET /messages
+      description: "\n    Retrieves messages that have been sent in the Maven system.\n    "
+      parameters:
+      - name: startTime
+        required: true
+        in: query
+        example: '2020-04-08T21:19:42.123456Z'
+        description: The storage creation timestamp of the first messages being requested.
+        schema:
+          format: date-time
+          type: string
+      - name: endTime
+        required: false
+        in: query
+        example: '2020-04-12T21:19:42Z'
+        description: The storage creation timestamp of the last message (inclusive)
+        schema:
+          format: date-time
+          default: now()
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMessagesResponse'
+      tags:
+      - messages
+      security:
+      - api_key: []
+components:
+  schemas:
+    CreateMessageRequest:
+      type: object
+      properties:
+        senderUserId:
+          type: number
+          description: Maven user identifier to represent the message sender.
+          example: 8923
+        senderExternalUserId:
+          type: string
+          description: Unique external identifier for the message sender.
+          example: USER_123
+        recipientUserIds:
+          description: Array of Maven user identifiers for the message recipients.
+          example:
+          - 4539
+          - 2398
+          type: array
+          items:
+            type: array
+        recipientExternalUserIds:
+          description: Array of unique external identifiers for the message recipients.
+          example:
+          - USER_456
+          - USER_789
+          type: array
+          items:
+            type: array
+        body:
+          type: string
+          description: Required. the body of the message. Max size 16KB.
+          example: Hello, world!
+      required:
+      - senderUserId
+      - senderExternalUserId
+      - recipientUserIds
+      - recipientExternalUserIds
+      - body
+    CreateMessageResponse:
+      type: object
+      properties:
+        messages:
+          description: Array of created messages
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+      required:
+      - messages
+    Pagination:
+      type: object
+      properties:
+        nextPageStartTime:
+          type: string
+          description: "Next Page Start Time - Used for cursor pagination in subsequent requests\n      assuming hasNextPage is true. For subsequent requests, set startTime to the value\n      of this field in the previous request to get the next page."
+          example: 2020-04-09T21:50::42.000000Z
+        hasNextPage:
+          type: boolean
+          description: hasNextPage - Bool to indicate if there is another page of messages to retrieve.
+      required:
+      - nextPageStartTime
+      - hasNextPage
+    GetMessagesResponse:
+      type: object
+      properties:
+        messages:
+          description: Array of created messages
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        pagination:
+          description: For subsequent requests, set offset to the value of this field to get the next page
+          allOf:
+          - $ref: '#/components/schemas/Pagination'
+      required:
+      - messages
+      - pagination
+    Message:
+      type: object
+      properties:
+        messageId:
+          type: string
+          description: Maven message identifier
+          example: qtPv1Sx6JnutsN8TQaQW
+        sentTime:
+          type: string
+          description: ISO8601 timestamp of when the message was originally sent.
+          example: '2020-04-09T21:50:42Z'
+        serverTime:
+          type: string
+          description: ISO8601 timestamp of when the message was created on the server.
+          example: '2020-04-09T21:50:42Z'
+        senderUserId:
+          type: number
+          description: Maven user identifier to represent the message sender.
+          example: 8923
+        senderExternalUserId:
+          type: string
+          description: Unique external identifier for the message sender.
+          example: USER_123
+        participants:
+          description: Array of message participants
+          example:
+          - userId: 8923
+            externalUserId: USER_123
+          type: array
+          items:
+            type: string
+        body:
+          type: string
+          description: Required. the body of the message. Max size 16KB.
+          example: Hello, world!
+      required:
+      - messageId
+      - sentTime
+      - serverTime
+      - senderUserId
+      - senderExternalUserId
+      - participants
+      - body
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: apiKey
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

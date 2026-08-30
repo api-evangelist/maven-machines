@@ -1,0 +1,226 @@
+openapi: 3.2.0
+info:
+  title: Middleware Reddy Ice API
+  description: 'Middleware service that integrates Reddy Ice systems with the Maven Machines platform.
+
+
+    ## Authentication
+
+    All protected endpoints require an API key in the `apiKey` request header.
+
+
+    `GET /` is public and does not require an API key.
+
+
+    ## Environment
+
+    The middleware URL is the same for all tiers. Your `apiKey` determines which Maven
+
+    environment (dev, qa, staging, prod) receives the request.'
+  version: 1.0.0
+  contact: {}
+  license:
+    name: UNLICENSED
+servers:
+- url: https://reddy-ice.middleware.mavenmachines.com
+  description: Middleware (target env selected by apiKey)
+tags:
+- name: reddy-ice
+paths:
+  /cases/{caseNumber}:
+    get:
+      operationId: ReddyIceCaseController_getCase
+      summary: GET /cases/caseNumber
+      description: "\n    API debug endpoint for fetching the task associated with a case in the Maven system.\n    "
+      parameters:
+      - name: caseNumber
+        required: true
+        in: path
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Case task found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponseDto'
+        '400':
+          description: Validation failed or business rule violation
+        '401':
+          description: Missing or invalid apiKey
+        '404':
+          description: Case not found
+      tags:
+      - reddy-ice
+      security:
+      - api_key: []
+    put:
+      operationId: ReddyIceCaseController_upsertCase
+      summary: PUT /cases/caseNumber
+      description: "\n    API endpoint for creating and updating a case in the Maven system.\n    "
+      parameters:
+      - name: caseNumber
+        required: true
+        in: path
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReddyIceCaseDto'
+      responses:
+        '200':
+          description: Case create or updated successfully
+        '400':
+          description: Validation failed or business rule violation
+        '401':
+          description: Missing or invalid apiKey
+      tags:
+      - reddy-ice
+      security:
+      - api_key: []
+    delete:
+      operationId: ReddyIceCaseController_deleteCase
+      summary: DELETE /cases/{caseNumber}
+      description: "\n    API endpoint for deleting a case in the Maven system.\n    "
+      parameters:
+      - name: caseNumber
+        required: true
+        in: path
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A successful API response for deleting a case
+        '400':
+          description: Validation failed or business rule violation
+        '401':
+          description: Missing or invalid apiKey
+        '404':
+          description: Case not found
+      tags:
+      - reddy-ice
+      security:
+      - api_key: []
+components:
+  schemas:
+    TaskResponseDto:
+      type: object
+      properties:
+        companyId:
+          type: number
+        taskId:
+          type: string
+        taskType:
+          type: string
+        status:
+          type: string
+        taskName:
+          type: string
+        companyLocationId:
+          type: number
+        description:
+          type: string
+        assignedEmployeeIds:
+          type: array
+          items:
+            type: string
+        taskContext:
+          type: object
+      required:
+      - companyId
+      - taskId
+      - taskType
+      - status
+      - taskName
+      - companyLocationId
+      - assignedEmployeeIds
+      - taskContext
+    ContactDto:
+      type: object
+      properties:
+        name:
+          type: string
+        contactPhone:
+          type: string
+        contactEmail:
+          type: string
+    ReddyIceCaseDto:
+      type: object
+      properties:
+        externalCompanyLocationId:
+          type: string
+        terminalCode:
+          type: string
+        serviceStartDate:
+          type: string
+        serviceEndDate:
+          type: string
+        createdOn:
+          type: string
+        caseStatus:
+          type: string
+        caseType:
+          type: string
+        caseSubType:
+          type: string
+        description:
+          type: string
+        title:
+          type: string
+        contactInformation:
+          $ref: '#/components/schemas/ContactDto'
+        assetInformation:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetDto'
+        parentCaseNumber:
+          type: string
+        incidentId:
+          type: string
+      required:
+      - externalCompanyLocationId
+      - terminalCode
+      - serviceStartDate
+      - serviceEndDate
+      - createdOn
+      - caseStatus
+      - caseType
+      - caseSubType
+      - contactInformation
+    AssetDto:
+      type: object
+      properties:
+        unitNumber:
+          type: string
+        make:
+          type: string
+        model:
+          type: string
+        year:
+          type: string
+        latitude:
+          type: number
+        longitude:
+          type: number
+        serviceStatus:
+          type: string
+        capacity:
+          type: number
+      required:
+      - unitNumber
+      - make
+      - model
+      - year
+      - latitude
+      - longitude
+      - serviceStatus
+      - capacity
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: apiKey

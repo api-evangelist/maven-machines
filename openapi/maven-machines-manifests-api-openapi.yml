@@ -1,0 +1,281 @@
+openapi: 3.2.0
+info:
+  title: Maven Machines Manifests API
+  version: '1.0'
+  description: 'Operations tagged manifests across 7 of this provider''s published API definitions: maven-machines-aaa-cooper-middleware-openapi.json, maven-machines-averitt-middleware-openapi.json, maven-machines-bozzutos-middleware-openapi.json, maven-machines-manifest-commands-openapi.json, maven-machines-planning-and-dispatch-openapi.json, maven-machines-rest-service-manual-openapi.json, maven-machines-roy-miller-middleware-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://integrations.mavenmachines.com
+- url: /
+  description: Current host (use when testing this middleware)
+- url: https://integrations.mavenmachines.com/companies/{companyKey}/
+  variables:
+    companyKey:
+      default: companyKey
+- url: https://integrations.mavenmachines.com/
+tags:
+- name: manifests
+paths:
+  /manifests:
+    post:
+      operationId: ManifestsController_handleManifests
+      summary: POST /manifests
+      description: API to send manifests data
+      parameters: []
+      responses:
+        '200':
+          description: A successful API response for manifests.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CredentialsResponseDto'
+      tags:
+      - manifests
+      security:
+      - api_key: []
+    servers:
+    - url: https://integrations.mavenmachines.com
+  /manifests/commands:
+    post:
+      operationId: ManifestsCommandsController_handleManifestsCommands
+      summary: POST /manifests/commands
+      description: API to send manifest and movement commands
+      parameters: []
+      responses:
+        '200':
+          description: A successful API response for linehaul manifests commands.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CredentialsResponseDto'
+      tags:
+      - manifests
+      security:
+      - api_key: []
+    servers:
+    - url: https://integrations.mavenmachines.com
+  /manifests/commands/batch:
+    post:
+      operationId: ManifestsCommandsController_handleManifestsCommandsBatch
+      summary: POST /manifests/commands/batch
+      description: API to send batch manifest and movement commands
+      parameters: []
+      responses:
+        '200':
+          description: A successful API response for linehaul manifests commands in batch.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CredentialsResponseDto'
+      tags:
+      - manifests
+      security:
+      - api_key: []
+    servers:
+    - url: https://integrations.mavenmachines.com
+  /manifests/manifestNumber:
+    post:
+      operationId: ManifestsController_handleManifestNumber
+      summary: POST /manifests/manifestNumber
+      description: Pass-through to Maven POST /manifestNumber — assign a TMS manifest number to a Maven planning manifest.
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManifestNumberRequestDto'
+      responses:
+        '200':
+          description: Accepted; forwarded to Maven in the background.
+        '400':
+          description: routeUniqueId or manifestNumber missing/invalid.
+      tags:
+      - manifests
+      security:
+      - api_key: []
+    servers:
+    - url: https://integrations.mavenmachines.com
+      description: Maven (production)
+    - url: /
+      description: Current host (use when testing this middleware)
+  /manifests/{manifestNumber}:
+    patch:
+      summary: PATCH /manifests/{manifestNumber}
+      description: Updates a delivery manifest. Only provided key-value pairs provided are updated.
+      operationId: patch-manifestsmanifestnumber
+      parameters:
+      - name: manifestNumber
+        in: path
+        description: Manifest number of the manifest to be updated
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                trailerNumber:
+                  type: string
+                  description: The trailer number for the manifest.
+                vehicleNumber:
+                  type: string
+                  description: The vehicle number for the manifest
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - manifests
+      security:
+      - sec0: []
+    servers:
+    - url: https://integrations.mavenmachines.com/
+components:
+  schemas:
+    CredentialsResponseDto:
+      type: object
+      properties: {}
+    ManifestNumberRequestDto:
+      type: object
+      properties:
+        routeUniqueId:
+          type: string
+          example: maven-route-instance-id
+          description: Maven-generated identifier for this manifest
+        manifestNumber:
+          type: string
+          example: M-12345
+          description: Manifest Number to be set for this manifest
+      required:
+      - routeUniqueId
+      - manifestNumber
+    ManifestEventSourceRequestDto:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: '12345678'
+          description: Unique identifier of the user who performed the command (optional)
+        displayName:
+          type: string
+          example: Last, First
+          description: Display name of the user who performed the command (optional)
+        system:
+          type: string
+          example: AS400
+          description: Name of system where the command origination from (i.e. Scheduler, AS400, TMS, etc...)
+    ManifestCommandRequestDto:
+      type: object
+      properties:
+        commandType:
+          type: string
+          example: CreateManifest
+          description: Command name
+        payload:
+          type: object
+          example:
+            manifestNumber: Manifest
+            trailerNumber: Trailer
+            driverCode: Driver
+            originLocationCode: PITT
+            originDoorNumber: '3'
+            destinationLocationCode: PHL
+            destinationDoorNumber: '5'
+            status: Planning
+            currentLocation: IN_TRANSIT
+            scheduledStartLoadingTime: '2024-05-30T18:00:00Z'
+            scheduledStartUnloadingTime: '2024-05-30T19:00:00Z'
+            scheduledFinishUnloadingTime: '2024-05-30T19:45:00Z'
+            scheduledCloseTime: '2024-05-30T20:00:00Z'
+            associatedProNumbers:
+            - proNumber: pro-1234
+              status: planned
+            associatedMovements:
+            - sequenceNumber: 0
+              referenceIds:
+                hookNumber: hook-1234
+            hazmat: true
+            poison: false
+            food: true
+        referenceIds:
+          type: object
+          example:
+            loadNumber: '12345678'
+          description: A set of references that defines an identifier
+        eventSource:
+          $ref: '#/components/schemas/ManifestEventSourceRequestDto'
+      required:
+      - commandType
+      - payload
+      - referenceIds
+    ManifestCommandsRequestDto:
+      type: object
+      properties:
+        commands:
+          type: array
+          items:
+            $ref: '#/components/schemas/ManifestCommandRequestDto'
+      required:
+      - commands
+    ManifestCommandResponsesDto:
+      type: object
+      properties:
+        commandResponses:
+          type: array
+          items:
+            $ref: '#/components/schemas/ManifestCommandResponseDto'
+      required:
+      - commandResponses
+    ManifestCommandResponseDto:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+          description: Determines whether the command was successfully executed
+        errors:
+          example:
+          - Driver with the specified driver code not found
+          description: List of errors that occurred during command processing
+          type: array
+          items:
+            type: string
+      required:
+      - success
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: apiKey
+    sec0:
+      type: apiKey
+      in: header
+      name: apiKey
+x-refined-from:
+- maven-machines-aaa-cooper-middleware-openapi.json
+- maven-machines-averitt-middleware-openapi.json
+- maven-machines-bozzutos-middleware-openapi.json
+- maven-machines-manifest-commands-openapi.json
+- maven-machines-planning-and-dispatch-openapi.json
+- maven-machines-rest-service-manual-openapi.json
+- maven-machines-roy-miller-middleware-openapi.json

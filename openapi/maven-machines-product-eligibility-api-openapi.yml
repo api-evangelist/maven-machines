@@ -1,0 +1,254 @@
+openapi: 3.2.0
+info:
+  title: Reddy Ice Middleware Product Eligibility API
+  description: 'Middleware service that integrates Reddy Ice systems with the Maven Machines platform.
+
+
+    ## Authentication
+
+    All protected endpoints require an API key in the `apiKey` request header.
+
+
+    `GET /` is public and does not require an API key.
+
+
+    ## Environment
+
+    The middleware URL is the same for all tiers. Your `apiKey` determines which Maven
+
+    environment (dev, qa, staging, prod) receives the request.'
+  version: 1.0.0
+  contact: {}
+  license:
+    name: UNLICENSED
+servers:
+- url: https://reddy-ice.middleware.mavenmachines.com
+  description: Middleware (target env selected by apiKey)
+tags:
+- name: product-eligibility
+paths:
+  /product-eligibility:
+    post:
+      operationId: ProductEligibilityController_updateProductEligibility
+      summary: Update product eligibility
+      description: Updates company-level products, customer eligibility, pricing, discounts, and payment settings.
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EligibilityRequestDto'
+            examples:
+              productCreation:
+                summary: Product Creation
+                description: Company-level product master refresh (no consigneeCustomerNumber).
+                value:
+                  associatedShipment:
+                    shipmentItems:
+                    - description: 7_LB Bags
+                      sku: 7_LB
+                      productCode: '200771'
+                      upc: 00860006114916
+                    - description: 16_LB Bags
+                      sku: 16_LB
+                      productCode: '200772'
+                      upc: 00860006114917
+                    - description: CC Service Charge
+                      sku: CC_Srvc
+                      productCode: '200781'
+                      upc: 00860006114916
+              productEligibility:
+                summary: Product Eligibility
+                description: Customer product eligibility, pricing, payment, and POD settings.
+                value:
+                  associatedShipment:
+                    consigneeCustomerNumber: '808003052'
+                    shipmentItems:
+                    - description: 7_LB Bags
+                      sku: 7_LB
+                      productCode: '200771'
+                      upc: 00860006114916
+                      required: false
+                      consignment: false
+                      price: 1.17
+                      discount: 0.1
+                      taxRate: 0.12
+                    - description: CC Service Charge
+                      sku: CC_Srvc
+                      productCode: '200781'
+                      upc: 00860006114916
+                      required: true
+                      consignment: false
+                      price: 1
+                      discount: 0
+                      taxRate: 0
+                    paymentOnDelivery:
+                      required: true
+                      accept:
+                        check: false
+                        cash: true
+                        credit: false
+                    podRequirements:
+                      onDeliveryPo: true
+                      printNameAndSignature: true
+                      storeStampImg: true
+                      customerDocumentImg: true
+              distributorAssignment:
+                summary: Distributor Customer Assignment
+                description: Assign or revoke distributor servicing a customer.
+                value:
+                  associatedShipment:
+                    consigneeCustomerNumber: '808003052'
+                    distributorId: relationship123
+                    shipmentItems:
+                    - description: 7_LB Bags
+                      sku: 7_LB
+                      productCode: '200771'
+                      upc: 00860006114916
+                      required: false
+                      consignment: false
+                      price: 1.17
+                      discount: 0.1
+                      taxRate: 0.12
+                    paymentOnDelivery:
+                      required: true
+                      accept:
+                        check: false
+                        cash: true
+                        credit: false
+                    podRequirements:
+                      onDeliveryPo: true
+                      printNameAndSignature: true
+                      storeStampImg: true
+                      customerDocumentImg: true
+      responses:
+        '200':
+          description: Product eligibility updated successfully
+        '400':
+          description: Validation failed or business rule violation
+        '401':
+          description: Missing or invalid apiKey
+        '404':
+          description: Referenced product was not found
+      tags:
+      - product-eligibility
+      security:
+      - api_key: []
+components:
+  schemas:
+    EligibilityRequestDto:
+      type: object
+      properties:
+        associatedShipment:
+          $ref: '#/components/schemas/EligibilityShipmentDto'
+      required:
+      - associatedShipment
+    PaymentTypeDto:
+      type: object
+      properties:
+        check:
+          type: boolean
+          example: true
+        cash:
+          type: boolean
+          example: true
+        credit:
+          type: boolean
+          example: true
+    PaymentOnDeliveryDto:
+      type: object
+      properties:
+        required:
+          type: boolean
+          example: false
+        accept:
+          $ref: '#/components/schemas/PaymentTypeDto'
+      required:
+      - required
+      - accept
+    PodRequirementsDto:
+      type: object
+      properties:
+        onDeliveryPo:
+          type: boolean
+          example: false
+        printNameAndSignature:
+          type: boolean
+          example: true
+        storeStampImg:
+          type: boolean
+          example: false
+        customerDocumentImg:
+          type: boolean
+          example: false
+      required:
+      - onDeliveryPo
+      - printNameAndSignature
+      - storeStampImg
+      - customerDocumentImg
+    ProductEligibilityItemDto:
+      type: object
+      properties:
+        description:
+          type: string
+          example: 7_LB Bags
+        sku:
+          type: string
+          example: 7_LB
+        productCode:
+          type: string
+          description: FK! - Product code must be the value of an existing Product in the system.  See sales service product_blurb table.
+          example: '200771'
+        upc:
+          type: string
+          example: 00860006114916
+        required:
+          type: boolean
+          example: true
+        consignment:
+          type: boolean
+          example: false
+        price:
+          oneOf:
+          - type: number
+          - type: string
+          example: 1.17
+        discount:
+          oneOf:
+          - type: number
+          - type: string
+          example: 0.1
+        taxRate:
+          oneOf:
+          - type: number
+          - type: string
+          example: 0.017
+      required:
+      - sku
+      - productCode
+      - upc
+    EligibilityShipmentDto:
+      type: object
+      properties:
+        consigneeCustomerNumber:
+          type: string
+          example: '045037666'
+        distributorId:
+          type: string
+          example: relationship123
+        shipmentItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductEligibilityItemDto'
+        podRequirements:
+          $ref: '#/components/schemas/PodRequirementsDto'
+        paymentOnDelivery:
+          $ref: '#/components/schemas/PaymentOnDeliveryDto'
+      required:
+      - shipmentItems
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: apiKey

@@ -1,0 +1,266 @@
+openapi: 3.2.0
+info:
+  title: Maven Machines Orders API
+  version: '1.0'
+  contact: {}
+  description: 'Operations tagged orders across 2 of this provider''s published API definitions: maven-machines-bozzutos-middleware-openapi.json, maven-machines-triple-s-steel-middleware-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://integrations.mavenmachines.com
+  description: Maven (production)
+- url: /
+  description: Current host (use when testing this middleware)
+tags:
+- name: orders
+paths:
+  /orders/snapshot:
+    post:
+      operationId: SnapshotController_handleSnapshot
+      summary: POST /orders/snapshot
+      description: API to receive full order snapshot from Bozzuto's AS400
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderSnapshotRequestDto'
+      responses:
+        '200':
+          description: Snapshot received and logged.
+        '503':
+          description: Snapshot archive to Fly Tigris failed (when BUCKET_NAME is configured).
+      tags:
+      - orders
+      security:
+      - api_key: []
+    servers:
+    - url: https://integrations.mavenmachines.com
+      description: Maven (production)
+    - url: /
+      description: Current host (use when testing this middleware)
+  /orders/cutoff:
+    post:
+      operationId: CutoffController_handleCutoff
+      summary: POST /orders/cutoff
+      description: API to receive customer cutoff times from Bozzuto's
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCutoffRequestDto'
+      responses:
+        '200':
+          description: Cutoff payload accepted; Tigris + Redis ingest runs in background.
+      tags:
+      - orders
+      security:
+      - api_key: []
+    servers:
+    - url: https://integrations.mavenmachines.com
+      description: Maven (production)
+    - url: /
+      description: Current host (use when testing this middleware)
+  /orders:
+    post:
+      operationId: OrdersController_upsertShipmentAndManifest
+      summary: POST /orders
+      description: "\n    API endpoint for creating and updating p&d shipments and manifests in the Maven system.\n    "
+      parameters: []
+      responses:
+        '200':
+          description: A successful API response for p&d shipments and manifests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CredentialsResponseDto'
+      tags:
+      - orders
+      security:
+      - api_key: []
+    servers:
+    - url: https://integrations.mavenmachines.com
+components:
+  schemas:
+    TransactionSnapshotItemDto:
+      type: object
+      properties:
+        reference_id:
+          type: number
+          example: 123456
+        reference_type:
+          type: string
+          example: ORDER
+        reference_status:
+          type: string
+          example: OPEN
+        commodity:
+          type: string
+          example: Grocery/Candy
+        weight:
+          type: number
+          example: 342.6
+        cube:
+          type: number
+          example: 26.05
+        cases:
+          type: number
+          example: 10
+        pickup_location:
+          type: string
+          example: ID
+        delivery_date:
+          type: string
+          example: '2026-04-06'
+          description: Required when reference_type is ORDER
+        ignore_minimums:
+          type: boolean
+          example: false
+        delivery_location:
+          type: string
+          example: 4110C
+        route_together_key:
+          type: string
+          example: ABC123
+        route_together_sequence:
+          type: number
+          example: 1
+        amount_for_minimum_calculation:
+          type: number
+          example: 100.5
+        pickup_start_window:
+          type: string
+          example: '2026-07-04T00:00:00Z'
+          description: Required ISO 8601 datetime when reference_type is PICKUP
+        pickup_end_window:
+          type: string
+          example: '2026-07-04T23:59:59Z'
+          description: Required ISO 8601 datetime when reference_type is PICKUP
+        pickup_qualifier:
+          type:
+          - string
+          - 'null'
+          example: FIRST_COME_FIRST_SERVED
+          enum:
+          - FIRST_COME_FIRST_SERVED
+          - APPOINTMENT_REQUESTED
+      required:
+      - reference_id
+      - reference_type
+      - reference_status
+      - commodity
+      - weight
+      - cube
+      - cases
+      - pickup_location
+      - delivery_date
+      - ignore_minimums
+      - delivery_location
+      - pickup_start_window
+      - pickup_end_window
+    OrderSnapshotRequestDto:
+      type: object
+      properties:
+        snapshot_datetime:
+          type: number
+          example: 1772225579943
+          description: Unix timestamp in milliseconds
+        transaction_count:
+          type: number
+          example: 21419
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionSnapshotItemDto'
+      required:
+      - snapshot_datetime
+      - transaction_count
+      - transactions
+    OrderCutoffRequestDto:
+      type: object
+      properties:
+        snapshot_datetime:
+          type: number
+          example: 1773169696149
+          description: Unix timestamp in milliseconds
+        record_count:
+          type: number
+          example: 97558
+        cutoff_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/CutoffItemDto'
+      required:
+      - snapshot_datetime
+      - record_count
+      - cutoff_list
+    CutoffItemDto:
+      type: object
+      properties:
+        customer_number:
+          type: string
+          example: 4110C
+          description: Must match snapshot delivery_location (ORDER) or pickup_location (PICKUP) exactly — same string used as Redis hash field prefix with commodity_id (e.g. trailing C or V if present).
+        commodity_id:
+          type: number
+          example: -1
+        commodity_description:
+          type: string
+          example: PENDING COMMODITY MAPPING
+        monday_lead_days:
+          type: number
+          example: 1
+        monday_cutoff:
+          type: number
+          example: 1
+        tuesday_lead_days:
+          type: number
+          example: 1
+        tuesday_cutoff:
+          type: number
+          example: 1000
+        wednesday_lead_days:
+          type: number
+          example: 1
+        wednesday_cutoff:
+          type: number
+          example: 1000
+        thursday_lead_days:
+          type: number
+          example: 1
+        thursday_cutoff:
+          type: number
+          example: 1000
+        friday_lead_days:
+          type: number
+          example: 1
+        friday_cutoff:
+          type: number
+          example: 1000
+        saturday_lead_days:
+          type: number
+          example: 1
+        saturday_cutoff:
+          type: number
+          example: 1000
+        sunday_lead_days:
+          type: number
+          example: 1
+        sunday_cutoff:
+          type: number
+          example: 1000
+      required:
+      - customer_number
+      - commodity_description
+    CredentialsResponseDto:
+      type: object
+      properties: {}
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: apiKey
+x-refined-from:
+- maven-machines-bozzutos-middleware-openapi.json
+- maven-machines-triple-s-steel-middleware-openapi.json

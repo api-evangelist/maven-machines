@@ -1,0 +1,47 @@
+openapi: 3.2.0
+info:
+  title: Triple SSS Steel Routeplans API
+  description: Documentation for Triple SSS Steel
+  version: '1.0'
+  contact: {}
+servers:
+- url: https://integrations.mavenmachines.com
+tags:
+- name: routeplans
+paths:
+  /routeplans:
+    get:
+      operationId: RouteplansController_getRouteplans
+      summary: GET /routeplans
+      description: "\n    API endpoint for reading route plan data for a given date.\n    "
+      parameters:
+      - name: sessionDate
+        required: true
+        in: query
+        schema:
+          type: date
+      responses:
+        '200':
+          description: A successful API response for the route plans for a given date
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRoutePlansRequestDto'
+      tags:
+      - routeplans
+      security:
+      - api_key: []
+components:
+  schemas:
+    GetRoutePlansRequestDto:
+      type: object
+      properties:
+        sessionDate:
+          type: date
+      required:
+      - sessionDate
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: apiKey

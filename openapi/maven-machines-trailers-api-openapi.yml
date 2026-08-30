@@ -1,0 +1,411 @@
+openapi: 3.2.0
+info:
+  title: Assets Trailers API
+  description: Documentation for Company Assets APIs
+  version: '1.0'
+  contact: {}
+servers:
+- url: https://integrations.mavenmachines.com
+tags:
+- name: Trailers
+paths:
+  /trailers/{trailerNumber}:
+    get:
+      operationId: GetTrailersController_getVehicles
+      summary: ''
+      description: "\n      Retrieves a list of trailers for a company.\n    "
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Page number
+        example: 3
+        schema:
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: The number of items to be returned per page.
+        example: 10
+        schema:
+          type: number
+      - name: includeInactive
+        required: false
+        in: query
+        description: If set to "true", the API will return items marked as inactive in Maven system.
+        example: false
+        schema:
+          type: boolean
+      - name: includeAttributes
+        required: false
+        in: query
+        description: If set to "true", the API will return full vehicle object including additional attributes.
+        example: true
+        schema:
+          type: boolean
+      - name: trailerNumber
+        required: true
+        in: path
+        description: Can be a single value or a comma separated list of trailer numbers
+        example: trailerNumber-1,trailerNumber-2,trailerNumber-3
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A list of trailers along side with pagination information (limit and next page number).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTrailersResponseApi'
+        '400':
+          description: Bad request.
+        '500':
+          description: Unknown server error.
+      tags:
+      - Trailers
+      security:
+      - api_key: []
+    patch:
+      operationId: UpdateTrailerController_updateTrailer
+      summary: ''
+      description: Updates a trailer. Only provided key-value pairs provided are updated.
+      parameters:
+      - name: trailerNumber
+        required: true
+        in: path
+        example: trailerNumber-1
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTrailerRequestDTO'
+      responses:
+        '200':
+          description: Returns updated trailer.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrailerDTO'
+        '400':
+          description: Bad request.
+        '500':
+          description: Unknown server error.
+      tags:
+      - Trailers
+      security:
+      - api_key: []
+  /trailers/upload:
+    post:
+      operationId: UploadTrailerController_upload
+      summary: ''
+      description: "\n      Upload trailers API allows you insert, update or deactivate trailers.\n      API expects a CSV file with the following columns: ChgType, TrailerStatus, UnitID, TrailerType, Make, Model, Year, VIN, Domicile, CurrentTerm, EquipType, EquipSpecs, Liftgate, Heat, OwnershipStatus, Axles, BodyType, Length, LengthUnits.\n      \n      Column description:\n      - ChgType: 1 = Add 2 = Deactivate, 3 = Update;\n      - TrailerStatus: ACTIVE or INACTIVE;\n      - UnitID: The trailer number. i.e. RT0992.\n      - Make: Make of the trailer i.e. Leyland\n      - Model: Model of the trailer i.e. Actros\n      - Year: Year of manufacture of the trailer, i.e. 2009\n      - VIN: Vehicle identification number of trailer, i.e. 4433XJJWEI2422232\n      - Domicile: Map to an attribute field;\n      - CurrentTerm: Map to the domicile field;\n      - Liftgate: Unit is equipped with a liftgate 1 = Yes, 0 = No;\n      - Heat: Unit is heated.  1 = Yes, 0 = No;\n      - OwnershipStatus: Unit mode of ownership can be one of 'rented', 'owned', 'leased', 'non-company' or 'other'.\n      - Axles: Number of axles on trialer i.e. 2, 6, 8.\n      - BodyType: Bodytype of trailer i.e. flatbed.\n      - Length: Numeric value indicating length of trailer i.e. 20\n      - LengthUnits: The unit for the length of the trailer i.e. 'feet', 'meters'\n\n      API supports up to 1000 rows in a CSV file.\n      "
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: An array of successfully uploaded trailers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadTrailersResponseApi'
+        '400':
+          description: Bad request.
+        '500':
+          description: Unknown server error.
+      tags:
+      - Trailers
+      security:
+      - api_key: []
+  /trailers:
+    post:
+      operationId: CreateTrailerController_createTrailer
+      summary: ''
+      description: Creates a new trailer. If the trailerNumber already exists, the request will be rejected.
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrailerDTO'
+      responses:
+        '201':
+          description: Returns created trailer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrailerDTO'
+        '400':
+          description: Bad request.
+        '500':
+          description: Unknown server error.
+      tags:
+      - Trailers
+      security:
+      - api_key: []
+    get:
+      operationId: GetAllTrailersController_getVehicles
+      summary: ''
+      description: "\n      Retrieves all company trailers.\n    "
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Page number
+        example: 3
+        schema:
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: The number of items to be returned per page.
+        example: 10
+        schema:
+          type: number
+      - name: includeInactive
+        required: false
+        in: query
+        description: If set to "true", the API will return items marked as inactive in Maven system.
+        example: false
+        schema:
+          type: boolean
+      - name: includeAttributes
+        required: false
+        in: query
+        description: If set to "true", the API will return full vehicle object including additional attributes.
+        example: true
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: A list of trailers along side with pagination information (limit and next page number).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTrailersResponseApi'
+        '400':
+          description: Bad request.
+        '500':
+          description: Unknown server error.
+      tags:
+      - Trailers
+      security:
+      - api_key: []
+components:
+  schemas:
+    GetTrailersResponseApi:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationDTO'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrailerDTO'
+      required:
+      - data
+    PaginationCursor:
+      type: object
+      properties:
+        pageNum:
+          type: number
+          description: Next page number.
+          example: 5
+      required:
+      - pageNum
+    TrailerDTO:
+      type: object
+      properties:
+        trailerNumber:
+          type: string
+          example: 111T
+        trailerType:
+          type: string
+        vin:
+          type: string
+          example: 1WAAA36241B704500
+        make:
+          type: string
+          example: Acme Corporation
+        model:
+          type: string
+          example: base
+        year:
+          type: string
+          example: 2020
+        assetId:
+          type: string
+          example: 231-3211321-321321
+        licensePlateNumber:
+          type: string
+          example: '555'
+        licensePlateState:
+          type: string
+          example: AT
+        status:
+          type: string
+          enum:
+          - active
+          - inactive
+        length:
+          type: number
+          example: 44
+        lengthUnits:
+          type: string
+          enum:
+          - meters
+          - feet
+        axles:
+          type: number
+          example: 8
+        heated:
+          type: boolean
+          example: false
+        liftGate:
+          type: boolean
+          example: false
+        bodyType:
+          type: string
+          example: flatbed
+        ownershipStatus:
+          type: string
+          enum:
+          - rented
+          - owned
+          - leased
+          - non-company
+          - other
+          example: non-company
+        terminal:
+          type: string
+          example: PH
+        attributes:
+          $ref: '#/components/schemas/TrailerAttributesResponse'
+        groupCodes:
+          type: array
+          items:
+            type: string
+      required:
+      - trailerNumber
+    UploadTrailersResponseApi:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrailerDTO'
+      required:
+      - status
+    PaginationDTO:
+      type: object
+      properties:
+        cursor:
+          $ref: '#/components/schemas/PaginationCursor'
+        limit:
+          type: number
+          description: The number of items to be returned per page.
+          example: 10
+      required:
+      - cursor
+      - limit
+    UpdateTrailerRequestDTO:
+      type: object
+      properties:
+        trailerType:
+          type: string
+        vin:
+          type: string
+          example: 1WAAA36241B704500
+        make:
+          type: string
+          example: Acme Corporation
+        model:
+          type: string
+          example: base
+        year:
+          type: string
+          example: 2020
+        assetId:
+          type: string
+          example: 231-3211321-321321
+        licensePlateNumber:
+          type: string
+          example: '555'
+        licensePlateState:
+          type: string
+          example: AT
+        status:
+          type: string
+          enum:
+          - active
+          - inactive
+        length:
+          type: number
+          example: 44
+        lengthUnits:
+          type: string
+          enum:
+          - meters
+          - feet
+        axles:
+          type: number
+          example: 8
+        heated:
+          type: boolean
+          example: false
+        liftGate:
+          type: boolean
+          example: false
+        bodyType:
+          type: string
+          example: flatbed
+        ownershipStatus:
+          type: string
+          enum:
+          - rented
+          - owned
+          - leased
+          - non-company
+          - other
+          example: non-company
+        terminal:
+          type: string
+          example: PH
+        attributes:
+          $ref: '#/components/schemas/TrailerAttributesResponse'
+        groupCodes:
+          type: array
+          items:
+            type: string
+    TrailerAttributesResponse:
+      type: object
+      properties:
+        Domicile:
+          type: string
+          example: UNK
+        EquipType:
+          type: string
+          example: POWER UNIT
+        EquipSpecs:
+          type: string
+          example: AA 20
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: apiKey

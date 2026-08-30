@@ -1,0 +1,336 @@
+openapi: 3.2.0
+info:
+  title: Workflow Forms API
+  description: Documentation for Workflow APIs
+  version: '1.0'
+  contact: {}
+servers:
+- url: https://integrations.mavenmachines.com
+tags:
+- name: forms
+paths:
+  /forms:
+    get:
+      operationId: FormDefinitionsController_getFormDefinitions
+      summary: GET /forms
+      description: "\n    Below is a list of all the forms that Maven provides for Truckload experience. In general these can be customized by the fleet.\n\n      - start trip\n      - end trip\n      - arrive stop/terminal\n      - auto-arrive stop/terminal\n      - depart stop/terminal\n      - auto-depart stop/terminal\n      - workflow (forms associated to specific stop/terminal)\n        - ex: trailer info, delivery info\n      - ad-hoc (forms not assigned to a particular stop, but accessible to drivers throughout their day)\n        - ex: break-down form, time-off request    \n    \n    \n    Retrieves form definitions from the Maven system.\n    "
+      parameters:
+      - name: offset
+        required: false
+        in: query
+        example: 5
+        description: Pagination result offset. Defaults to 0.
+        schema:
+          type: number
+      responses:
+        '200':
+          description: A successful API response for fetching form definitions from the Maven system
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormDefinitionsApiResponse'
+        '404':
+          description: When form definitions not found for company
+        '500':
+          description: Unknown error response from the customers service.
+      tags:
+      - forms
+      security:
+      - api_key: []
+  /forms/results:
+    get:
+      operationId: FormResultsController_getFormResults
+      summary: GET /forms/results
+      description: APIs for interacting with form data from the Maven system.
+      parameters:
+      - name: startTime
+        required: true
+        in: query
+        description: Required. the ISO8601 storage creation timestamp of the first data being polled (inclusive)
+        example: '2020-05-03T00:00:00Z'
+        schema:
+          type: string
+      - name: endTime
+        required: false
+        in: query
+        description: The ISO8601 storage creation timestamp of the last data being polled (inclusive)
+        example: '2020-05-09T23:59:59Z'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Retrieves form results in the Maven system.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormResultsApiResponse'
+        '404':
+          description: When form definitions not found for company
+        '500':
+          description: Unknown error response from the customers service.
+      tags:
+      - forms
+      security:
+      - api_key: []
+components:
+  schemas:
+    FormDefinitionsApiResponse:
+      type: object
+      properties:
+        forms:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormDefinitions'
+        pagination:
+          $ref: '#/components/schemas/GlobalPagination'
+      required:
+      - forms
+      - pagination
+    FormDefinitions:
+      type: object
+      properties:
+        formId:
+          type: string
+          format: uuid
+          description: Maven form identifier
+          example: 10aec305-df07-4310-89fd-596c76748d56
+        version:
+          type: string
+          description: Form version
+          format: date-time
+          example: '2020-04-08T21:19:42.123456Z'
+        name:
+          type: string
+          description: Form name
+          example: Delivery Form
+        description:
+          type: string
+          description: Description of form
+          example: Form to be completed when making a delivery
+        components:
+          description: Form definition syntax
+          type: array
+          items:
+            $ref: '#/components/schemas/FormDefinitionsComponents'
+      required:
+      - formId
+      - version
+      - name
+      - description
+      - components
+    GlobalPagination:
+      type: object
+      properties:
+        total:
+          type: number
+          description: Total number of records
+          example: 15
+        hasNextPage:
+          type: boolean
+          description: Bool to indicate if there is another page of data to request.
+          example: false
+        nextPageOffset:
+          type: number
+          description: For subsequent requests, set offset to the value of this field to get the next page
+          example: null
+      required:
+      - total
+      - hasNextPage
+      - nextPageOffset
+    FormResultsApiResponse:
+      type: object
+      properties:
+        forms:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormResults'
+        pagination:
+          $ref: '#/components/schemas/FormResultsPagination'
+      required:
+      - forms
+      - pagination
+    FormDefinitionsComponents:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Key of form definitions component
+          example: Pro Number
+        hint:
+          type: string
+          description: Hint for form definitions component
+          example: Enter your Pro Number
+        type:
+          type: string
+          description: Type of form definitions component
+          enum:
+          - divider
+          - textDisplay
+          - ratingInput
+          - dateInput
+          - dateTimeInput
+          - imageInput
+          - radioButtonsInput
+          - dropDownInput
+          - checkBoxInput
+          - doubleInput
+          - digitInput
+          - integerInput
+          - paragraphInput
+          - textInput
+        visible:
+          type: boolean
+          description: Flag of component visibility
+          example: true
+        required:
+          type: boolean
+          description: Flag that indicates is this component required or optional
+          example: true
+        maxLength:
+          type: number
+          description: Max length of chars
+          example: 15
+        minLength:
+          type: number
+          description: Min length of chars
+          example: 5
+        minValue:
+          type: number
+          description: Min value
+          example: -90
+        maxValue:
+          type: number
+          description: Max value
+          example: 90
+        totalOptions:
+          type: number
+          description: Total options
+          example: 5
+        category:
+          type: string
+          description: Category
+          example: payment-receipt
+        displayTitle:
+          type: string
+          description: Display Title of the component
+          example: Pro Number
+        autocomplete:
+          type: string
+          description: Autocomplete
+          example: latitude
+        options:
+          description: options
+          example:
+          - 'Yes'
+          - 'No'
+          type: array
+          items:
+            type: string
+      required:
+      - key
+      - type
+      - visible
+      - required
+      - displayTitle
+    FormResults:
+      type: object
+      properties:
+        companyId:
+          type: number
+          description: Maven form result company identifier
+          example: 1
+        hr_id:
+          type: string
+          description: Maven form result user identifier
+          example: df610a41-6b33-4652-a8de-8a7ed0d290e7
+        formResultsId:
+          type: string
+          description: Maven form result identifier
+          example: df610a41-6b33-4652-a8de-8a7ed0d290e7
+        formId:
+          type: string
+          description: Maven form identifier
+          example: 10aec305-df07-4310-89fd-596c76748d56
+        version:
+          type: string
+          description: Maven form version
+          format: date-time
+          example: '2020-05-01T14:08:23Z'
+        name:
+          type: string
+          description: Name of form
+          example: Delivery Form
+        submittedBy:
+          type: string
+          description: Name of user who submitted this form
+          example: John Smith
+        externalUserId:
+          type: string
+          description: Unique external identifier for the user who submitted this form
+          example: USER123
+        submissionTime:
+          type: string
+          description: Time that this form result was submitted
+          format: date-time
+          example: '2020-05-05T08:37:53Z'
+        approvals:
+          type: string
+          description: Reserved for future expansion
+          example: null
+        formResults:
+          type: object
+          description: Form results
+          example:
+            BoL:
+            - https://maven-documents-prod.s3.amazonaws.com/8042971139979c51-1f36-bfed-3959q
+            Stop: '123'
+            Event: null
+            Amount: null
+            Lumper?: 'No'
+            Tractor: '456'
+            Comments: null
+            Latitude: 40.43543
+            Location: null
+            Odometer: 83064.2793
+            Longitude: -88.7630544
+            Pro Number: '7892127'
+            Driver Name: John Smith
+            Company Name: null
+            Driver Unload: 'No'
+            Lumper Receipt: null
+            How was the client?: 4
+      required:
+      - companyId
+      - hr_id
+      - formResultsId
+      - formId
+      - version
+      - name
+      - submittedBy
+      - externalUserId
+      - submissionTime
+      - approvals
+      - formResults
+    FormResultsPagination:
+      type: object
+      properties:
+        nextPageStartTime:
+          type: string
+          description: For subsequent requests, set startTime to the value of this field to get the next page
+          format: date-time
+          example: 2020-05-07T21:50.42Z
+        hasNextPage:
+          type: boolean
+          description: True if there is another page of forms data to request
+          example: true
+      required:
+      - nextPageStartTime
+      - hasNextPage
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: apiKey
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

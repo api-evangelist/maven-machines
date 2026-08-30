@@ -1,0 +1,500 @@
+openapi: 3.2.0
+info:
+  title: rest-service-manual Locations API
+  version: '1.0'
+servers:
+- url: https://integrations.mavenmachines.com/
+security:
+- sec0: []
+tags:
+- name: Locations
+paths:
+  /locations/vehicles:
+    get:
+      summary: GET /locations/vehicles
+      description: The vehicle locations API returns a history of all recorded telematics pings for any vehicle that is installed with a Maven Vehicle Data Adapter (VDA).
+      operationId: get-locationsvehicles
+      parameters:
+      - name: startTime
+        in: query
+        description: ISO8601 string of the first data being polled (inclusive)
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: endTime
+        in: query
+        description: ISO8601 string of the last data being polled (inclusive)
+        schema:
+          type: string
+          format: date
+      - name: groupCode
+        in: query
+        description: If provided the response will include only locations for vehicles that belong to that group
+        schema:
+          type: string
+      - name: extendedParams
+        in: query
+        description: 'If true, the response will include additional attributes: rpm, heading, city, state, postalCode, speed, fuelLevel'
+        schema:
+          type: boolean
+          default: false
+      - name: apiKey
+        in: header
+        description: API Key required to authenticate request
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"data\": [\n    {\n      \"id\": 123,\n      \"vehicle\": \"Truck 2\",\n      \"eventTime\": \"2020-04-09T21:50:42Z\",\n      \"uploadedTime\": \"2020-04-09T21:55:42Z\",\n      \"latitude\": 95.67892,\n      \"longitude\": 25.23456,\n      \"odometer\": 123456.7,\n      \"driver\": {\n        \"firstName\": \"John\",\n        \"lastName\": \"Smith\",\n        \"employeeId\": \"JS123\"\n      },\n      \"extendedParams\": {\n        \"rpm\": 56.75,\n        \"heading\": 120,\n        \"speed\": 36,\n        \"fuelLevel\": 0.92,\n        \"nearestAddress\": \"3930 16th Ave SW, Cedar Rapids, IA 52404, USA\",\n        \"city\": \"Pittsburgh\",\n        \"state\": \"PA\",\n        \"country\": \"US\",\n        \"postalCode\": \"Pittsburgh\",\n        \"eldLocation\": {\n          \"distance\": 2.8,\n          \"country\": \"USA\",\n          \"direction\": \"SW\",\n          \"city\": \"Cedar Rapids\",\n          \"jurisdiction\": \"IA\",\n          \"units\": \"mi\",\n          \"formattedLocation\": \"2.8 mi SW IA Cedar Rapids, USA\"\n        },\n        \"smallCity\": {\n          \"distance\": 2.8,\n          \"country\": \"USA\",\n          \"direction\": \"SW\",\n          \"city\": \"Cedar Rapids\",\n          \"jurisdiction\": \"IA\",\n          \"units\": \"mi\",\n          \"formattedLocation\": \"2.8 mi SW IA Cedar Rapids, USA\",\n          \"postalCode\": \"15213\"\n        },\n        \"largeCity\": {\n          \"distance\": 2.8,\n          \"country\": \"USA\",\n          \"direction\": \"SW\",\n          \"city\": \"Cedar Rapids\",\n          \"jurisdiction\": \"IA\",\n          \"units\": \"mi\",\n          \"formattedLocation\": \"2.8 mi SW IA Cedar Rapids, USA\",\n          \"postalCode\": \"15213\"\n        }\n      }\n    }\n  ],\n  \"units\": {\n    \"odometer\": \"miles\",\n    \"totalFuelConsumed\": \"gallons\",\n    \"speed\": \"mph\",\n    \"fuelLevel\": \"percentage\"\n  },\n  \"pagination\": {\n    \"nextPageStartTime\": \"2020-04-09T21:50::42.000000Z\",\n    \"hasNextPage\": true\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 123
+                          default: 0
+                        vehicle:
+                          type: string
+                          example: Truck 2
+                        eventTime:
+                          type: string
+                          example: '2020-04-09T21:50:42Z'
+                        uploadedTime:
+                          type: string
+                          example: '2020-04-09T21:55:42Z'
+                        latitude:
+                          type: number
+                          example: 95.67892
+                          default: 0
+                        longitude:
+                          type: number
+                          example: 25.23456
+                          default: 0
+                        odometer:
+                          type: number
+                          example: 123456.7
+                          default: 0
+                        driver:
+                          type: object
+                          properties:
+                            firstName:
+                              type: string
+                              example: John
+                            lastName:
+                              type: string
+                              example: Smith
+                            employeeId:
+                              type: string
+                              example: JS123
+                        extendedParams:
+                          type: object
+                          properties:
+                            rpm:
+                              type: number
+                              example: 56.75
+                              default: 0
+                            heading:
+                              type: integer
+                              example: 120
+                              default: 0
+                            speed:
+                              type: integer
+                              example: 36
+                              default: 0
+                            fuelLevel:
+                              type: number
+                              example: 0.92
+                              default: 0
+                            nearestAddress:
+                              type: string
+                              example: 3930 16th Ave SW, Cedar Rapids, IA 52404, USA
+                            city:
+                              type: string
+                              example: Pittsburgh
+                            state:
+                              type: string
+                              example: PA
+                            country:
+                              type: string
+                              example: US
+                            postalCode:
+                              type: string
+                              example: Pittsburgh
+                            eldLocation:
+                              type: object
+                              properties:
+                                distance:
+                                  type: number
+                                  example: 2.8
+                                  default: 0
+                                country:
+                                  type: string
+                                  example: USA
+                                direction:
+                                  type: string
+                                  example: SW
+                                city:
+                                  type: string
+                                  example: Cedar Rapids
+                                jurisdiction:
+                                  type: string
+                                  example: IA
+                                units:
+                                  type: string
+                                  example: mi
+                                formattedLocation:
+                                  type: string
+                                  example: 2.8 mi SW IA Cedar Rapids, USA
+                            smallCity:
+                              type: object
+                              properties:
+                                distance:
+                                  type: number
+                                  example: 2.8
+                                  default: 0
+                                country:
+                                  type: string
+                                  example: USA
+                                direction:
+                                  type: string
+                                  example: SW
+                                city:
+                                  type: string
+                                  example: Cedar Rapids
+                                jurisdiction:
+                                  type: string
+                                  example: IA
+                                units:
+                                  type: string
+                                  example: mi
+                                formattedLocation:
+                                  type: string
+                                  example: 2.8 mi SW IA Cedar Rapids, USA
+                                postalCode:
+                                  type: string
+                                  example: '15213'
+                            largeCity:
+                              type: object
+                              properties:
+                                distance:
+                                  type: number
+                                  example: 2.8
+                                  default: 0
+                                country:
+                                  type: string
+                                  example: USA
+                                direction:
+                                  type: string
+                                  example: SW
+                                city:
+                                  type: string
+                                  example: Cedar Rapids
+                                jurisdiction:
+                                  type: string
+                                  example: IA
+                                units:
+                                  type: string
+                                  example: mi
+                                formattedLocation:
+                                  type: string
+                                  example: 2.8 mi SW IA Cedar Rapids, USA
+                                postalCode:
+                                  type: string
+                                  example: '15213'
+                  units:
+                    type: object
+                    properties:
+                      odometer:
+                        type: string
+                        example: miles
+                      totalFuelConsumed:
+                        type: string
+                        example: gallons
+                      speed:
+                        type: string
+                        example: mph
+                      fuelLevel:
+                        type: string
+                        example: percentage
+                  pagination:
+                    type: object
+                    properties:
+                      nextPageStartTime:
+                        type: string
+                        example: 2020-04-09T21:50::42.000000Z
+                      hasNextPage:
+                        type: boolean
+                        example: true
+                        default: true
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Locations
+  /locations/vehicles/snapshot:
+    get:
+      summary: GET /locations/vehicles/snapshot
+      description: The vehicle locations snapshot API returns a list of the latest ping/location for all vehicles in your fleet that are installed with a Maven Vehicle Data Adapter (VDA).
+      operationId: get-locationsvehiclessnapshot
+      parameters:
+      - name: groupCode
+        in: query
+        description: If provided the response will include only locations for vehicles that belong to that group
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Offset to indicate from which vehicle the locations should be read next time
+        schema:
+          type: integer
+          format: int32
+      - name: extendedParams
+        in: query
+        description: 'If true, the response will include additional attributes: rpm, heading, city, state, postalCode, speed, fuelLevel'
+        schema:
+          type: boolean
+          default: false
+      - name: apiKey
+        in: header
+        description: API Key required to authenticate request
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n  \"data\": [\n    {\n      \"id\": 123,\n      \"vehicle\": \"Truck 2\",\n      \"eventTime\": \"2020-04-09T21:50:42Z\",\n      \"uploadedTime\": \"2020-04-09T21:55:42Z\",\n      \"latitude\": 95.67892,\n      \"longitude\": 25.23456,\n      \"odometer\": 123456.7,\n      \"driver\": {\n        \"firstName\": \"John\",\n        \"lastName\": \"Smith\",\n        \"employeeId\": \"JS123\"\n      },\n      \"extendedParams\": {\n        \"rpm\": 56.75,\n        \"heading\": 120,\n        \"speed\": 36,\n        \"fuelLevel\": 0.92,\n        \"nearestAddress\": \"3930 16th Ave SW, Cedar Rapids, IA 52404, USA\",\n        \"city\": \"Pittsburgh\",\n        \"state\": \"PA\",\n        \"country\": \"US\",\n        \"postalCode\": \"Pittsburgh\",\n        \"eldLocation\": {\n          \"distance\": 2.8,\n          \"country\": \"USA\",\n          \"direction\": \"SW\",\n          \"city\": \"Cedar Rapids\",\n          \"jurisdiction\": \"IA\",\n          \"units\": \"mi\",\n          \"formattedLocation\": \"2.8 mi SW IA Cedar Rapids, USA\"\n        },\n        \"smallCity\": {\n          \"distance\": 2.8,\n          \"country\": \"USA\",\n          \"direction\": \"SW\",\n          \"city\": \"Cedar Rapids\",\n          \"jurisdiction\": \"IA\",\n          \"units\": \"mi\",\n          \"formattedLocation\": \"2.8 mi SW IA Cedar Rapids, USA\",\n          \"postalCode\": \"15213\"\n        },\n        \"largeCity\": {\n          \"distance\": 2.8,\n          \"country\": \"USA\",\n          \"direction\": \"SW\",\n          \"city\": \"Cedar Rapids\",\n          \"jurisdiction\": \"IA\",\n          \"units\": \"mi\",\n          \"formattedLocation\": \"2.8 mi SW IA Cedar Rapids, USA\",\n          \"postalCode\": \"15213\"\n        }\n      }\n    }\n  ],\n  \"units\": {\n    \"odometer\": \"miles\",\n    \"totalFuelConsumed\": \"gallons\",\n    \"speed\": \"mph\",\n    \"fuelLevel\": \"percentage\"\n  },\n  \"pagination\": {\n    \"offset\": 123,\n    \"hasNextPage\": true\n  }\n}"
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 123
+                          default: 0
+                        vehicle:
+                          type: string
+                          example: Truck 2
+                        eventTime:
+                          type: string
+                          example: '2020-04-09T21:50:42Z'
+                        uploadedTime:
+                          type: string
+                          example: '2020-04-09T21:55:42Z'
+                        latitude:
+                          type: number
+                          example: 95.67892
+                          default: 0
+                        longitude:
+                          type: number
+                          example: 25.23456
+                          default: 0
+                        odometer:
+                          type: number
+                          example: 123456.7
+                          default: 0
+                        driver:
+                          type: object
+                          properties:
+                            firstName:
+                              type: string
+                              example: John
+                            lastName:
+                              type: string
+                              example: Smith
+                            employeeId:
+                              type: string
+                              example: JS123
+                        extendedParams:
+                          type: object
+                          properties:
+                            rpm:
+                              type: number
+                              example: 56.75
+                              default: 0
+                            heading:
+                              type: integer
+                              example: 120
+                              default: 0
+                            speed:
+                              type: integer
+                              example: 36
+                              default: 0
+                            fuelLevel:
+                              type: number
+                              example: 0.92
+                              default: 0
+                            nearestAddress:
+                              type: string
+                              example: 3930 16th Ave SW, Cedar Rapids, IA 52404, USA
+                            city:
+                              type: string
+                              example: Pittsburgh
+                            state:
+                              type: string
+                              example: PA
+                            country:
+                              type: string
+                              example: US
+                            postalCode:
+                              type: string
+                              example: Pittsburgh
+                            eldLocation:
+                              type: object
+                              properties:
+                                distance:
+                                  type: number
+                                  example: 2.8
+                                  default: 0
+                                country:
+                                  type: string
+                                  example: USA
+                                direction:
+                                  type: string
+                                  example: SW
+                                city:
+                                  type: string
+                                  example: Cedar Rapids
+                                jurisdiction:
+                                  type: string
+                                  example: IA
+                                units:
+                                  type: string
+                                  example: mi
+                                formattedLocation:
+                                  type: string
+                                  example: 2.8 mi SW IA Cedar Rapids, USA
+                            smallCity:
+                              type: object
+                              properties:
+                                distance:
+                                  type: number
+                                  example: 2.8
+                                  default: 0
+                                country:
+                                  type: string
+                                  example: USA
+                                direction:
+                                  type: string
+                                  example: SW
+                                city:
+                                  type: string
+                                  example: Cedar Rapids
+                                jurisdiction:
+                                  type: string
+                                  example: IA
+                                units:
+                                  type: string
+                                  example: mi
+                                formattedLocation:
+                                  type: string
+                                  example: 2.8 mi SW IA Cedar Rapids, USA
+                                postalCode:
+                                  type: string
+                                  example: '15213'
+                            largeCity:
+                              type: object
+                              properties:
+                                distance:
+                                  type: number
+                                  example: 2.8
+                                  default: 0
+                                country:
+                                  type: string
+                                  example: USA
+                                direction:
+                                  type: string
+                                  example: SW
+                                city:
+                                  type: string
+                                  example: Cedar Rapids
+                                jurisdiction:
+                                  type: string
+                                  example: IA
+                                units:
+                                  type: string
+                                  example: mi
+                                formattedLocation:
+                                  type: string
+                                  example: 2.8 mi SW IA Cedar Rapids, USA
+                                postalCode:
+                                  type: string
+                                  example: '15213'
+                  units:
+                    type: object
+                    properties:
+                      odometer:
+                        type: string
+                        example: miles
+                      totalFuelConsumed:
+                        type: string
+                        example: gallons
+                      speed:
+                        type: string
+                        example: mph
+                      fuelLevel:
+                        type: string
+                        example: percentage
+                  pagination:
+                    type: object
+                    properties:
+                      offset:
+                        type: integer
+                        example: 123
+                        default: 0
+                      hasNextPage:
+                        type: boolean
+                        example: true
+                        default: true
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      tags:
+      - Locations
+components:
+  securitySchemes:
+    sec0:
+      type: apiKey
+      in: header
+      name: apiKey
+x-readme:
+  headers: []
+  explorer-enabled: true
+  proxy-enabled: true
+x-readme-fauxas: true

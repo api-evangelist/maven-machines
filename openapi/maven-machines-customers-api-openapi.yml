@@ -1,0 +1,170 @@
+openapi: 3.2.0
+info:
+  title: planning-and-dispatch Customers API
+  version: '1.0'
+servers:
+- url: https://integrations.mavenmachines.com/companies/{companyKey}/
+  variables:
+    companyKey:
+      default: companyKey
+security:
+- sec0: []
+tags:
+- name: Customers
+paths:
+  /customers:
+    post:
+      summary: POST /customers
+      description: Adds or updates a customer record in the Maven system.
+      operationId: post-companiescompanyidcustomers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - customerNumber
+              - customerName
+              properties:
+                customerNumber:
+                  type: string
+                  description: (Req) External identifier for the customer record. If customerNumber already known, will update the record.
+                customerName:
+                  type: string
+                  description: Name of customer
+                customerName2:
+                  type: string
+                  description: Additional name of customer
+                customerPhoneDay:
+                  type: string
+                  description: Daytime phone number of customer
+                customerPhoneNight:
+                  type: string
+                  description: Evening phone number of customer
+                addressStreet:
+                  type: string
+                  description: Address of the customer
+                addressStreet2:
+                  type: string
+                  description: Address 2 of the customer
+                addressCity:
+                  type: string
+                  description: City of the customer
+                addressState:
+                  type: string
+                  description: State of the customer. Must be specified as 2-char ISO state code.
+                addressZip:
+                  type: string
+                  description: Zip code of the customer
+                addressCountry:
+                  type: string
+                  description: Country of the customer. Must be specified as 2-char or 3-char ISO country code.
+                terminalCode:
+                  type: string
+                  description: Terminal code associated with this customer
+                timezone:
+                  type: string
+                  description: Timezone where customer is located. Must be a valid timezone name.
+                notes:
+                  type: string
+                  description: Additional information about this customer
+                attributes:
+                  type: object
+                  description: Key / Value object of custom records Maven will store and return with every request related to this customer record.
+                  properties: {}
+                availability:
+                  type: array
+                  description: Open/Close times for customer
+                  items:
+                    properties:
+                      dayOfWeek:
+                        type: string
+                        description: Day of week for availability segment
+                        enum:
+                        - su
+                        - mo
+                        - tu
+                        - we
+                        - th
+                        - fr
+                        - sa
+                      availability:
+                        type: boolean
+                        description: Is customer available during these hours?
+                      forPickups:
+                        type: boolean
+                        description: Can pickups be made during these hours?
+                      forDeliveries:
+                        type: boolean
+                        description: Can deliveries be made during these hours?
+                      fromTime:
+                        type: string
+                        description: Start time for this availability window. 24 hour, HH:mm:ss format
+                      tillTime:
+                        type: string
+                        description: End time for this availability window. 24 hour, HH:mm:ss format
+                    required:
+                    - dayOfWeek
+                    - availability
+                    - forPickups
+                    - forDeliveries
+                    - fromTime
+                    - tillTime
+                    type: object
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n\t\"type\": \"BAD_REQUEST\",\n\t\"message\": \"text description of error\"\n}"
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: BAD_REQUEST
+                  message:
+                    type: string
+                    example: text description of error
+        '500':
+          description: '500'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: "{\n\t\"type\": \"SERVER_ERROR\",\n  \"message\": \"A server error has occurred\"\n}"
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    example: SERVER_ERROR
+                  message:
+                    type: string
+                    example: A server error has occurred
+      deprecated: false
+      tags:
+      - Customers
+components:
+  securitySchemes:
+    sec0:
+      type: apiKey
+      in: header
+      name: apiKey
+x-readme:
+  headers: []
+  explorer-enabled: true
+  proxy-enabled: true
+x-readme-fauxas: true

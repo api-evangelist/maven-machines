@@ -1,0 +1,360 @@
+openapi: 3.2.0
+info:
+  title: Assets Vehicles API
+  description: Documentation for Company Assets APIs
+  version: '1.0'
+  contact: {}
+servers:
+- url: https://integrations.mavenmachines.com
+tags:
+- name: Vehicles
+paths:
+  /vehicles/{vehicleNumber}:
+    get:
+      operationId: GetVehiclesController_getVehicles
+      summary: ''
+      description: "\n      Retrieves a list of vehicles for a company.\n    "
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Page number
+        example: 3
+        schema:
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: The number of items to be returned per page.
+        example: 10
+        schema:
+          type: number
+      - name: includeInactive
+        required: false
+        in: query
+        description: If set to "true", the API will return items marked as inactive in Maven system.
+        example: false
+        schema:
+          type: boolean
+      - name: includeAttributes
+        required: false
+        in: query
+        description: If set to "true", the API will return full vehicle object including additional attributes.
+        example: true
+        schema:
+          type: boolean
+      - name: vehicleNumber
+        required: true
+        in: path
+        description: Can be a single value or a comma separated list of vehicle numbers
+        example: vehicleNumber-1,vehicleNumber-2,vehicleNumber-3
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A list of vehicles along side with pagination information (limit and next page number).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetVehiclesResponseApi'
+        '400':
+          description: Bad request.
+        '500':
+          description: Unknown server error.
+      tags:
+      - Vehicles
+      security:
+      - api_key: []
+    patch:
+      operationId: UpdateVehicleController_updateVehicle
+      summary: ''
+      description: Updates a vehicle. Only provided key-value pairs provided are updated.
+      parameters:
+      - name: vehicleNumber
+        required: true
+        in: path
+        example: vehicleNumber-1
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateVehicleRequestDTO'
+      responses:
+        '200':
+          description: Returns updated vehicle.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleDTO'
+        '400':
+          description: Bad request.
+        '500':
+          description: Unknown server error.
+      tags:
+      - Vehicles
+      security:
+      - api_key: []
+  /vehicles/upload:
+    post:
+      operationId: UploadVehiclesController_upload
+      summary: ''
+      description: "\n      Upload vehicles API allows you insert, update or deactivate vehicles.\n      API expects a CSV file with the following columns: ChgType, VehicleStatus, UnitID, VehicleType, Make, Model, Year, VIN, Domicile, CurrentTerm, EquipType, EquipSpecs, Liftgate, Heat, CDL.\n      \n      Column description:\n      - ChgType: 1 = Add 2 = Deactivate, 3 = Update;\n      - Status: ACTIVE or INACTIVE;\n      - Domicile: Map to an attribute field;\n      - CurrentTerm: Map to the domicile field;\n      - Liftgate: Unit is equipped with a liftgate 1 = Yes, 0 = No;\n      - Heat: Unit is heated.  1 = Yes, 0 = No;\n      - CDL: Requires driver with CDL.  1 = Yes, 0 = No;\n\n      API supports up to 1000 rows in a CSV file.\n    "
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: An array of successfully uploaded or failed vehicle numbers.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadVehiclesResponseApi'
+        '400':
+          description: Bad request.
+        '500':
+          description: Unknown server error.
+      tags:
+      - Vehicles
+      security:
+      - api_key: []
+  /vehicles:
+    post:
+      operationId: CreateVehicleController_createVehicle
+      summary: ''
+      description: Creates a new vehicle. If the vehicleNumber already exists, the request will be rejected.
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleDTO'
+      responses:
+        '201':
+          description: Returns created vehicle
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleDTO'
+        '400':
+          description: Bad request.
+        '500':
+          description: Unknown server error.
+      tags:
+      - Vehicles
+      security:
+      - api_key: []
+    get:
+      operationId: GetAllVehiclesController_getVehicles
+      summary: ''
+      description: "\n      Retrieves all company vehicles.\n    "
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Page number
+        example: 3
+        schema:
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: The number of items to be returned per page.
+        example: 10
+        schema:
+          type: number
+      - name: includeInactive
+        required: false
+        in: query
+        description: If set to "true", the API will return items marked as inactive in Maven system.
+        example: false
+        schema:
+          type: boolean
+      - name: includeAttributes
+        required: false
+        in: query
+        description: If set to "true", the API will return full vehicle object including additional attributes.
+        example: true
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: A list of vehicles along side with pagination information (limit and next page number).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetVehiclesResponseApi'
+        '400':
+          description: Bad request.
+        '500':
+          description: Unknown server error.
+      tags:
+      - Vehicles
+      security:
+      - api_key: []
+components:
+  schemas:
+    PaginationCursor:
+      type: object
+      properties:
+        pageNum:
+          type: number
+          description: Next page number.
+          example: 5
+      required:
+      - pageNum
+    VehicleDTO:
+      type: object
+      properties:
+        powerUnitNumber:
+          type: string
+          example: 111V
+        powerUnitType:
+          type: string
+        vin:
+          type: string
+          example: 1WVVVV36241B704500
+        make:
+          type: string
+          example: Acme Corporation
+        model:
+          type: string
+          example: base
+        year:
+          type: number
+          example: 2015
+        assetId:
+          type: string
+          example: 321321-321321-3213
+        licensePlateNumber:
+          type: string
+          example: '555'
+        licensePlateState:
+          type: string
+          example: AT
+        fuelType:
+          type: string
+          example: Petrol
+        vehicleStatus:
+          type: string
+          enum:
+          - active
+          - inactive
+          - disabled
+        attributes:
+          $ref: '#/components/schemas/VehicleAttributesResponse'
+        groupCodes:
+          type: array
+          items:
+            type: string
+      required:
+      - powerUnitNumber
+    VehicleAttributesResponse:
+      type: object
+      properties:
+        Domicile:
+          type: string
+          example: UNK
+        EquipType:
+          type: string
+          example: POWER UNIT
+        EquipSpecs:
+          type: string
+          example: AA 20
+        CDL:
+          type: number
+          enum:
+          - 0
+          - 1
+    UpdateVehicleRequestDTO:
+      type: object
+      properties:
+        powerUnitType:
+          type: string
+        vin:
+          type: string
+          example: 1WVVVV36241B704500
+        make:
+          type: string
+          example: Acme Corporation
+        model:
+          type: string
+          example: base
+        year:
+          type: number
+          example: 2015
+        assetId:
+          type: string
+          example: 321321-321321-3213
+        licensePlateNumber:
+          type: string
+          example: '555'
+        licensePlateState:
+          type: string
+          example: AT
+        fuelType:
+          type: string
+          example: Petrol
+        vehicleStatus:
+          type: string
+          enum:
+          - active
+          - inactive
+          - disabled
+        attributes:
+          $ref: '#/components/schemas/VehicleAttributesResponse'
+        groupCodes:
+          type: array
+          items:
+            type: string
+    UploadVehiclesResponseApi:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/VehicleDTO'
+      required:
+      - status
+    PaginationDTO:
+      type: object
+      properties:
+        cursor:
+          $ref: '#/components/schemas/PaginationCursor'
+        limit:
+          type: number
+          description: The number of items to be returned per page.
+          example: 10
+      required:
+      - cursor
+      - limit
+    GetVehiclesResponseApi:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationDTO'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/VehicleDTO'
+      required:
+      - data
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: apiKey

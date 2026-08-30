@@ -1,0 +1,279 @@
+openapi: 3.2.0
+info:
+  title: Reddy Ice Middleware Servicetechs API
+  description: 'Middleware service that integrates Reddy Ice systems with the Maven Machines platform.
+
+
+    ## Authentication
+
+    All protected endpoints require an API key in the `apiKey` request header.
+
+
+    `GET /` is public and does not require an API key.
+
+
+    ## Environment
+
+    The middleware URL is the same for all tiers. Your `apiKey` determines which Maven
+
+    environment (dev, qa, staging, prod) receives the request.'
+  version: 1.0.0
+  contact: {}
+  license:
+    name: UNLICENSED
+servers:
+- url: https://reddy-ice.middleware.mavenmachines.com
+  description: Middleware (target env selected by apiKey)
+tags:
+- name: servicetechs
+paths:
+  /servicetechs/assets/{barcode}:
+    get:
+      operationId: ServiceTechsController_getAssetByBarcode
+      summary: GET /servicetechs/assets/barCode
+      description: API endpoint to get asset information from a barcode scan
+      parameters:
+      - name: barcode
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: task-id
+        required: false
+        in: query
+        description: Optional Maven task ID
+        schema:
+          type: string
+      - name: task-type
+        required: false
+        in: query
+        description: Optional Maven task type
+        schema:
+          type: string
+      - name: i
+        required: false
+        in: query
+        description: Optional field filter(s)
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: A successful asset lookup
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetResponseDto'
+        '400':
+          description: Validation failed or business rule violation
+        '401':
+          description: Missing or invalid apiKey
+        '404':
+          description: Asset not found
+        '500':
+          description: Upstream asset lookup failed
+      tags:
+      - servicetechs
+      security:
+      - api_key: []
+  /servicetechs/assets/workflow-data/{assetType}:
+    get:
+      operationId: ServiceTechsController_getWorkflowData
+      summary: GET /servicetechs/assets/workflow-data/assetType
+      description: Fetch workflow data for a given asset type
+      parameters:
+      - name: assetType
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: i
+        required: false
+        in: query
+        description: Optional field filter(s)
+        schema:
+          type: array
+          items:
+            type: string
+      - name: task-id
+        required: false
+        in: query
+        description: Optional Maven task ID
+        schema:
+          type: string
+      - name: task-type
+        required: false
+        in: query
+        description: Optional Maven task type
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A successful workflow lookup
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponseDto'
+        '400':
+          description: Validation failed or business rule violation
+        '401':
+          description: Missing or invalid apiKey
+        '500':
+          description: Workflow data lookup failed
+      tags:
+      - servicetechs
+      security:
+      - api_key: []
+  /servicetechs/clearCache:
+    get:
+      operationId: ServiceTechsController_clearCache
+      summary: Clear servicetechs cache
+      description: Clears cached servicetechs datasets. Restricted to API keys associated with company ID 1.
+      parameters: []
+      responses:
+        '200':
+          description: Cache cleared
+        '400':
+          description: Validation failed or business rule violation
+        '401':
+          description: This endpoint may only be executed for company 1
+      tags:
+      - servicetechs
+      security:
+      - api_key: []
+components:
+  schemas:
+    WorkflowResponseDto:
+      type: object
+      properties:
+        checklist:
+          $ref: '#/components/schemas/ChecklistDto'
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenericItemDto'
+        photoCategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenericItemDto'
+        rootCauses:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenericItemDto'
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenericItemDto'
+      required:
+      - checklist
+      - parts
+      - photoCategories
+      - rootCauses
+      - services
+    GenericItemDto:
+      type: object
+      properties:
+        id:
+          type: string
+        displayText:
+          type: string
+      required:
+      - id
+      - displayText
+    AssetResponseDto:
+      type: object
+      properties:
+        checklist:
+          $ref: '#/components/schemas/ChecklistDto'
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenericItemDto'
+        photoCategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenericItemDto'
+        rootCauses:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenericItemDto'
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenericItemDto'
+        info:
+          $ref: '#/components/schemas/AssetInfoDto'
+      required:
+      - checklist
+      - parts
+      - photoCategories
+      - rootCauses
+      - services
+      - info
+    LatLongDto:
+      type: object
+      properties:
+        latitude:
+          oneOf:
+          - type: number
+          - type: string
+        longitude:
+          oneOf:
+          - type: number
+          - type: string
+      required:
+      - latitude
+      - longitude
+    AssetInfoDto:
+      type: object
+      properties:
+        barcode:
+          type: string
+        capacity:
+          oneOf:
+          - type: number
+          - type: string
+        latLon:
+          $ref: '#/components/schemas/LatLongDto'
+        make:
+          type: string
+        model:
+          type: string
+        serviceStatus:
+          type: string
+        unitNumber:
+          type: string
+        unitType:
+          type: string
+        year:
+          oneOf:
+          - type: number
+          - type: string
+      required:
+      - barcode
+      - capacity
+      - latLon
+      - make
+      - model
+      - serviceStatus
+      - unitNumber
+      - unitType
+      - year
+    ChecklistDto:
+      type: object
+      properties:
+        id:
+          type: string
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenericItemDto'
+      required:
+      - id
+      - questions
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: apiKey

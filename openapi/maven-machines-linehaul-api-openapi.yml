@@ -1,0 +1,278 @@
+openapi: 3.2.0
+info:
+  title: Maven Machines Linehaul API
+  version: '1.0'
+  description: 'Operations tagged Linehaul across 2 of this provider''s published API definitions: maven-machines-eld-hos-openapi.json, maven-machines-linehaul-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://integrations.mavenmachines.com
+tags:
+- name: Linehaul
+paths:
+  /linehaul/trip:
+    post:
+      summary: POST /linehaul/trip
+      description: ''
+      operationId: post-linehaultrips
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - externalTripId
+              properties:
+                externalTripId:
+                  type: string
+                  description: Unique Identifier for the trip
+                status:
+                  type: string
+                  description: 'The status of the trip. Statuses include: pending,  started,  departedOrigin,  arrivedDestination,  completed'
+                driverCode:
+                  type: array
+                  description: HR id of the driver. Not required but if a driver code is provided, the driver code must exist in Maven, otherwise we will reject the trip
+                  items:
+                    type: string
+                vehicleNumber:
+                  type: string
+                  description: Number of the vehicle on the trip
+                manifestNumber:
+                  type: array
+                  description: array of associated manifests to the trip. This field is optional but if a manifest number is provided, it must exist in Maven otherwise we will reject the trip
+                  items:
+                    type: string
+                plannedStartTime:
+                  type: string
+                  default: ISO
+                  format: date
+                plannedArrivalTime:
+                  type: string
+                  default: ISO
+                  format: date
+                originLocationCode:
+                  type: string
+                  description: Optional but if an originLocationCode is provided, it must exist in Maven otherwise the trip will be rejected
+                destinationLocationCode:
+                  type: string
+                  description: Optional but if an destinationLocationCode is provided, it must exist in Maven otherwise the trip will be rejected
+                instructions:
+                  type: string
+                  description: Open field to provide additional instructions to the driver about the trip
+                attributes:
+                  type: string
+                  description: 'Key: Value Pairs'
+                  format: json
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: '400'
+          content:
+            application/json:
+              examples:
+                Result:
+                  value: '{}'
+              schema:
+                type: object
+                properties: {}
+      deprecated: false
+      security: []
+      tags:
+      - Linehaul
+    servers:
+    - url: ''
+  /linehaul/manifest:
+    post:
+      operationId: LinehaulController_upsertLinehaulManifest
+      summary: POST /linehaul/manifest
+      description: "\n    Enables the creation and updating (upsert) of a linehaul manifest.\n    "
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpsertLinehaulManifestDto'
+      responses:
+        '202':
+          description: ''
+        '400':
+          description: When a request to upload a linehaul manifest fails due to wrong client input
+        '500':
+          description: Unknown error response.
+      tags:
+      - Linehaul
+      security:
+      - api_key: []
+    servers:
+    - url: https://integrations.mavenmachines.com
+components:
+  schemas:
+    UpsertLinehaulManifestDto:
+      type: object
+      properties:
+        manifestNumber:
+          type: string
+          description: Unique external identifier of the manifest
+        status:
+          type: string
+          description: 'Current status of the manifest. Values include PENDING, LOADING, CLOSED, DISPATCHED, DEPARTED ORIGIN, ARRIVED DESTINATION, SPOTTED, UNLOADING, and COMPLETED. Any other status given will be ingested as "OTHER: {status}"'
+        trailerNumber:
+          type: string
+          description: Unique external identifier for the trailer associated to the manifest
+        originLocationCode:
+          type: string
+          description: Unique external identifier for the origin location of the manifest
+        originDoorNumber:
+          type: string
+          description: Unique external identifier for the origin door of the manifest
+        destinationLocationCode:
+          type: string
+          description: Unique external identifier for the origin location of the manifest
+        nextLocationCode:
+          type: string
+          description: Unique external identifier for the next intermediate terminal location on the manifest
+        currentLocationCode:
+          type: string
+          description: Unique external identifier for the current terminal location
+        destinationDoorNumber:
+          type: string
+          description: Unique external identifier for the origin door of the manifest
+        plannedCloseTime:
+          type: string
+          description: Timestamp for the planned close time in UTC. ISO8601 format
+          format: date-time
+          example: '2024-11-14T00:55:31.820Z'
+        actualArrivalTime:
+          type: string
+          description: Timestamp for the actual arrival time in UTC. ISO8601 format.
+          format: date-time
+          example: '2024-11-14T00:55:31.820Z'
+        nextActualArrivalTime:
+          type: string
+          description: Timestamp for the next actual arrival time in UTC. ISO8601 format
+          format: date-time
+          example: '2024-11-14T00:55:31.820Z'
+        nextEstimatedArrivalTime:
+          type: string
+          description: Timestamp for the next estimated arrival time in UTC. ISO8601 format
+          format: date-time
+          example: '2024-11-14T00:55:31.820Z'
+        plannedArrivalTime:
+          type: string
+          description: Timestamp for the planned arrival time in UTC. ISO8601 format
+          format: date-time
+          example: '2024-11-14T00:55:31.820Z'
+        nextPlannedArrivalTime:
+          type: string
+          description: Timestamp for the next planned arrival time in UTC. ISO8601 format
+          format: date-time
+          example: '2024-11-14T00:55:31.820Z'
+        estimatedArrivalTime:
+          type: string
+          description: Timestamp for the estimated arrival time in UTC. ISO8601 format
+          format: date-time
+          example: '2024-11-14T00:55:31.820Z'
+        associatedProNumbers:
+          description: An array of PRO numbers associated with the manifest
+          type: array
+          items:
+            type: string
+        associatedTripNumbers:
+          description: An array of unique external trip identifiers associated with the manifest
+          type: array
+          items:
+            type: string
+        hazmat:
+          type: boolean
+          description: Hazmat
+        poison:
+          type: boolean
+          description: Poison
+        food:
+          type: boolean
+          description: Food
+      required:
+      - manifestNumber
+    UpsertLinehaulTripDto:
+      type: object
+      properties:
+        externalTripId:
+          type: string
+          description: Unique external identifier of the linehaul trip
+          example: '4231381'
+        status:
+          type: string
+          description: Status of the linehaul trip. Values include pending, started, departedOrigin, arrivedDestination, completed
+          enum:
+          - pending
+          - started
+          - departedOrigin
+          - arrivedDestination
+          - completed
+          example: departedOrigin
+        driverCode:
+          description: An array of driver codes associated with the linehaul trip. A driver code needs to exist in Maven
+          example:
+          - '1945'
+          - '2014'
+          type: array
+          items:
+            type: string
+        vehicleNumber:
+          type: string
+          description: External identifier for the vehicle associated with the linehaul trip
+          example: '2153'
+        manifestNumbers:
+          description: An array of manifest numbers associated with the linehaul trip. A manifest number needs to exist in Maven
+          example:
+          - 01285244
+          - 01285245
+          type: array
+          items:
+            type: string
+        plannedStartTime:
+          type: string
+          description: Timestamp for the planned start time from the origin in UTC. ISO8601 format
+          format: date-time
+          example: '2023-07-09T22:55:00Z'
+        plannedArrivalTime:
+          type: string
+          description: Timestamp for the planned arrival time to the destination in UTC. ISO8601 format
+          format: date-time
+          example: '2023-07-10T23:15:00Z'
+        originLocationCode:
+          type: string
+          description: External identifier for the origin location of the linehaul trip. Location needs to exist in Maven
+          example: '013'
+        destinationLocationCode:
+          type: string
+          description: External identifier for the destination location of the linehaul trip. Location needs to exist in Maven
+          example: '001'
+        instructions:
+          type: string
+          description: Used to provide additional instructions to the drivers for the linehaul trip
+          example: Please make sure to allow for extra time due to highway construction
+        attributes:
+          type: object
+          description: Additional custom properties of the linehaul trip
+          example:
+            Trip Type: Linehaul
+            Vehicle Type: tractor-trailers
+      required:
+      - externalTripId
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: apiKey
+x-refined-from:
+- maven-machines-eld-hos-openapi.json
+- maven-machines-linehaul-openapi.json
