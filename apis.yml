@@ -385,24 +385,6 @@ apis:
     url: https://maven-machines.readme.io/reference/post-shipment
   - type: GettingStarted
     url: https://maven-machines.readme.io/docs/basic-concepts
-- aid: maven-machines:maven-machines-routeplans-api
-  name: Maven Machines Routeplans API
-  description: The routeplans API from Maven Machines — 1 operation(s) for routeplans.
-  humanURL: https://maven-machines.readme.io/
-  baseURL: https://integrations.mavenmachines.com
-  tags:
-  - Route Plans
-  tags_raw:
-  - routeplans
-  properties:
-  - type: OpenAPI
-    url: openapi/maven-machines-routeplans-api-openapi.yml
-  - type: Documentation
-    url: https://maven-machines.readme.io/
-  - type: APIReference
-    url: https://maven-machines.readme.io/reference/post-shipment
-  - type: GettingStarted
-    url: https://maven-machines.readme.io/docs/basic-concepts
 - aid: maven-machines:maven-machines-servicetechs-api
   name: Maven Machines Servicetechs API
   description: The servicetechs API from Maven Machines — 3 operation(s) for servicetechs.
@@ -533,6 +515,22 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/maven-machines-vehicles-api-openapi.yml
+  - type: Documentation
+    url: https://maven-machines.readme.io/
+  - type: APIReference
+    url: https://maven-machines.readme.io/reference/post-shipment
+  - type: GettingStarted
+    url: https://maven-machines.readme.io/docs/basic-concepts
+- aid: maven-machines:maven-machines-route-plans-api
+  name: Maven Machines Route Plans API
+  description: The Route Plans API from Maven Machines — 1 operation(s) for route plans.
+  humanURL: https://maven-machines.readme.io/
+  baseURL: https://integrations.mavenmachines.com
+  tags:
+  - Route Plans
+  properties:
+  - type: OpenAPI
+    url: openapi/maven-machines-route-plans-api-openapi.yml
   - type: Documentation
     url: https://maven-machines.readme.io/
   - type: APIReference
