@@ -204,6 +204,8 @@ apis:
   humanURL: https://maven-machines.readme.io/
   baseURL: https://integrations.mavenmachines.com
   tags:
+  - Location
+  tags_raw:
   - Locations
   properties:
   - type: OpenAPI
