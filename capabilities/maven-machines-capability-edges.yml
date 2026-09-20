@@ -11,7 +11,7 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 7
+edge_count: 10
 edges:
 - tag: Eld
   spec_file: maven-machines-eld-api-openapi.yml
@@ -73,6 +73,18 @@ edges:
     CreateTripStopRequestDto schemas — this is the execution record of road transport moves in a dispatch
     platform. L1 Transport Operations Management is clear; whether it is dispatch assignment specifically
     versus general trip execution is not determinable, so no L2.
+- tag: bulk-shipments
+  spec_file: maven-machines-bulk-shipments-api-openapi.yml
+  capability_id: BC-520.50
+  capability_id_l1: BC-520
+  capability_name: Logistics Operations Management
+  confidence: 0.7
+  evidence: 'POST /bulkShipments  BulkShipmentsController_handleBulkShipments (carrier middleware definitions:
+    aaa-cooper, averitt, roy-miller)'
+  reason: Bulk submission of shipments through carrier middleware integrations is freight/transport execution,
+    matching Logistics Operations Management. Slightly reduced confidence because the only schema shown
+    is CredentialsResponseDto, suggesting an integration wrapper.
+  recovered_from: vertical-automotive-mobility-edges.json
 - tag: reports
   spec_file: maven-machines-reports-api-openapi.yml
   capability_id: BC-2430.60
@@ -83,3 +95,26 @@ edges:
   reason: Reporting of vehicle performance records for a fleet/telematics platform, which is measurement
     of mobile-asset performance and utilisation. Confidence tempered because it is a read-only reporting
     endpoint and could also be argued as generic analytics/BI.
+- tag: routeplans
+  spec_file: maven-machines-route-plans-api-openapi.yml
+  capability_id: BC-520.50
+  capability_id_l1: BC-520
+  capability_name: Logistics Operations Management
+  confidence: 0.7
+  evidence: GET /routeplans  RouteplansController_getRouteplans; GetRoutePlansRequestDto
+  reason: Retrieval of route plans on a platform for 'route planning and optimization, dispatch execution'
+    — transport/logistics operations. Single read operation limits confidence.
+  recovered_from: vertical-automotive-mobility-edges.json
+  reanchored_from: maven-machines-routeplans-api-openapi.yml
+- tag: shipment
+  spec_file: maven-machines-shipment-api-openapi.yml
+  capability_id: BC-520.50
+  capability_id_l1: BC-520
+  capability_name: Logistics Operations Management
+  confidence: 0.7
+  evidence: POST /shipment  ShipmentController_handleShipment; POST /shipment/updateShipmentProNumber;
+    ShipmentRequestDto
+  reason: Creation/bulk upsert of shipments and assignment of PRO numbers within a trucking planning-and-dispatch
+    platform — freight transport execution, i.e. logistics operations. Integration-style endpoints keep
+    confidence moderate.
+  recovered_from: vertical-automotive-mobility-edges.json
