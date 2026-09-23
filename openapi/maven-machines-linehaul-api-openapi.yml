@@ -92,7 +92,7 @@ paths:
     post:
       operationId: LinehaulController_upsertLinehaulManifest
       summary: POST /linehaul/manifest
-      description: "\n    Enables the creation and updating (upsert) of a linehaul manifest.\n    "
+      description: Enables the creation and updating (upsert) of a linehaul manifest.
       parameters: []
       requestBody:
         required: true

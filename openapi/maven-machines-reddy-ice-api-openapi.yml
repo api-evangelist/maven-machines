@@ -31,7 +31,7 @@ paths:
     get:
       operationId: ReddyIceCaseController_getCase
       summary: GET /cases/caseNumber
-      description: "\n    API debug endpoint for fetching the task associated with a case in the Maven system.\n    "
+      description: API debug endpoint for fetching the task associated with a case in the Maven system.
       parameters:
       - name: caseNumber
         required: true
@@ -58,7 +58,7 @@ paths:
     put:
       operationId: ReddyIceCaseController_upsertCase
       summary: PUT /cases/caseNumber
-      description: "\n    API endpoint for creating and updating a case in the Maven system.\n    "
+      description: API endpoint for creating and updating a case in the Maven system.
       parameters:
       - name: caseNumber
         required: true
@@ -85,7 +85,7 @@ paths:
     delete:
       operationId: ReddyIceCaseController_deleteCase
       summary: DELETE /cases/{caseNumber}
-      description: "\n    API endpoint for deleting a case in the Maven system.\n    "
+      description: API endpoint for deleting a case in the Maven system.
       parameters:
       - name: caseNumber
         required: true
@@ -107,6 +107,43 @@ paths:
       - api_key: []
 components:
   schemas:
+    AssetDto:
+      type: object
+      properties:
+        unitNumber:
+          type: string
+        make:
+          type: string
+        model:
+          type: string
+        year:
+          type: string
+        latitude:
+          type: number
+        longitude:
+          type: number
+        serviceStatus:
+          type: string
+        capacity:
+          type: number
+      required:
+      - unitNumber
+      - make
+      - model
+      - year
+      - latitude
+      - longitude
+      - serviceStatus
+      - capacity
+    ContactDto:
+      type: object
+      properties:
+        name:
+          type: string
+        contactPhone:
+          type: string
+        contactEmail:
+          type: string
     TaskResponseDto:
       type: object
       properties:
@@ -139,15 +176,6 @@ components:
       - companyLocationId
       - assignedEmployeeIds
       - taskContext
-    ContactDto:
-      type: object
-      properties:
-        name:
-          type: string
-        contactPhone:
-          type: string
-        contactEmail:
-          type: string
     ReddyIceCaseDto:
       type: object
       properties:
@@ -191,34 +219,6 @@ components:
       - caseType
       - caseSubType
       - contactInformation
-    AssetDto:
-      type: object
-      properties:
-        unitNumber:
-          type: string
-        make:
-          type: string
-        model:
-          type: string
-        year:
-          type: string
-        latitude:
-          type: number
-        longitude:
-          type: number
-        serviceStatus:
-          type: string
-        capacity:
-          type: number
-      required:
-      - unitNumber
-      - make
-      - model
-      - year
-      - latitude
-      - longitude
-      - serviceStatus
-      - capacity
   securitySchemes:
     api_key:
       type: apiKey

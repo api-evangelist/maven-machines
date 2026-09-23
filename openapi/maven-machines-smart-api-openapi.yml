@@ -7,13 +7,13 @@ info:
 servers:
 - url: https://integrations.mavenmachines.com
 tags:
-- name: smart
+- name: SMART
 paths:
   /smart/alarmLog:
     get:
       operationId: SmartController_getAlarmLog
       summary: GET /smart/alarmLog
-      description: "\n    Retrieves alarm logs for given machines or all machines and given datetime range.\n    "
+      description: Retrieves alarm logs for given machines or all machines and given datetime range.
       parameters:
       - name: startTime
         required: true
@@ -48,14 +48,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/AlarmLogApiResponse'
       tags:
-      - smart
+      - SMART
       security:
       - api_key: []
   /smart/batchLogging:
     get:
       operationId: SmartController_getBatchLogging
       summary: GET /smart/batchLogging
-      description: "\n    Retrieves batch logging for given machines or all machines and given datetime range.\n    "
+      description: Retrieves batch logging for given machines or all machines and given datetime range.
       parameters:
       - name: startTime
         required: true
@@ -90,23 +90,75 @@ paths:
               schema:
                 $ref: '#/components/schemas/BatchLoggingApiResponse'
       tags:
-      - smart
+      - SMART
       security:
       - api_key: []
 components:
   schemas:
-    AlarmLogApiResponse:
+    BatchLoggingMaterialResponseDto:
       type: object
       properties:
-        alarms:
-          type: array
-          items:
-            $ref: '#/components/schemas/AlarmLogResponseDto'
-        pagination:
-          $ref: '#/components/schemas/PaginationResponseDto'
+        BlenderBatchID:
+          type: number
+          description: Unique ID of the batch. Cross ref with ID.
+          example: '8345'
+        CompNum:
+          type: number
+          description: Component Number of the batch material
+          example: '5'
+        CompName:
+          type: string
+          description: Component Name of the batch material.
+          example: Component 6
+        MaterialID:
+          type: string
+          description: Material ID of the batch material.
+          example: Resin 0
+        MaterialType:
+          type: string
+          description: Material Type of the batch material.
+          example: NAT
+        FeedOrder:
+          type: number
+          description: Feed Order of the batch material
+          example: '3'
+        FeedTime:
+          type: number
+          description: Feed Time of the batch material
+          example: '400'
+        SetPart:
+          type: number
+          description: Set Part of the batch material
+          example: '5'
+        ActPart:
+          type: number
+          description: Actual Part of the batch material
+          example: '5.0852'
+        SetWeight:
+          type: number
+          description: Set Weight of the batch material
+          example: '22.6796'
+        ActWeight:
+          type: number
+          description: Actual Weight of the batch material
+          example: '22.1771'
+        Tolerance:
+          type: number
+          description: Tolerance of the batch material
+          example: '0.8982'
       required:
-      - alarms
-      - pagination
+      - BlenderBatchID
+      - CompNum
+      - CompName
+      - MaterialID
+      - MaterialType
+      - FeedOrder
+      - FeedTime
+      - SetPart
+      - ActPart
+      - SetWeight
+      - ActWeight
+      - Tolerance
     BatchLoggingResponseDto:
       type: object
       properties:
@@ -183,70 +235,6 @@ components:
       required:
       - batch
       - pagination
-    BatchLoggingMaterialResponseDto:
-      type: object
-      properties:
-        BlenderBatchID:
-          type: number
-          description: Unique ID of the batch. Cross ref with ID.
-          example: '8345'
-        CompNum:
-          type: number
-          description: Component Number of the batch material
-          example: '5'
-        CompName:
-          type: string
-          description: Component Name of the batch material.
-          example: Component 6
-        MaterialID:
-          type: string
-          description: Material ID of the batch material.
-          example: Resin 0
-        MaterialType:
-          type: string
-          description: Material Type of the batch material.
-          example: NAT
-        FeedOrder:
-          type: number
-          description: Feed Order of the batch material
-          example: '3'
-        FeedTime:
-          type: number
-          description: Feed Time of the batch material
-          example: '400'
-        SetPart:
-          type: number
-          description: Set Part of the batch material
-          example: '5'
-        ActPart:
-          type: number
-          description: Actual Part of the batch material
-          example: '5.0852'
-        SetWeight:
-          type: number
-          description: Set Weight of the batch material
-          example: '22.6796'
-        ActWeight:
-          type: number
-          description: Actual Weight of the batch material
-          example: '22.1771'
-        Tolerance:
-          type: number
-          description: Tolerance of the batch material
-          example: '0.8982'
-      required:
-      - BlenderBatchID
-      - CompNum
-      - CompName
-      - MaterialID
-      - MaterialType
-      - FeedOrder
-      - FeedTime
-      - SetPart
-      - ActPart
-      - SetWeight
-      - ActWeight
-      - Tolerance
     PaginationResponseDto:
       type: object
       properties:
@@ -261,6 +249,18 @@ components:
       required:
       - hasNextPage
       - nextPageStartTime
+    AlarmLogApiResponse:
+      type: object
+      properties:
+        alarms:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlarmLogResponseDto'
+        pagination:
+          $ref: '#/components/schemas/PaginationResponseDto'
+      required:
+      - alarms
+      - pagination
     AlarmLogResponseDto:
       type: object
       properties:

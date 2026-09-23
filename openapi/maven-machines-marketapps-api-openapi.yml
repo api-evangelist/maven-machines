@@ -13,7 +13,7 @@ paths:
     get:
       operationId: MarketAppsController_getSession
       summary: GET /marketapps/session
-      description: "\n    Retrieves market app session\n    "
+      description: Retrieves market app session
       parameters:
       - name: sessionToken
         required: true

@@ -12,8 +12,8 @@ paths:
   /trailers/{trailerNumber}:
     get:
       operationId: GetTrailersController_getVehicles
-      summary: ''
-      description: "\n      Retrieves a list of trailers for a company.\n    "
+      summary: Get trailers controller get vehicles
+      description: Retrieves a list of trailers for a company.
       parameters:
       - name: page
         required: false
@@ -65,9 +65,10 @@ paths:
       - Trailers
       security:
       - api_key: []
+      x-summary-source: derived
     patch:
       operationId: UpdateTrailerController_updateTrailer
-      summary: ''
+      summary: Update trailer controller update trailer
       description: Updates a trailer. Only provided key-value pairs provided are updated.
       parameters:
       - name: trailerNumber
@@ -97,11 +98,52 @@ paths:
       - Trailers
       security:
       - api_key: []
+      x-summary-source: derived
   /trailers/upload:
     post:
       operationId: UploadTrailerController_upload
-      summary: ''
-      description: "\n      Upload trailers API allows you insert, update or deactivate trailers.\n      API expects a CSV file with the following columns: ChgType, TrailerStatus, UnitID, TrailerType, Make, Model, Year, VIN, Domicile, CurrentTerm, EquipType, EquipSpecs, Liftgate, Heat, OwnershipStatus, Axles, BodyType, Length, LengthUnits.\n      \n      Column description:\n      - ChgType: 1 = Add 2 = Deactivate, 3 = Update;\n      - TrailerStatus: ACTIVE or INACTIVE;\n      - UnitID: The trailer number. i.e. RT0992.\n      - Make: Make of the trailer i.e. Leyland\n      - Model: Model of the trailer i.e. Actros\n      - Year: Year of manufacture of the trailer, i.e. 2009\n      - VIN: Vehicle identification number of trailer, i.e. 4433XJJWEI2422232\n      - Domicile: Map to an attribute field;\n      - CurrentTerm: Map to the domicile field;\n      - Liftgate: Unit is equipped with a liftgate 1 = Yes, 0 = No;\n      - Heat: Unit is heated.  1 = Yes, 0 = No;\n      - OwnershipStatus: Unit mode of ownership can be one of 'rented', 'owned', 'leased', 'non-company' or 'other'.\n      - Axles: Number of axles on trialer i.e. 2, 6, 8.\n      - BodyType: Bodytype of trailer i.e. flatbed.\n      - Length: Numeric value indicating length of trailer i.e. 20\n      - LengthUnits: The unit for the length of the trailer i.e. 'feet', 'meters'\n\n      API supports up to 1000 rows in a CSV file.\n      "
+      summary: Upload trailer controller upload
+      description: 'Upload trailers API allows you insert, update or deactivate trailers.
+
+        API expects a CSV file with the following columns: ChgType, TrailerStatus, UnitID, TrailerType, Make, Model, Year, VIN, Domicile, CurrentTerm, EquipType, EquipSpecs, Liftgate, Heat, OwnershipStatus, Axles, BodyType, Length, LengthUnits.
+
+
+        Column description:
+
+        - ChgType: 1 = Add 2 = Deactivate, 3 = Update;
+
+        - TrailerStatus: ACTIVE or INACTIVE;
+
+        - UnitID: The trailer number. i.e. RT0992.
+
+        - Make: Make of the trailer i.e. Leyland
+
+        - Model: Model of the trailer i.e. Actros
+
+        - Year: Year of manufacture of the trailer, i.e. 2009
+
+        - VIN: Vehicle identification number of trailer, i.e. 4433XJJWEI2422232
+
+        - Domicile: Map to an attribute field;
+
+        - CurrentTerm: Map to the domicile field;
+
+        - Liftgate: Unit is equipped with a liftgate 1 = Yes, 0 = No;
+
+        - Heat: Unit is heated. 1 = Yes, 0 = No;
+
+        - OwnershipStatus: Unit mode of ownership can be one of ''rented'', ''owned'', ''leased'', ''non-company'' or ''other''.
+
+        - Axles: Number of axles on trialer i.e. 2, 6, 8.
+
+        - BodyType: Bodytype of trailer i.e. flatbed.
+
+        - Length: Numeric value indicating length of trailer i.e. 20
+
+        - LengthUnits: The unit for the length of the trailer i.e. ''feet'', ''meters''
+
+
+        API supports up to 1000 rows in a CSV file.'
       parameters: []
       requestBody:
         required: true
@@ -128,10 +170,11 @@ paths:
       - Trailers
       security:
       - api_key: []
+      x-summary-source: derived
   /trailers:
     post:
       operationId: CreateTrailerController_createTrailer
-      summary: ''
+      summary: Create trailer controller create trailer
       description: Creates a new trailer. If the trailerNumber already exists, the request will be rejected.
       parameters: []
       requestBody:
@@ -155,10 +198,11 @@ paths:
       - Trailers
       security:
       - api_key: []
+      x-summary-source: derived
     get:
       operationId: GetAllTrailersController_getVehicles
-      summary: ''
-      description: "\n      Retrieves all company trailers.\n    "
+      summary: Get all trailers controller get vehicles
+      description: Retrieves all company trailers.
       parameters:
       - name: page
         required: false
@@ -203,6 +247,7 @@ paths:
       - Trailers
       security:
       - api_key: []
+      x-summary-source: derived
 components:
   schemas:
     GetTrailersResponseApi:
@@ -216,15 +261,42 @@ components:
             $ref: '#/components/schemas/TrailerDTO'
       required:
       - data
-    PaginationCursor:
+    UploadTrailersResponseApi:
       type: object
       properties:
-        pageNum:
-          type: number
-          description: Next page number.
-          example: 5
+        status:
+          type: string
+          example: ok
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrailerDTO'
       required:
-      - pageNum
+      - status
+    TrailerAttributesResponse:
+      type: object
+      properties:
+        Domicile:
+          type: string
+          example: UNK
+        EquipType:
+          type: string
+          example: POWER UNIT
+        EquipSpecs:
+          type: string
+          example: AA 20
+    PaginationDTO:
+      type: object
+      properties:
+        cursor:
+          $ref: '#/components/schemas/PaginationCursor'
+        limit:
+          type: number
+          description: The number of items to be returned per page.
+          example: 10
+      required:
+      - cursor
+      - limit
     TrailerDTO:
       type: object
       properties:
@@ -299,30 +371,15 @@ components:
             type: string
       required:
       - trailerNumber
-    UploadTrailersResponseApi:
+    PaginationCursor:
       type: object
       properties:
-        status:
-          type: string
-          example: ok
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TrailerDTO'
-      required:
-      - status
-    PaginationDTO:
-      type: object
-      properties:
-        cursor:
-          $ref: '#/components/schemas/PaginationCursor'
-        limit:
+        pageNum:
           type: number
-          description: The number of items to be returned per page.
-          example: 10
+          description: Next page number.
+          example: 5
       required:
-      - cursor
-      - limit
+      - pageNum
     UpdateTrailerRequestDTO:
       type: object
       properties:
@@ -392,18 +449,6 @@ components:
           type: array
           items:
             type: string
-    TrailerAttributesResponse:
-      type: object
-      properties:
-        Domicile:
-          type: string
-          example: UNK
-        EquipType:
-          type: string
-          example: POWER UNIT
-        EquipSpecs:
-          type: string
-          example: AA 20
   securitySchemes:
     api_key:
       type: apiKey

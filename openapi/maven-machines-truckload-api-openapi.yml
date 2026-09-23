@@ -13,7 +13,13 @@ paths:
     post:
       operationId: TruckloadController_createTrip
       summary: POST /truckload/trips
-      description: "\n    The create trip API allows for the creation of a trip and associated stops\n    in the Maven system.\n    The apiKey header authenticates and authorizes the request to submit trip\n    data for a specific company."
+      description: 'The create trip API allows for the creation of a trip and associated stops
+
+        in the Maven system.
+
+        The apiKey header authenticates and authorizes the request to submit trip
+
+        data for a specific company.'
       parameters: []
       requestBody:
         required: true
@@ -35,7 +41,13 @@ paths:
     put:
       operationId: TruckloadController_updateTrip
       summary: PUT /truckload/trips
-      description: "\n    The update trip API allows for the updating of a trip \n    in the Maven system.\n    The apiKey header authenticates and authorizes the request to submit trip\n    data for a specific company."
+      description: 'The update trip API allows for the updating of a trip
+
+        in the Maven system.
+
+        The apiKey header authenticates and authorizes the request to submit trip
+
+        data for a specific company.'
       parameters:
       - name: tripId
         required: false
@@ -71,7 +83,13 @@ paths:
     patch:
       operationId: TruckloadController_patchTrip
       summary: PATCH /truckload/trips
-      description: "\n    The update trip API allows for the updating of a trip \n    in the Maven system.\n    The apiKey header authenticates and authorizes the request to submit trip\n    data for a specific company."
+      description: 'The update trip API allows for the updating of a trip
+
+        in the Maven system.
+
+        The apiKey header authenticates and authorizes the request to submit trip
+
+        data for a specific company.'
       parameters:
       - name: tripId
         required: false
@@ -107,7 +125,13 @@ paths:
     delete:
       operationId: TruckloadController_deleteTrip
       summary: DELETE /truckload/trips
-      description: "\n    The delete trip API allows for the deletion of a trip \n    in the Maven system.\n    The apiKey header authenticates and authorizes the request to submit trip\n    data for a specific company."
+      description: 'The delete trip API allows for the deletion of a trip
+
+        in the Maven system.
+
+        The apiKey header authenticates and authorizes the request to submit trip
+
+        data for a specific company.'
       parameters:
       - name: tripId
         required: false
@@ -350,236 +374,18 @@ paths:
       - api_key: []
 components:
   schemas:
-    TripsStopsStatusApiResponse:
+    GetStopApiResponse:
       type: object
       properties:
-        trips:
+        stops:
           type: array
           items:
             type: string
         units:
           $ref: '#/components/schemas/Units'
       required:
-      - trips
+      - stops
       - units
-    FormRequestDto:
-      type: object
-      properties:
-        formId:
-          type: string
-          format: uuid
-          example: 8477fff9-7576-4899-bcca-ab275a6e2b62
-          description: Maven form identifier
-        version:
-          type: string
-          format: date-time
-          example: '2020-05-01T12:34:56Z'
-          description: Maven form version
-        prefill:
-          type: object
-          example:
-            formKey1: prefillValue1
-            formKey2: prefillValue2
-          description: Allows you to define prefilled data for specific fields in a form. If autocomplete is enabled on a field, prefilled values will take precedence.
-        literalPreFillMapping:
-          type: object
-          example:
-            formKey1: literalPreFillMappingValue1
-            formKey2: literalPreFillMappingValue2
-          description: Allows you to define prefill mapping for specific fields in a form
-      required:
-      - formId
-      - version
-    CreateStopRequestDto:
-      type: object
-      properties:
-        sequence:
-          type: number
-          example: 1
-          description: sequence order of stop on trip. If none is provided, the stop will be added to the end of the trip.
-        location:
-          allOf:
-          - $ref: '#/components/schemas/CompanyLocationRequestDto'
-          - description: Location data object
-        tmsStopType:
-          type: string
-          example: “Live Unload“ or “PU“
-          description: Stop type key from the TMS
-        typeDisplayName:
-          type: string
-          example: “Pickup“ or “Hook Trailer“
-          description: Used for adding a visual tag to denote different stop types.
-        displayName:
-          type: string
-          example: STOP123
-          description: Display name for stop
-        description:
-          type: string
-          example: Call ahead before arriving
-          description: Description/summary/details about the stop
-        scheduledDate:
-          type: string
-          format: date
-          example: '2020-05-04'
-          description: Date the stop is scheduled to occur
-        windowStartTime:
-          type: string
-          format: date-time
-          example: '2020-05-04T12:00:00Z'
-          description: Earliest time to arrive at the stop
-        windowEndTime:
-          type: string
-          format: date-time
-          example: '2020-05-04T16:00:00Z'
-          description: Latest time to arrive at the stop
-        scheduledWeight:
-          type: number
-          example: 5555
-          description: Scheduled weight for the stop (1 decimal place)
-        scheduledVolume:
-          type: number
-          example: 50
-          description: Scheduled volume for the stop (1 decimal place)
-        scheduledCount:
-          type: integer
-          example: 5
-          description: Scheduled pieces count for the stop
-        forms:
-          description: Forms associated with the stop
-          type: array
-          items:
-            $ref: '#/components/schemas/FormRequestDto'
-        attributes:
-          type: object
-          example:
-            customField: customValue
-          description: Additional custom properties of the stop
-        expectedServiceTime:
-          type: integer
-          example: 5
-          description: Expected service time in minutes. Used for ETA calculation.
-        externalTripId:
-          type: string
-          example: TMS_123456
-          description: Unique external identifier for trip
-        tripId:
-          type: integer
-          example: 12245
-          description: Unique identifier for a trip. Either tripId or externalTripId is required. If both are provided, Maven will look up by tripId first.
-        externalStopId:
-          type: string
-          example: TMS_1234
-          description: Unique external identifier for stop
-      required:
-      - sequence
-    Form:
-      type: object
-      properties:
-        literalPreFillMapping:
-          type: object
-          example:
-            formKey1: literalPreFillMappingValue1
-            formKey2: literalPreFillMappingValue2
-          description: Allows you to define prefill mapping for specific fields in a form
-        formId:
-          type: string
-          format: uuid
-          example: 8477fff9-7576-4899-bcca-ab275a6e2b62
-          description: Maven form identifier
-        version:
-          type: string
-          format: date-time
-          example: '2020-05-01T12:34:56Z'
-          description: Maven form version
-        prefill:
-          type: object
-          example:
-            formKey1: prefillValue1
-            formKey2: prefillValue2
-          description: Allows you to define prefilled data for specific fields in a form. If autocomplete is enabled on a field, prefilled values will take precedence.
-      required:
-      - literalPreFillMapping
-      - formId
-      - version
-      - prefill
-    UpdateStopRequestDto:
-      type: object
-      properties:
-        sequence:
-          type: number
-          example: 1
-          description: sequence order of stop on trip. If none is provided, the stop will be added to the end of the trip.
-        location:
-          allOf:
-          - $ref: '#/components/schemas/CompanyLocationRequestDto'
-          - description: Location data object
-        tmsStopType:
-          type: string
-          example: “Live Unload“ or “PU“
-          description: Stop type key from the TMS
-        typeDisplayName:
-          type: string
-          example: “Pickup“ or “Hook Trailer“
-          description: Used for adding a visual tag to denote different stop types.
-        displayName:
-          type: string
-          example: STOP123
-          description: Display name for stop
-        description:
-          type: string
-          example: Call ahead before arriving
-          description: Description/summary/details about the stop
-        scheduledDate:
-          type: string
-          format: date
-          example: '2020-05-04'
-          description: Date the stop is scheduled to occur
-        windowStartTime:
-          type: string
-          format: date-time
-          example: '2020-05-04T12:00:00Z'
-          description: Earliest time to arrive at the stop
-        windowEndTime:
-          type: string
-          format: date-time
-          example: '2020-05-04T16:00:00Z'
-          description: Latest time to arrive at the stop
-        scheduledWeight:
-          type: number
-          example: 5555
-          description: Scheduled weight for the stop (1 decimal place)
-        scheduledVolume:
-          type: number
-          example: 50
-          description: Scheduled volume for the stop (1 decimal place)
-        scheduledCount:
-          type: integer
-          example: 5
-          description: Scheduled pieces count for the stop
-        forms:
-          description: Forms associated with the stop
-          type: array
-          items:
-            $ref: '#/components/schemas/FormRequestDto'
-        attributes:
-          type: object
-          example:
-            customField: customValue
-          description: Additional custom properties of the stop
-        expectedServiceTime:
-          type: integer
-          example: 5
-          description: Expected service time in minutes. Used for ETA calculation.
-        externalTripId:
-          type: string
-          example: TMS_123456
-          description: Unique external identifier for trip
-        tripId:
-          type: integer
-          example: 12245
-          description: Unique identifier for a trip. Either tripId or externalTripId is required. If both are provided, Maven will look up by tripId first.
-      required:
-      - sequence
     PatchStopRequestDto:
       type: object
       properties:
@@ -656,396 +462,6 @@ components:
           type: integer
           example: 12245
           description: Unique identifier for a trip. Either tripId or externalTripId is required. If both are provided, Maven will look up by tripId first.
-    CreateUpdateStopApiResponse:
-      type: object
-      properties:
-        stop:
-          $ref: '#/components/schemas/Stop'
-        units:
-          $ref: '#/components/schemas/Units'
-      required:
-      - stop
-      - units
-    CompanyLocationRequestDto:
-      type: object
-      properties:
-        companyLocationId:
-          type: number
-          format: integer
-          example: 45983
-          description: unique identifier for a company location. If both a companyLocationId and externalCompanyLocationId are specified, Maven matches on companyLocationId. If either or both companyLocationId and externalCompanyLocationId are specified, the fields below are ignored. Either a companyLocationId or externalCompanyLocationId or explicit address are required.
-        externalCompanyLocationId:
-          type: string
-          example: TMS_PLACE123
-          description: unique external identifier for a company location. If both a companyLocationId and externalCompanyLocationId are specified, Maven matches on companyLocationId. If either or both companyLocationId and externalCompanyLocationId are specified, the fields below are ignored. Either a companyLocationId or externalCompanyLocationId or explicit address are required.
-        name:
-          type: string
-          example: Maven Machines
-          description: Name of location
-        address1:
-          type: string
-          example: 4117 Liberty Ave
-          description: Street address of location
-        address2:
-          type: string
-          example: BLDG 1
-          description: Secondary address line of location
-        city:
-          type: string
-          example: Pittsburgh
-          description: City of location
-        state:
-          type: string
-          format: ISO state code
-          example: PA
-          description: State or province of location
-        zip:
-          type: string
-          example: '15224'
-          description: Zip/postal code of location
-        country:
-          type: string
-          format: ISO country code
-          example: US
-          description: Country of location
-        latitude:
-          type: number
-          description: Latitude of the company location. Accepts up to 5 decimal points of precision
-          example: 40.12345
-        longitude:
-          type: number
-          description: Longitude of the company location. Accepts up to 5 decimal points of precision
-          example: -79.12345
-        geofence:
-          allOf:
-          - $ref: '#/components/schemas/Geofence'
-          - description: Geofence data object
-        attributes:
-          type: object
-          example:
-            customField: customValue
-          description: Additional custom properties of the company location
-        notes:
-          type: string
-          example: Notes about location
-          description: Some notes about location
-    CompanyLocation:
-      type: object
-      properties:
-        companyLocationId:
-          type: number
-          format: integer
-          example: 45983
-          description: unique identifier for a company location. If both a companyLocationId and externalCompanyLocationId are specified, Maven matches on companyLocationId. If either or both companyLocationId and externalCompanyLocationId are specified, the fields below are ignored. Either a companyLocationId or externalCompanyLocationId or explicit address are required.
-        externalCompanyLocationId:
-          type: string
-          example: TMS_PLACE123
-          description: unique external identifier for a company location. If both a companyLocationId and externalCompanyLocationId are specified, Maven matches on companyLocationId. If either or both companyLocationId and externalCompanyLocationId are specified, the fields below are ignored. Either a companyLocationId or externalCompanyLocationId or explicit address are required.
-        name:
-          type: string
-          example: Maven Machines
-          description: Name of location
-        address1:
-          type: string
-          example: 4117 Liberty Ave
-          description: Street address of location
-        address2:
-          type: string
-          example: BLDG 1
-          description: Secondary address line of location
-        city:
-          type: string
-          example: Pittsburgh
-          description: City of location
-        state:
-          type: string
-          format: ISO state code
-          example: PA
-          description: State or province of location
-        zip:
-          type: string
-          example: '15224'
-          description: Zip/postal code of location
-        country:
-          type: string
-          format: ISO country code
-          example: US
-          description: Country of location
-        latitude:
-          type: number
-          description: Latitude of the company location. Accepts up to 5 decimal points of precision
-          example: 40.12345
-        longitude:
-          type: number
-          description: Longitude of the company location. Accepts up to 5 decimal points of precision
-          example: -79.12345
-        geofence:
-          $ref: '#/components/schemas/Geofence'
-      required:
-      - companyLocationId
-      - externalCompanyLocationId
-      - name
-      - address1
-      - address2
-      - city
-      - state
-      - zip
-      - country
-      - latitude
-      - longitude
-      - geofence
-    GetStopApiResponse:
-      type: object
-      properties:
-        stops:
-          type: array
-          items:
-            type: string
-        units:
-          $ref: '#/components/schemas/Units'
-      required:
-      - stops
-      - units
-    TripsStopsStatusUpdateRequestDto:
-      type: object
-      properties:
-        trips:
-          example:
-          - actualStartTime: '2022-03-17T21:49:12.000Z'
-            actualEndTime: null
-          type: array
-          items:
-            type: object
-        stops:
-          example:
-          - stopId: 12345
-            externalStopId: TMS_1234
-            canceledTime: '2022-03-17T21:49:12.000Z'
-          - stopId: 67890
-            externalStopId: TMS_6789
-            skippedTime: '2022-03-17T21:49:12.000Z'
-          type: array
-          items:
-            type: object
-    GetTripApiResponse:
-      type: object
-      properties:
-        trips:
-          type: array
-          items:
-            type: string
-        units:
-          $ref: '#/components/schemas/Units'
-      required:
-      - trips
-      - units
-    TripApiResponse:
-      type: object
-      properties:
-        trip:
-          $ref: '#/components/schemas/Trip'
-        units:
-          $ref: '#/components/schemas/Units'
-      required:
-      - trip
-      - units
-    UpdateTripStopRequestDto:
-      type: object
-      properties:
-        sequence:
-          type: number
-          example: 1
-          description: sequence order of stop on trip. If none is provided, the stop will be added to the end of the trip.
-        location:
-          allOf:
-          - $ref: '#/components/schemas/CompanyLocationRequestDto'
-          - description: Location data object
-        tmsStopType:
-          type: string
-          example: “Live Unload“ or “PU“
-          description: Stop type key from the TMS
-        typeDisplayName:
-          type: string
-          example: “Pickup“ or “Hook Trailer“
-          description: Used for adding a visual tag to denote different stop types.
-        displayName:
-          type: string
-          example: STOP123
-          description: Display name for stop
-        description:
-          type: string
-          example: Call ahead before arriving
-          description: Description/summary/details about the stop
-        scheduledDate:
-          type: string
-          format: date
-          example: '2020-05-04'
-          description: Date the stop is scheduled to occur
-        windowStartTime:
-          type: string
-          format: date-time
-          example: '2020-05-04T12:00:00Z'
-          description: Earliest time to arrive at the stop
-        windowEndTime:
-          type: string
-          format: date-time
-          example: '2020-05-04T16:00:00Z'
-          description: Latest time to arrive at the stop
-        scheduledWeight:
-          type: number
-          example: 5555
-          description: Scheduled weight for the stop (1 decimal place)
-        scheduledVolume:
-          type: number
-          example: 50
-          description: Scheduled volume for the stop (1 decimal place)
-        scheduledCount:
-          type: integer
-          example: 5
-          description: Scheduled pieces count for the stop
-        forms:
-          description: Forms associated with the stop
-          type: array
-          items:
-            $ref: '#/components/schemas/FormRequestDto'
-        attributes:
-          type: object
-          example:
-            customField: customValue
-          description: Additional custom properties of the stop
-        expectedServiceTime:
-          type: integer
-          example: 5
-          description: Expected service time in minutes. Used for ETA calculation.
-        stopId:
-          type: string
-          example: '123'
-          description: Stop id
-        externalStopId:
-          type: string
-          example: '123'
-          description: External stop id
-      required:
-      - sequence
-    TripUpdateRequestDto:
-      type: object
-      properties:
-        externalUserIds:
-          example:
-          - USER123
-          - USER456
-          description: Unique external identifiers for drivers scheduled for this trip
-          type: array
-          items:
-            type: string
-        externalVehicleIds:
-          example:
-          - TRUCK123
-          description: Unique external identifiers for vehicles scheduled for this trip
-          type: array
-          items:
-            type: string
-        externalTrailerIds:
-          example:
-          - TRAILER123
-          description: Unique external identifiers for trailers scheduled for this trip
-          type: array
-          items:
-            type: string
-        displayName:
-          type: string
-          example: TRIP101
-          description: Display name for trip
-        description:
-          type: string
-          example: Go places, do stuff
-          description: Description/summary/details about the trip
-        tmsTripType:
-          type: string
-          example: loaded
-          description: Trip type key from the TMS.
-        sequence:
-          type: number
-          example: 5
-          description: Trip sequence number
-        scheduledStartTime:
-          type: string
-          format: date-time
-          example: '2020-05-01T06:30:00Z'
-          description: Scheduled start time for the trip
-        scheduledEndTime:
-          type: string
-          format: date-time
-          example: '2020-05-08T20:30:00Z'
-          description: Scheduled end time for the trip
-        scheduledDistanceTotal:
-          type: number
-          example: 1234.5
-          description: Scheduled total distance for the trip (1 decimal place)
-        scheduledDistanceLoaded:
-          type: number
-          example: 1200
-          description: Scheduled loaded distance for the trip (1 decimal place)
-        scheduledDistanceEmpty:
-          type: number
-          example: 34.5
-          description: Scheduled empty distance for the trip (1 decimal place)
-        scheduledWeight:
-          type: number
-          example: 5555
-          description: Scheduled weight for the trip load (1 decimal place)
-        scheduledVolume:
-          type: number
-          example: 50
-          description: Scheduled volume for the trip load (1 decimal place)
-        scheduledCount:
-          type: integer
-          example: 5
-          description: Scheduled pieces count for the trip
-        shipper:
-          allOf:
-          - $ref: '#/components/schemas/CompanyLocationRequestDto'
-          - description: Shipper associated with the trip
-        consignee:
-          allOf:
-          - $ref: '#/components/schemas/CompanyLocationRequestDto'
-          - description: Consignee associated with the trip
-        attributes:
-          type: object
-          example:
-            customField: customValue
-          description: Additional custom properties of the trip
-        stops:
-          description: Stops associated with the trip
-          type: array
-          items:
-            $ref: '#/components/schemas/UpdateTripStopRequestDto'
-    Circle:
-      type: object
-      properties:
-        latitude:
-          type: number
-          description: "Latitude of location. Accepts up to 5 decimal points of precision. \n      The valid range of latitude in degrees is -90 and +90"
-          example: 40.12345
-        longitude:
-          type: number
-          description: "Longitude of location. Accepts up to 5 decimal points of precision. \n      The valid range of longitude in degrees is -180 and +180"
-          example: -79.1234
-        enterRadiusMeters:
-          type: number
-          description: "Enter radius in meters. Radius for entering the geofence \n    (when driver arrives)."
-          example: 350.4
-          default: 1000
-        exitRadiusMeters:
-          type: number
-          description: "Exit radius in meters. Radius for exiting the geofence \n    (when driver departs)"
-          example: 500.1
-          default: 2000
-      required:
-      - latitude
-      - longitude
-      - enterRadiusMeters
-      - exitRadiusMeters
     TripCreateRequestDto:
       type: object
       properties:
@@ -1152,7 +568,115 @@ components:
           example:
             customField: customValue
           description: Additional custom properties of the trip
-    CreateTripStopRequestDto:
+    CompanyLocationRequestDto:
+      type: object
+      properties:
+        companyLocationId:
+          type: number
+          format: integer
+          example: 45983
+          description: unique identifier for a company location. If both a companyLocationId and externalCompanyLocationId are specified, Maven matches on companyLocationId. If either or both companyLocationId and externalCompanyLocationId are specified, the fields below are ignored. Either a companyLocationId or externalCompanyLocationId or explicit address are required.
+        externalCompanyLocationId:
+          type: string
+          example: TMS_PLACE123
+          description: unique external identifier for a company location. If both a companyLocationId and externalCompanyLocationId are specified, Maven matches on companyLocationId. If either or both companyLocationId and externalCompanyLocationId are specified, the fields below are ignored. Either a companyLocationId or externalCompanyLocationId or explicit address are required.
+        name:
+          type: string
+          example: Maven Machines
+          description: Name of location
+        address1:
+          type: string
+          example: 4117 Liberty Ave
+          description: Street address of location
+        address2:
+          type: string
+          example: BLDG 1
+          description: Secondary address line of location
+        city:
+          type: string
+          example: Pittsburgh
+          description: City of location
+        state:
+          type: string
+          format: ISO state code
+          example: PA
+          description: State or province of location
+        zip:
+          type: string
+          example: '15224'
+          description: Zip/postal code of location
+        country:
+          type: string
+          format: ISO country code
+          example: US
+          description: Country of location
+        latitude:
+          type: number
+          description: Latitude of the company location. Accepts up to 5 decimal points of precision
+          example: 40.12345
+        longitude:
+          type: number
+          description: Longitude of the company location. Accepts up to 5 decimal points of precision
+          example: -79.12345
+        geofence:
+          allOf:
+          - $ref: '#/components/schemas/Geofence'
+          - description: Geofence data object
+        attributes:
+          type: object
+          example:
+            customField: customValue
+          description: Additional custom properties of the company location
+        notes:
+          type: string
+          example: Notes about location
+          description: Some notes about location
+    GetTripApiResponse:
+      type: object
+      properties:
+        trips:
+          type: array
+          items:
+            type: string
+        units:
+          $ref: '#/components/schemas/Units'
+      required:
+      - trips
+      - units
+    TripsStopsStatusApiResponse:
+      type: object
+      properties:
+        trips:
+          type: array
+          items:
+            type: string
+        units:
+          $ref: '#/components/schemas/Units'
+      required:
+      - trips
+      - units
+    TripsStopsStatusUpdateRequestDto:
+      type: object
+      properties:
+        trips:
+          example:
+          - actualStartTime: '2022-03-17T21:49:12.000Z'
+            actualEndTime: null
+          type: array
+          items:
+            type: object
+        stops:
+          example:
+          - stopId: 12345
+            externalStopId: TMS_1234
+            canceledTime: '2022-03-17T21:49:12.000Z'
+          - stopId: 67890
+            externalStopId: TMS_6789
+            skippedTime: '2022-03-17T21:49:12.000Z'
+          type: array
+          items:
+            type: object
+    UpdateStopRequestDto:
       type: object
       properties:
         sequence:
@@ -1220,10 +744,14 @@ components:
           type: integer
           example: 5
           description: Expected service time in minutes. Used for ETA calculation.
-        externalStopId:
+        externalTripId:
           type: string
-          example: TMS_1234
-          description: Unique external identifier for stop
+          example: TMS_123456
+          description: Unique external identifier for trip
+        tripId:
+          type: integer
+          example: 12245
+          description: Unique identifier for a trip. Either tripId or externalTripId is required. If both are provided, Maven will look up by tripId first.
       required:
       - sequence
     Units:
@@ -1257,6 +785,152 @@ components:
       - volume
       - weight
       - distance
+    TripApiResponse:
+      type: object
+      properties:
+        trip:
+          $ref: '#/components/schemas/Trip'
+        units:
+          $ref: '#/components/schemas/Units'
+      required:
+      - trip
+      - units
+    FormRequestDto:
+      type: object
+      properties:
+        formId:
+          type: string
+          format: uuid
+          example: 8477fff9-7576-4899-bcca-ab275a6e2b62
+          description: Maven form identifier
+        version:
+          type: string
+          format: date-time
+          example: '2020-05-01T12:34:56Z'
+          description: Maven form version
+        prefill:
+          type: object
+          example:
+            formKey1: prefillValue1
+            formKey2: prefillValue2
+          description: Allows you to define prefilled data for specific fields in a form. If autocomplete is enabled on a field, prefilled values will take precedence.
+        literalPreFillMapping:
+          type: object
+          example:
+            formKey1: literalPreFillMappingValue1
+            formKey2: literalPreFillMappingValue2
+          description: Allows you to define prefill mapping for specific fields in a form
+      required:
+      - formId
+      - version
+    Form:
+      type: object
+      properties:
+        literalPreFillMapping:
+          type: object
+          example:
+            formKey1: literalPreFillMappingValue1
+            formKey2: literalPreFillMappingValue2
+          description: Allows you to define prefill mapping for specific fields in a form
+        formId:
+          type: string
+          format: uuid
+          example: 8477fff9-7576-4899-bcca-ab275a6e2b62
+          description: Maven form identifier
+        version:
+          type: string
+          format: date-time
+          example: '2020-05-01T12:34:56Z'
+          description: Maven form version
+        prefill:
+          type: object
+          example:
+            formKey1: prefillValue1
+            formKey2: prefillValue2
+          description: Allows you to define prefilled data for specific fields in a form. If autocomplete is enabled on a field, prefilled values will take precedence.
+      required:
+      - literalPreFillMapping
+      - formId
+      - version
+      - prefill
+    UpdateTripStopRequestDto:
+      type: object
+      properties:
+        sequence:
+          type: number
+          example: 1
+          description: sequence order of stop on trip. If none is provided, the stop will be added to the end of the trip.
+        location:
+          allOf:
+          - $ref: '#/components/schemas/CompanyLocationRequestDto'
+          - description: Location data object
+        tmsStopType:
+          type: string
+          example: “Live Unload“ or “PU“
+          description: Stop type key from the TMS
+        typeDisplayName:
+          type: string
+          example: “Pickup“ or “Hook Trailer“
+          description: Used for adding a visual tag to denote different stop types.
+        displayName:
+          type: string
+          example: STOP123
+          description: Display name for stop
+        description:
+          type: string
+          example: Call ahead before arriving
+          description: Description/summary/details about the stop
+        scheduledDate:
+          type: string
+          format: date
+          example: '2020-05-04'
+          description: Date the stop is scheduled to occur
+        windowStartTime:
+          type: string
+          format: date-time
+          example: '2020-05-04T12:00:00Z'
+          description: Earliest time to arrive at the stop
+        windowEndTime:
+          type: string
+          format: date-time
+          example: '2020-05-04T16:00:00Z'
+          description: Latest time to arrive at the stop
+        scheduledWeight:
+          type: number
+          example: 5555
+          description: Scheduled weight for the stop (1 decimal place)
+        scheduledVolume:
+          type: number
+          example: 50
+          description: Scheduled volume for the stop (1 decimal place)
+        scheduledCount:
+          type: integer
+          example: 5
+          description: Scheduled pieces count for the stop
+        forms:
+          description: Forms associated with the stop
+          type: array
+          items:
+            $ref: '#/components/schemas/FormRequestDto'
+        attributes:
+          type: object
+          example:
+            customField: customValue
+          description: Additional custom properties of the stop
+        expectedServiceTime:
+          type: integer
+          example: 5
+          description: Expected service time in minutes. Used for ETA calculation.
+        stopId:
+          type: string
+          example: '123'
+          description: Stop id
+        externalStopId:
+          type: string
+          example: '123'
+          description: External stop id
+      required:
+      - sequence
     Trip:
       type: object
       properties:
@@ -1386,6 +1060,88 @@ components:
       - shipper
       - consignee
       - stops
+    CreateStopRequestDto:
+      type: object
+      properties:
+        sequence:
+          type: number
+          example: 1
+          description: sequence order of stop on trip. If none is provided, the stop will be added to the end of the trip.
+        location:
+          allOf:
+          - $ref: '#/components/schemas/CompanyLocationRequestDto'
+          - description: Location data object
+        tmsStopType:
+          type: string
+          example: “Live Unload“ or “PU“
+          description: Stop type key from the TMS
+        typeDisplayName:
+          type: string
+          example: “Pickup“ or “Hook Trailer“
+          description: Used for adding a visual tag to denote different stop types.
+        displayName:
+          type: string
+          example: STOP123
+          description: Display name for stop
+        description:
+          type: string
+          example: Call ahead before arriving
+          description: Description/summary/details about the stop
+        scheduledDate:
+          type: string
+          format: date
+          example: '2020-05-04'
+          description: Date the stop is scheduled to occur
+        windowStartTime:
+          type: string
+          format: date-time
+          example: '2020-05-04T12:00:00Z'
+          description: Earliest time to arrive at the stop
+        windowEndTime:
+          type: string
+          format: date-time
+          example: '2020-05-04T16:00:00Z'
+          description: Latest time to arrive at the stop
+        scheduledWeight:
+          type: number
+          example: 5555
+          description: Scheduled weight for the stop (1 decimal place)
+        scheduledVolume:
+          type: number
+          example: 50
+          description: Scheduled volume for the stop (1 decimal place)
+        scheduledCount:
+          type: integer
+          example: 5
+          description: Scheduled pieces count for the stop
+        forms:
+          description: Forms associated with the stop
+          type: array
+          items:
+            $ref: '#/components/schemas/FormRequestDto'
+        attributes:
+          type: object
+          example:
+            customField: customValue
+          description: Additional custom properties of the stop
+        expectedServiceTime:
+          type: integer
+          example: 5
+          description: Expected service time in minutes. Used for ETA calculation.
+        externalTripId:
+          type: string
+          example: TMS_123456
+          description: Unique external identifier for trip
+        tripId:
+          type: integer
+          example: 12245
+          description: Unique identifier for a trip. Either tripId or externalTripId is required. If both are provided, Maven will look up by tripId first.
+        externalStopId:
+          type: string
+          example: TMS_1234
+          description: Unique external identifier for stop
+      required:
+      - sequence
     Geofence:
       type: object
       properties:
@@ -1395,6 +1151,190 @@ components:
           - description: Geofencing definition. Only "circle" is supported for now.
       required:
       - circle
+    Circle:
+      type: object
+      properties:
+        latitude:
+          type: number
+          description: "Latitude of location. Accepts up to 5 decimal points of precision. \n      The valid range of latitude in degrees is -90 and +90"
+          example: 40.12345
+        longitude:
+          type: number
+          description: "Longitude of location. Accepts up to 5 decimal points of precision. \n      The valid range of longitude in degrees is -180 and +180"
+          example: -79.1234
+        enterRadiusMeters:
+          type: number
+          description: "Enter radius in meters. Radius for entering the geofence \n    (when driver arrives)."
+          example: 350.4
+          default: 1000
+        exitRadiusMeters:
+          type: number
+          description: "Exit radius in meters. Radius for exiting the geofence \n    (when driver departs)"
+          example: 500.1
+          default: 2000
+      required:
+      - latitude
+      - longitude
+      - enterRadiusMeters
+      - exitRadiusMeters
+    TripUpdateRequestDto:
+      type: object
+      properties:
+        externalUserIds:
+          example:
+          - USER123
+          - USER456
+          description: Unique external identifiers for drivers scheduled for this trip
+          type: array
+          items:
+            type: string
+        externalVehicleIds:
+          example:
+          - TRUCK123
+          description: Unique external identifiers for vehicles scheduled for this trip
+          type: array
+          items:
+            type: string
+        externalTrailerIds:
+          example:
+          - TRAILER123
+          description: Unique external identifiers for trailers scheduled for this trip
+          type: array
+          items:
+            type: string
+        displayName:
+          type: string
+          example: TRIP101
+          description: Display name for trip
+        description:
+          type: string
+          example: Go places, do stuff
+          description: Description/summary/details about the trip
+        tmsTripType:
+          type: string
+          example: loaded
+          description: Trip type key from the TMS.
+        sequence:
+          type: number
+          example: 5
+          description: Trip sequence number
+        scheduledStartTime:
+          type: string
+          format: date-time
+          example: '2020-05-01T06:30:00Z'
+          description: Scheduled start time for the trip
+        scheduledEndTime:
+          type: string
+          format: date-time
+          example: '2020-05-08T20:30:00Z'
+          description: Scheduled end time for the trip
+        scheduledDistanceTotal:
+          type: number
+          example: 1234.5
+          description: Scheduled total distance for the trip (1 decimal place)
+        scheduledDistanceLoaded:
+          type: number
+          example: 1200
+          description: Scheduled loaded distance for the trip (1 decimal place)
+        scheduledDistanceEmpty:
+          type: number
+          example: 34.5
+          description: Scheduled empty distance for the trip (1 decimal place)
+        scheduledWeight:
+          type: number
+          example: 5555
+          description: Scheduled weight for the trip load (1 decimal place)
+        scheduledVolume:
+          type: number
+          example: 50
+          description: Scheduled volume for the trip load (1 decimal place)
+        scheduledCount:
+          type: integer
+          example: 5
+          description: Scheduled pieces count for the trip
+        shipper:
+          allOf:
+          - $ref: '#/components/schemas/CompanyLocationRequestDto'
+          - description: Shipper associated with the trip
+        consignee:
+          allOf:
+          - $ref: '#/components/schemas/CompanyLocationRequestDto'
+          - description: Consignee associated with the trip
+        attributes:
+          type: object
+          example:
+            customField: customValue
+          description: Additional custom properties of the trip
+        stops:
+          description: Stops associated with the trip
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateTripStopRequestDto'
+    CompanyLocation:
+      type: object
+      properties:
+        companyLocationId:
+          type: number
+          format: integer
+          example: 45983
+          description: unique identifier for a company location. If both a companyLocationId and externalCompanyLocationId are specified, Maven matches on companyLocationId. If either or both companyLocationId and externalCompanyLocationId are specified, the fields below are ignored. Either a companyLocationId or externalCompanyLocationId or explicit address are required.
+        externalCompanyLocationId:
+          type: string
+          example: TMS_PLACE123
+          description: unique external identifier for a company location. If both a companyLocationId and externalCompanyLocationId are specified, Maven matches on companyLocationId. If either or both companyLocationId and externalCompanyLocationId are specified, the fields below are ignored. Either a companyLocationId or externalCompanyLocationId or explicit address are required.
+        name:
+          type: string
+          example: Maven Machines
+          description: Name of location
+        address1:
+          type: string
+          example: 4117 Liberty Ave
+          description: Street address of location
+        address2:
+          type: string
+          example: BLDG 1
+          description: Secondary address line of location
+        city:
+          type: string
+          example: Pittsburgh
+          description: City of location
+        state:
+          type: string
+          format: ISO state code
+          example: PA
+          description: State or province of location
+        zip:
+          type: string
+          example: '15224'
+          description: Zip/postal code of location
+        country:
+          type: string
+          format: ISO country code
+          example: US
+          description: Country of location
+        latitude:
+          type: number
+          description: Latitude of the company location. Accepts up to 5 decimal points of precision
+          example: 40.12345
+        longitude:
+          type: number
+          description: Longitude of the company location. Accepts up to 5 decimal points of precision
+          example: -79.12345
+        geofence:
+          $ref: '#/components/schemas/Geofence'
+      required:
+      - companyLocationId
+      - externalCompanyLocationId
+      - name
+      - address1
+      - address2
+      - city
+      - state
+      - zip
+      - country
+      - latitude
+      - longitude
+      - geofence
     Stop:
       type: object
       properties:
@@ -1499,6 +1439,90 @@ components:
       - attributes
       - externalTripId
       - location
+    CreateTripStopRequestDto:
+      type: object
+      properties:
+        sequence:
+          type: number
+          example: 1
+          description: sequence order of stop on trip. If none is provided, the stop will be added to the end of the trip.
+        location:
+          allOf:
+          - $ref: '#/components/schemas/CompanyLocationRequestDto'
+          - description: Location data object
+        tmsStopType:
+          type: string
+          example: “Live Unload“ or “PU“
+          description: Stop type key from the TMS
+        typeDisplayName:
+          type: string
+          example: “Pickup“ or “Hook Trailer“
+          description: Used for adding a visual tag to denote different stop types.
+        displayName:
+          type: string
+          example: STOP123
+          description: Display name for stop
+        description:
+          type: string
+          example: Call ahead before arriving
+          description: Description/summary/details about the stop
+        scheduledDate:
+          type: string
+          format: date
+          example: '2020-05-04'
+          description: Date the stop is scheduled to occur
+        windowStartTime:
+          type: string
+          format: date-time
+          example: '2020-05-04T12:00:00Z'
+          description: Earliest time to arrive at the stop
+        windowEndTime:
+          type: string
+          format: date-time
+          example: '2020-05-04T16:00:00Z'
+          description: Latest time to arrive at the stop
+        scheduledWeight:
+          type: number
+          example: 5555
+          description: Scheduled weight for the stop (1 decimal place)
+        scheduledVolume:
+          type: number
+          example: 50
+          description: Scheduled volume for the stop (1 decimal place)
+        scheduledCount:
+          type: integer
+          example: 5
+          description: Scheduled pieces count for the stop
+        forms:
+          description: Forms associated with the stop
+          type: array
+          items:
+            $ref: '#/components/schemas/FormRequestDto'
+        attributes:
+          type: object
+          example:
+            customField: customValue
+          description: Additional custom properties of the stop
+        expectedServiceTime:
+          type: integer
+          example: 5
+          description: Expected service time in minutes. Used for ETA calculation.
+        externalStopId:
+          type: string
+          example: TMS_1234
+          description: Unique external identifier for stop
+      required:
+      - sequence
+    CreateUpdateStopApiResponse:
+      type: object
+      properties:
+        stop:
+          $ref: '#/components/schemas/Stop'
+        units:
+          $ref: '#/components/schemas/Units'
+      required:
+      - stop
+      - units
   securitySchemes:
     api_key:
       type: apiKey

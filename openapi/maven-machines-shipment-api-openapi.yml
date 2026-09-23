@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Maven Machines Shipment API
   version: '1.0'
-  description: 'Operations tagged shipment across 6 of this provider''s published API definitions: maven-machines-aaa-cooper-middleware-openapi.json, maven-machines-averitt-middleware-openapi.json, maven-machines-planning-and-dispatch-openapi.json, maven-machines-reddy-ice-middleware-openapi.json, maven-machines-roy-miller-middleware-openapi.json, maven-machines-shipments-openapi.json. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged shipment across 4 of this provider''s published API definitions: maven-machines-averitt-middleware-openapi.json, maven-machines-planning-and-dispatch-openapi.json, maven-machines-reddy-ice-middleware-openapi.json, maven-machines-shipments-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://integrations.mavenmachines.com
 - url: https://integrations.mavenmachines.com/companies/{companyKey}/
@@ -12,7 +12,7 @@ servers:
 - url: https://reddy-ice.middleware.mavenmachines.com
   description: Middleware (target env selected by apiKey)
 tags:
-- name: shipment
+- name: Shipment
 paths:
   /shipment:
     post:
@@ -28,7 +28,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CredentialsResponseDto'
       tags:
-      - shipment
+      - Shipment
       security:
       - api_key: []
     servers:
@@ -379,7 +379,7 @@ paths:
                   value: "errors: [{\n  proNumber: \"23902321\",\n  error: \"Delivery date reqired\"\"\n}]"
       deprecated: false
       tags:
-      - shipment
+      - Shipment
       security:
       - sec0: []
     servers:
@@ -391,7 +391,7 @@ paths:
     post:
       operationId: ShipmentController_updateShipmentProNumber
       summary: POST /shipment/updateShipmentProNumber
-      description: "\n    Updates a shipment's PRO number.\n    "
+      description: Updates a shipment's PRO number.
       parameters: []
       requestBody:
         required: true
@@ -407,7 +407,7 @@ paths:
         '500':
           description: Unknown error response.
       tags:
-      - shipment
+      - Shipment
       security:
       - api_key: []
 components:
@@ -415,13 +415,6 @@ components:
     CredentialsResponseDto:
       type: object
       properties: {}
-    ShipmentRequestDto:
-      type: object
-      properties:
-        associatedShipment:
-          $ref: '#/components/schemas/AssociatedShipmentDto'
-      required:
-      - associatedShipment
     ShipmentQuantityDto:
       type: object
       properties:
@@ -436,18 +429,6 @@ components:
       required:
       - quantity
       - unit
-    PaymentTypeDto:
-      type: object
-      properties:
-        check:
-          type: boolean
-          example: true
-        cash:
-          type: boolean
-          example: true
-        credit:
-          type: boolean
-          example: true
     PaymentOnDeliveryDto:
       type: object
       properties:
@@ -479,6 +460,13 @@ components:
       - printNameAndSignature
       - storeStampImg
       - customerDocumentImg
+    ShipmentRequestDto:
+      type: object
+      properties:
+        associatedShipment:
+          $ref: '#/components/schemas/AssociatedShipmentDto'
+      required:
+      - associatedShipment
     AssociatedShipmentDto:
       type: object
       properties:
@@ -624,6 +612,18 @@ components:
       - price
       - discount
       - taxRate
+    PaymentTypeDto:
+      type: object
+      properties:
+        check:
+          type: boolean
+          example: true
+        cash:
+          type: boolean
+          example: true
+        credit:
+          type: boolean
+          example: true
     UpdateShipmentProNumberDto:
       type: object
       properties:
@@ -646,9 +646,7 @@ components:
       in: header
       name: apiKey
 x-refined-from:
-- maven-machines-aaa-cooper-middleware-openapi.json
 - maven-machines-averitt-middleware-openapi.json
 - maven-machines-planning-and-dispatch-openapi.json
 - maven-machines-reddy-ice-middleware-openapi.json
-- maven-machines-roy-miller-middleware-openapi.json
 - maven-machines-shipments-openapi.json

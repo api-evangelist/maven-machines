@@ -144,87 +144,6 @@ paths:
       - api_key: []
 components:
   schemas:
-    WorkflowResponseDto:
-      type: object
-      properties:
-        checklist:
-          $ref: '#/components/schemas/ChecklistDto'
-        parts:
-          type: array
-          items:
-            $ref: '#/components/schemas/GenericItemDto'
-        photoCategories:
-          type: array
-          items:
-            $ref: '#/components/schemas/GenericItemDto'
-        rootCauses:
-          type: array
-          items:
-            $ref: '#/components/schemas/GenericItemDto'
-        services:
-          type: array
-          items:
-            $ref: '#/components/schemas/GenericItemDto'
-      required:
-      - checklist
-      - parts
-      - photoCategories
-      - rootCauses
-      - services
-    GenericItemDto:
-      type: object
-      properties:
-        id:
-          type: string
-        displayText:
-          type: string
-      required:
-      - id
-      - displayText
-    AssetResponseDto:
-      type: object
-      properties:
-        checklist:
-          $ref: '#/components/schemas/ChecklistDto'
-        parts:
-          type: array
-          items:
-            $ref: '#/components/schemas/GenericItemDto'
-        photoCategories:
-          type: array
-          items:
-            $ref: '#/components/schemas/GenericItemDto'
-        rootCauses:
-          type: array
-          items:
-            $ref: '#/components/schemas/GenericItemDto'
-        services:
-          type: array
-          items:
-            $ref: '#/components/schemas/GenericItemDto'
-        info:
-          $ref: '#/components/schemas/AssetInfoDto'
-      required:
-      - checklist
-      - parts
-      - photoCategories
-      - rootCauses
-      - services
-      - info
-    LatLongDto:
-      type: object
-      properties:
-        latitude:
-          oneOf:
-          - type: number
-          - type: string
-        longitude:
-          oneOf:
-          - type: number
-          - type: string
-      required:
-      - latitude
-      - longitude
     AssetInfoDto:
       type: object
       properties:
@@ -260,6 +179,36 @@ components:
       - unitNumber
       - unitType
       - year
+    AssetResponseDto:
+      type: object
+      properties:
+        checklist:
+          $ref: '#/components/schemas/ChecklistDto'
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenericItemDto'
+        photoCategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenericItemDto'
+        rootCauses:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenericItemDto'
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenericItemDto'
+        info:
+          $ref: '#/components/schemas/AssetInfoDto'
+      required:
+      - checklist
+      - parts
+      - photoCategories
+      - rootCauses
+      - services
+      - info
     ChecklistDto:
       type: object
       properties:
@@ -272,6 +221,57 @@ components:
       required:
       - id
       - questions
+    WorkflowResponseDto:
+      type: object
+      properties:
+        checklist:
+          $ref: '#/components/schemas/ChecklistDto'
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenericItemDto'
+        photoCategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenericItemDto'
+        rootCauses:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenericItemDto'
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenericItemDto'
+      required:
+      - checklist
+      - parts
+      - photoCategories
+      - rootCauses
+      - services
+    LatLongDto:
+      type: object
+      properties:
+        latitude:
+          oneOf:
+          - type: number
+          - type: string
+        longitude:
+          oneOf:
+          - type: number
+          - type: string
+      required:
+      - latitude
+      - longitude
+    GenericItemDto:
+      type: object
+      properties:
+        id:
+          type: string
+        displayText:
+          type: string
+      required:
+      - id
+      - displayText
   securitySchemes:
     api_key:
       type: apiKey

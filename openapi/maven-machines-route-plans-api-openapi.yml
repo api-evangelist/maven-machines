@@ -7,13 +7,13 @@ info:
 servers:
 - url: https://integrations.mavenmachines.com
 tags:
-- name: routeplans
+- name: Route Plans
 paths:
   /routeplans:
     get:
       operationId: RouteplansController_getRouteplans
       summary: GET /routeplans
-      description: "\n    API endpoint for reading route plan data for a given date.\n    "
+      description: API endpoint for reading route plan data for a given date.
       parameters:
       - name: sessionDate
         required: true
@@ -28,7 +28,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetRoutePlansRequestDto'
       tags:
-      - routeplans
+      - Route Plans
       security:
       - api_key: []
 components:

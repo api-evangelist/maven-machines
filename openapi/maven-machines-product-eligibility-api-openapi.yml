@@ -137,25 +137,6 @@ paths:
       - api_key: []
 components:
   schemas:
-    EligibilityRequestDto:
-      type: object
-      properties:
-        associatedShipment:
-          $ref: '#/components/schemas/EligibilityShipmentDto'
-      required:
-      - associatedShipment
-    PaymentTypeDto:
-      type: object
-      properties:
-        check:
-          type: boolean
-          example: true
-        cash:
-          type: boolean
-          example: true
-        credit:
-          type: boolean
-          example: true
     PaymentOnDeliveryDto:
       type: object
       properties:
@@ -167,26 +148,25 @@ components:
       required:
       - required
       - accept
-    PodRequirementsDto:
+    EligibilityShipmentDto:
       type: object
       properties:
-        onDeliveryPo:
-          type: boolean
-          example: false
-        printNameAndSignature:
-          type: boolean
-          example: true
-        storeStampImg:
-          type: boolean
-          example: false
-        customerDocumentImg:
-          type: boolean
-          example: false
+        consigneeCustomerNumber:
+          type: string
+          example: '045037666'
+        distributorId:
+          type: string
+          example: relationship123
+        shipmentItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductEligibilityItemDto'
+        podRequirements:
+          $ref: '#/components/schemas/PodRequirementsDto'
+        paymentOnDelivery:
+          $ref: '#/components/schemas/PaymentOnDeliveryDto'
       required:
-      - onDeliveryPo
-      - printNameAndSignature
-      - storeStampImg
-      - customerDocumentImg
+      - shipmentItems
     ProductEligibilityItemDto:
       type: object
       properties:
@@ -228,25 +208,45 @@ components:
       - sku
       - productCode
       - upc
-    EligibilityShipmentDto:
+    PodRequirementsDto:
       type: object
       properties:
-        consigneeCustomerNumber:
-          type: string
-          example: '045037666'
-        distributorId:
-          type: string
-          example: relationship123
-        shipmentItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductEligibilityItemDto'
-        podRequirements:
-          $ref: '#/components/schemas/PodRequirementsDto'
-        paymentOnDelivery:
-          $ref: '#/components/schemas/PaymentOnDeliveryDto'
+        onDeliveryPo:
+          type: boolean
+          example: false
+        printNameAndSignature:
+          type: boolean
+          example: true
+        storeStampImg:
+          type: boolean
+          example: false
+        customerDocumentImg:
+          type: boolean
+          example: false
       required:
-      - shipmentItems
+      - onDeliveryPo
+      - printNameAndSignature
+      - storeStampImg
+      - customerDocumentImg
+    EligibilityRequestDto:
+      type: object
+      properties:
+        associatedShipment:
+          $ref: '#/components/schemas/EligibilityShipmentDto'
+      required:
+      - associatedShipment
+    PaymentTypeDto:
+      type: object
+      properties:
+        check:
+          type: boolean
+          example: true
+        cash:
+          type: boolean
+          example: true
+        credit:
+          type: boolean
+          example: true
   securitySchemes:
     api_key:
       type: apiKey

@@ -13,7 +13,7 @@ paths:
     post:
       operationId: ShipmentLocationsController_upsertShipmentLocations
       summary: POST /shipment-locations
-      description: "\n    Enables adding or updating shipment(s) current and/or moveTo locations.\n    "
+      description: Enables adding or updating shipment(s) current and/or moveTo locations.
       parameters: []
       requestBody:
         required: true

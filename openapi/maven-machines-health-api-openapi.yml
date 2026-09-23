@@ -25,7 +25,7 @@ servers:
 - url: https://reddy-ice.middleware.mavenmachines.com
   description: Middleware (target env selected by apiKey)
 tags:
-- name: health
+- name: Health
 paths:
   /:
     get:
@@ -49,7 +49,7 @@ paths:
         4XX:
           description: Client error
       tags:
-      - health
+      - Health
 components:
   securitySchemes:
     api_key:

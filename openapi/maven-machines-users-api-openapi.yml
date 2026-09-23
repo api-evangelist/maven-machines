@@ -7,13 +7,17 @@ info:
 servers:
 - url: https://integrations.mavenmachines.com
 tags:
-- name: users
+- name: Users
 paths:
   /users:
     get:
       operationId: UsersController_getUsers
       summary: GET /users
-      description: "Retrieves a list of users in the Maven system. \n    Retrieves a company location record in the Maven system. A companyLocationId or externalCompanyLocationId must be supplied. \n    If both a supplied, Maven will first search by companyLocationId."
+      description: 'Retrieves a list of users in the Maven system.
+
+        Retrieves a company location record in the Maven system. A companyLocationId or externalCompanyLocationId must be supplied.
+
+        If both a supplied, Maven will first search by companyLocationId.'
       parameters:
       - name: userId
         required: false
@@ -44,13 +48,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetUsersApiResponse'
       tags:
-      - users
+      - Users
       security:
       - api_key: []
     post:
       operationId: UsersController_createUser
       summary: POST /users
-      description: "\n    API endpoints for interacting with user records in the Maven system.\n    \n    Creates a user in the Maven system\n    "
+      description: 'API endpoints for interacting with user records in the Maven system.
+
+
+        Creates a user in the Maven system'
       parameters: []
       requestBody:
         required: true
@@ -66,13 +73,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateUserApiResponse'
       tags:
-      - users
+      - Users
       security:
       - api_key: []
     put:
       operationId: UsersController_updateUser
       summary: PUT /users
-      description: "\n    Updates a user in the Maven system. Either a userId or externalUserId needs to be provided. \n    If both are provided, Maven will first match on userId.\n    "
+      description: 'Updates a user in the Maven system. Either a userId or externalUserId needs to be provided.
+
+        If both are provided, Maven will first match on userId.'
       parameters:
       - name: userId
         required: false
@@ -102,30 +111,218 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateUserApiResponse'
       tags:
-      - users
+      - Users
       security:
       - api_key: []
 components:
   schemas:
-    GlobalPagination:
+    CreateUserApiResponse:
       type: object
       properties:
-        total:
+        externalUserId:
+          type: string
+          description: Unique external identifier for user
+          example: USER123
+        userId:
           type: number
-          description: Total number of records
-          example: 15
-        hasNextPage:
+          description: Unique identifier for user
+          example: 17161
+        createdOn:
+          type: string
+          description: Timestamp of record creation in the Maven system
+          example: '2020-05-01T13:01:01Z'
+        updatedOn:
+          type: string
+          description: Timestamp of last record update in the Maven system
+          example: '2020-05-01T14:59:59Z'
+        active:
           type: boolean
-          description: Bool to indicate if there is another page of data to request.
-          example: false
-        nextPageOffset:
-          type: number
-          description: For subsequent requests, set offset to the value of this field to get the next page
-          example: null
+          description: True for active drivers. false for inactive drivers
+          example: true
+        first:
+          type: string
+          description: First name of user
+          example: John
+        middle:
+          type: string
+          description: Middle name of user
+          example: M
+        last:
+          type: string
+          description: Last name of user
+          example: Doe
+        terminals:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserTerminal'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserGroup'
+        roles:
+          description: Roles assigned to this user
+          example:
+          - Driver
+          type: array
+          items:
+            type: string
+        login:
+          $ref: '#/components/schemas/Login'
+        driversLicense:
+          $ref: '#/components/schemas/DriversLicense'
       required:
-      - total
-      - hasNextPage
-      - nextPageOffset
+      - externalUserId
+      - userId
+      - createdOn
+      - updatedOn
+      - active
+      - first
+      - middle
+      - last
+      - terminals
+      - groups
+      - roles
+      - login
+      - driversLicense
+    UserTerminal:
+      type: object
+      properties:
+        externalTerminalId:
+          type: string
+          description: External identifier for terminal
+          example: PGH
+        name:
+          type: string
+          description: Name of terminal
+          example: Pittsburgh
+      required:
+      - externalTerminalId
+      - name
+    GetUsersApiResponse:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateUserApiResponse'
+        pagination:
+          $ref: '#/components/schemas/GlobalPagination'
+      required:
+      - users
+    UserGroup:
+      type: object
+      properties:
+        externalGroupId:
+          type: string
+          description: External identifier for group
+          example: GROUP123
+        name:
+          type: string
+          description: Name of group
+          example: East Division
+      required:
+      - externalGroupId
+      - name
+    CreateUserRequestDto:
+      type: object
+      properties:
+        middle:
+          type: string
+          description: Middle name of user
+          example: M
+        driversLicense:
+          $ref: '#/components/schemas/DriversLicense'
+        login:
+          $ref: '#/components/schemas/CreateLogin'
+        externalUserId:
+          type: string
+          description: Unique external identifier for user
+          example: USER123
+        first:
+          type: string
+          description: First name of user
+          example: John
+        last:
+          type: string
+          description: Last name of user
+          example: Doe
+        externalTerminalIds:
+          description: External terminal identifiers associated with this user. either an externalTerminalId or externalGroupId is required
+          example:
+          - PGH
+          type: array
+          items:
+            type: string
+        externalGroupIds:
+          description: External group identifiers associated with this user.  either an externalTerminalId or externalGroupId is required
+          example:
+          - GROUP123
+          type: array
+          items:
+            type: string
+        roles:
+          description: Required. roles assigned to this user. an invalid role will error out
+          example:
+          - Driver
+          type: array
+          items:
+            type: string
+        userConfigurationOverrides:
+          $ref: '#/components/schemas/UserConfigurationOverrides'
+      required:
+      - login
+      - externalUserId
+      - first
+      - last
+      - roles
+    UpdateUserRequestDto:
+      type: object
+      properties:
+        middle:
+          type: string
+          description: Middle name of user
+          example: M
+        driversLicense:
+          $ref: '#/components/schemas/DriversLicense'
+        externalUserId:
+          type: string
+          description: Unique external identifier for user
+          example: USER123
+        login:
+          $ref: '#/components/schemas/UpdateLogin'
+        first:
+          type: string
+          description: First name of user
+          example: John
+        last:
+          type: string
+          description: Last name of user
+          example: Doe
+        active:
+          type: boolean
+          description: True for active drivers. false for inactive drivers
+          example: true
+        externalTerminalIds:
+          description: External terminal identifiers associated with this user
+          example:
+          - PGH
+          type: array
+          items:
+            type: string
+        externalGroupIds:
+          description: External group identifiers associated with this user
+          example:
+          - GROUP123
+          type: array
+          items:
+            type: string
+        roles:
+          description: Roles assigned to this user
+          example:
+          - Driver
+          type: array
+          items:
+            type: string
     EldConfigurationOverrides:
       type: object
       properties:
@@ -149,6 +346,23 @@ components:
           type: string
           description: Optional.  Allows setting the exempt reason for a user.  This value is only applied if the api call has also provided a value for exemptStatus.
           example: Maintenance Mechanic
+    UpdateLogin:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: Email address used to log into the Maven app. May be different than portal login email.
+          example: johnmdoe@example.com
+        phone:
+          type: string
+          description: Phone number used to log into the Maven app
+          example: '+14125555555'
+        password:
+          type: string
+          format: password
+          description: Password used to log into the Maven app
+          example: password1
     Login:
       type: object
       properties:
@@ -164,17 +378,49 @@ components:
       required:
       - email
       - phone
-    GetUsersApiResponse:
+    CreateLogin:
       type: object
       properties:
-        users:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateUserApiResponse'
-        pagination:
-          $ref: '#/components/schemas/GlobalPagination'
+        email:
+          type: string
+          format: email
+          description: Email address used to log into the Maven app. May be different than portal login email.
+          example: johnmdoe@example.com
+        phone:
+          type: string
+          description: Phone number used to log into the Maven app
+          example: '+14125555555'
+        password:
+          type: string
+          format: password
+          description: Password used to log into the Maven app
+          example: password1
       required:
-      - users
+      - password
+    GlobalPagination:
+      type: object
+      properties:
+        total:
+          type: number
+          description: Total number of records
+          example: 15
+        hasNextPage:
+          type: boolean
+          description: Bool to indicate if there is another page of data to request.
+          example: false
+        nextPageOffset:
+          type: number
+          description: For subsequent requests, set offset to the value of this field to get the next page
+          example: null
+      required:
+      - total
+      - hasNextPage
+      - nextPageOffset
+    UserConfigurationOverrides:
+      type: object
+      properties:
+        eldConfig:
+          $ref: '#/components/schemas/EldConfigurationOverrides'
     DriversLicense:
       type: object
       properties:
@@ -325,243 +571,6 @@ components:
       - type
       - endorsements
       - restrictions
-    UpdateUserRequestDto:
-      type: object
-      properties:
-        middle:
-          type: string
-          description: Middle name of user
-          example: M
-        driversLicense:
-          $ref: '#/components/schemas/DriversLicense'
-        externalUserId:
-          type: string
-          description: Unique external identifier for user
-          example: USER123
-        login:
-          $ref: '#/components/schemas/UpdateLogin'
-        first:
-          type: string
-          description: First name of user
-          example: John
-        last:
-          type: string
-          description: Last name of user
-          example: Doe
-        active:
-          type: boolean
-          description: True for active drivers. false for inactive drivers
-          example: true
-        externalTerminalIds:
-          description: External terminal identifiers associated with this user
-          example:
-          - PGH
-          type: array
-          items:
-            type: string
-        externalGroupIds:
-          description: External group identifiers associated with this user
-          example:
-          - GROUP123
-          type: array
-          items:
-            type: string
-        roles:
-          description: Roles assigned to this user
-          example:
-          - Driver
-          type: array
-          items:
-            type: string
-    UserGroup:
-      type: object
-      properties:
-        externalGroupId:
-          type: string
-          description: External identifier for group
-          example: GROUP123
-        name:
-          type: string
-          description: Name of group
-          example: East Division
-      required:
-      - externalGroupId
-      - name
-    CreateUserApiResponse:
-      type: object
-      properties:
-        externalUserId:
-          type: string
-          description: Unique external identifier for user
-          example: USER123
-        userId:
-          type: number
-          description: Unique identifier for user
-          example: 17161
-        createdOn:
-          type: string
-          description: Timestamp of record creation in the Maven system
-          example: '2020-05-01T13:01:01Z'
-        updatedOn:
-          type: string
-          description: Timestamp of last record update in the Maven system
-          example: '2020-05-01T14:59:59Z'
-        active:
-          type: boolean
-          description: True for active drivers. false for inactive drivers
-          example: true
-        first:
-          type: string
-          description: First name of user
-          example: John
-        middle:
-          type: string
-          description: Middle name of user
-          example: M
-        last:
-          type: string
-          description: Last name of user
-          example: Doe
-        terminals:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserTerminal'
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserGroup'
-        roles:
-          description: Roles assigned to this user
-          example:
-          - Driver
-          type: array
-          items:
-            type: string
-        login:
-          $ref: '#/components/schemas/Login'
-        driversLicense:
-          $ref: '#/components/schemas/DriversLicense'
-      required:
-      - externalUserId
-      - userId
-      - createdOn
-      - updatedOn
-      - active
-      - first
-      - middle
-      - last
-      - terminals
-      - groups
-      - roles
-      - login
-      - driversLicense
-    UserTerminal:
-      type: object
-      properties:
-        externalTerminalId:
-          type: string
-          description: External identifier for terminal
-          example: PGH
-        name:
-          type: string
-          description: Name of terminal
-          example: Pittsburgh
-      required:
-      - externalTerminalId
-      - name
-    UpdateLogin:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-          description: Email address used to log into the Maven app. May be different than portal login email.
-          example: johnmdoe@example.com
-        phone:
-          type: string
-          description: Phone number used to log into the Maven app
-          example: '+14125555555'
-        password:
-          type: string
-          format: password
-          description: Password used to log into the Maven app
-          example: password1
-    UserConfigurationOverrides:
-      type: object
-      properties:
-        eldConfig:
-          $ref: '#/components/schemas/EldConfigurationOverrides'
-    CreateUserRequestDto:
-      type: object
-      properties:
-        middle:
-          type: string
-          description: Middle name of user
-          example: M
-        driversLicense:
-          $ref: '#/components/schemas/DriversLicense'
-        login:
-          $ref: '#/components/schemas/CreateLogin'
-        externalUserId:
-          type: string
-          description: Unique external identifier for user
-          example: USER123
-        first:
-          type: string
-          description: First name of user
-          example: John
-        last:
-          type: string
-          description: Last name of user
-          example: Doe
-        externalTerminalIds:
-          description: External terminal identifiers associated with this user. either an externalTerminalId or externalGroupId is required
-          example:
-          - PGH
-          type: array
-          items:
-            type: string
-        externalGroupIds:
-          description: External group identifiers associated with this user.  either an externalTerminalId or externalGroupId is required
-          example:
-          - GROUP123
-          type: array
-          items:
-            type: string
-        roles:
-          description: Required. roles assigned to this user. an invalid role will error out
-          example:
-          - Driver
-          type: array
-          items:
-            type: string
-        userConfigurationOverrides:
-          $ref: '#/components/schemas/UserConfigurationOverrides'
-      required:
-      - login
-      - externalUserId
-      - first
-      - last
-      - roles
-    CreateLogin:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-          description: Email address used to log into the Maven app. May be different than portal login email.
-          example: johnmdoe@example.com
-        phone:
-          type: string
-          description: Phone number used to log into the Maven app
-          example: '+14125555555'
-        password:
-          type: string
-          format: password
-          description: Password used to log into the Maven app
-          example: password1
-      required:
-      - password
   securitySchemes:
     api_key:
       type: apiKey

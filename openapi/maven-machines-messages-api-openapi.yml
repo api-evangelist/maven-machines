@@ -6,13 +6,20 @@ info:
   contact: {}
 servers: []
 tags:
-- name: messages
+- name: Messages
 paths:
   /messages:
     post:
       operationId: MessagesController_createMessages
       summary: POST /messages
-      description: "\n    Creates messages from a sender to a list of recipients into the Maven Messages system.\n\n    Implementation Notes:\n    - If both senderUserId and senderExternalUserId are sent in the request, senderUserId will take precedence.\n    - If both recipientUserIds and recipientExternalUserIds are defined, Maven will take the union of both arrays to determine the final recipient list. Max 50 recipients.\n    "
+      description: 'Creates messages from a sender to a list of recipients into the Maven Messages system.
+
+
+        Implementation Notes:
+
+        - If both senderUserId and senderExternalUserId are sent in the request, senderUserId will take precedence.
+
+        - If both recipientUserIds and recipientExternalUserIds are defined, Maven will take the union of both arrays to determine the final recipient list. Max 50 recipients.'
       parameters: []
       requestBody:
         required: true
@@ -28,13 +35,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreateMessageResponse'
       tags:
-      - messages
+      - Messages
       security:
       - api_key: []
     get:
       operationId: MessagesController_getMessages
       summary: GET /messages
-      description: "\n    Retrieves messages that have been sent in the Maven system.\n    "
+      description: Retrieves messages that have been sent in the Maven system.
       parameters:
       - name: startTime
         required: true
@@ -61,11 +68,39 @@ paths:
               schema:
                 $ref: '#/components/schemas/GetMessagesResponse'
       tags:
-      - messages
+      - Messages
       security:
       - api_key: []
 components:
   schemas:
+    Pagination:
+      type: object
+      properties:
+        nextPageStartTime:
+          type: string
+          description: "Next Page Start Time - Used for cursor pagination in subsequent requests\n      assuming hasNextPage is true. For subsequent requests, set startTime to the value\n      of this field in the previous request to get the next page."
+          example: 2020-04-09T21:50::42.000000Z
+        hasNextPage:
+          type: boolean
+          description: hasNextPage - Bool to indicate if there is another page of messages to retrieve.
+      required:
+      - nextPageStartTime
+      - hasNextPage
+    GetMessagesResponse:
+      type: object
+      properties:
+        messages:
+          description: Array of created messages
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        pagination:
+          description: For subsequent requests, set offset to the value of this field to get the next page
+          allOf:
+          - $ref: '#/components/schemas/Pagination'
+      required:
+      - messages
+      - pagination
     CreateMessageRequest:
       type: object
       properties:
@@ -103,44 +138,6 @@ components:
       - recipientUserIds
       - recipientExternalUserIds
       - body
-    CreateMessageResponse:
-      type: object
-      properties:
-        messages:
-          description: Array of created messages
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-      required:
-      - messages
-    Pagination:
-      type: object
-      properties:
-        nextPageStartTime:
-          type: string
-          description: "Next Page Start Time - Used for cursor pagination in subsequent requests\n      assuming hasNextPage is true. For subsequent requests, set startTime to the value\n      of this field in the previous request to get the next page."
-          example: 2020-04-09T21:50::42.000000Z
-        hasNextPage:
-          type: boolean
-          description: hasNextPage - Bool to indicate if there is another page of messages to retrieve.
-      required:
-      - nextPageStartTime
-      - hasNextPage
-    GetMessagesResponse:
-      type: object
-      properties:
-        messages:
-          description: Array of created messages
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-        pagination:
-          description: For subsequent requests, set offset to the value of this field to get the next page
-          allOf:
-          - $ref: '#/components/schemas/Pagination'
-      required:
-      - messages
-      - pagination
     Message:
       type: object
       properties:
@@ -184,6 +181,16 @@ components:
       - senderExternalUserId
       - participants
       - body
+    CreateMessageResponse:
+      type: object
+      properties:
+        messages:
+          description: Array of created messages
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+      required:
+      - messages
   securitySchemes:
     api_key:
       type: apiKey
