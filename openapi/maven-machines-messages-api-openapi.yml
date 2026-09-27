@@ -73,20 +73,7 @@ paths:
       - api_key: []
 components:
   schemas:
-    Pagination:
-      type: object
-      properties:
-        nextPageStartTime:
-          type: string
-          description: "Next Page Start Time - Used for cursor pagination in subsequent requests\n      assuming hasNextPage is true. For subsequent requests, set startTime to the value\n      of this field in the previous request to get the next page."
-          example: 2020-04-09T21:50::42.000000Z
-        hasNextPage:
-          type: boolean
-          description: hasNextPage - Bool to indicate if there is another page of messages to retrieve.
-      required:
-      - nextPageStartTime
-      - hasNextPage
-    GetMessagesResponse:
+    CreateMessageResponse:
       type: object
       properties:
         messages:
@@ -94,13 +81,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Message'
-        pagination:
-          description: For subsequent requests, set offset to the value of this field to get the next page
-          allOf:
-          - $ref: '#/components/schemas/Pagination'
       required:
       - messages
-      - pagination
     CreateMessageRequest:
       type: object
       properties:
@@ -138,6 +120,19 @@ components:
       - recipientUserIds
       - recipientExternalUserIds
       - body
+    Pagination:
+      type: object
+      properties:
+        nextPageStartTime:
+          type: string
+          description: "Next Page Start Time - Used for cursor pagination in subsequent requests\n      assuming hasNextPage is true. For subsequent requests, set startTime to the value\n      of this field in the previous request to get the next page."
+          example: 2020-04-09T21:50::42.000000Z
+        hasNextPage:
+          type: boolean
+          description: hasNextPage - Bool to indicate if there is another page of messages to retrieve.
+      required:
+      - nextPageStartTime
+      - hasNextPage
     Message:
       type: object
       properties:
@@ -181,7 +176,7 @@ components:
       - senderExternalUserId
       - participants
       - body
-    CreateMessageResponse:
+    GetMessagesResponse:
       type: object
       properties:
         messages:
@@ -189,8 +184,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Message'
+        pagination:
+          description: For subsequent requests, set offset to the value of this field to get the next page
+          allOf:
+          - $ref: '#/components/schemas/Pagination'
       required:
       - messages
+      - pagination
   securitySchemes:
     api_key:
       type: apiKey

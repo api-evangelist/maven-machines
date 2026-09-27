@@ -34,6 +34,26 @@ paths:
       - api_key: []
 components:
   schemas:
+    FacilityLocation:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'Name of facility location. Example: ''1'' or ''10'''
+        type:
+          type: string
+          description: 'Type of facility location. Example: ''door''/''aisle''/''bay'''
+          enum:
+          - door
+          - aisle
+          - bay
+        terminalCode:
+          type: string
+          description: Company terminal identifier
+      required:
+      - name
+      - type
+      - terminalCode
     UpsertShipmentLocationsDto:
       type: object
       properties:
@@ -55,26 +75,6 @@ components:
           allOf:
           - $ref: '#/components/schemas/FacilityLocation'
           - description: Facility location where shipment(s) should be moved to
-    FacilityLocation:
-      type: object
-      properties:
-        name:
-          type: string
-          description: 'Name of facility location. Example: ''1'' or ''10'''
-        type:
-          type: string
-          description: 'Type of facility location. Example: ''door''/''aisle''/''bay'''
-          enum:
-          - door
-          - aisle
-          - bay
-        terminalCode:
-          type: string
-          description: Company terminal identifier
-      required:
-      - name
-      - type
-      - terminalCode
   securitySchemes:
     api_key:
       type: apiKey

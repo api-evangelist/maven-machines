@@ -125,6 +125,69 @@ components:
       required:
       - forms
       - pagination
+    FormDefinitions:
+      type: object
+      properties:
+        formId:
+          type: string
+          format: uuid
+          description: Maven form identifier
+          example: 10aec305-df07-4310-89fd-596c76748d56
+        version:
+          type: string
+          description: Form version
+          format: date-time
+          example: '2020-04-08T21:19:42.123456Z'
+        name:
+          type: string
+          description: Form name
+          example: Delivery Form
+        description:
+          type: string
+          description: Description of form
+          example: Form to be completed when making a delivery
+        components:
+          description: Form definition syntax
+          type: array
+          items:
+            $ref: '#/components/schemas/FormDefinitionsComponents'
+      required:
+      - formId
+      - version
+      - name
+      - description
+      - components
+    FormDefinitionsApiResponse:
+      type: object
+      properties:
+        forms:
+          type: array
+          items:
+            $ref: '#/components/schemas/FormDefinitions'
+        pagination:
+          $ref: '#/components/schemas/GlobalPagination'
+      required:
+      - forms
+      - pagination
+    GlobalPagination:
+      type: object
+      properties:
+        total:
+          type: number
+          description: Total number of records
+          example: 15
+        hasNextPage:
+          type: boolean
+          description: Bool to indicate if there is another page of data to request.
+          example: false
+        nextPageOffset:
+          type: number
+          description: For subsequent requests, set offset to the value of this field to get the next page
+          example: null
+      required:
+      - total
+      - hasNextPage
+      - nextPageOffset
     FormResults:
       type: object
       properties:
@@ -204,69 +267,6 @@ components:
       - submissionTime
       - approvals
       - formResults
-    FormDefinitionsApiResponse:
-      type: object
-      properties:
-        forms:
-          type: array
-          items:
-            $ref: '#/components/schemas/FormDefinitions'
-        pagination:
-          $ref: '#/components/schemas/GlobalPagination'
-      required:
-      - forms
-      - pagination
-    GlobalPagination:
-      type: object
-      properties:
-        total:
-          type: number
-          description: Total number of records
-          example: 15
-        hasNextPage:
-          type: boolean
-          description: Bool to indicate if there is another page of data to request.
-          example: false
-        nextPageOffset:
-          type: number
-          description: For subsequent requests, set offset to the value of this field to get the next page
-          example: null
-      required:
-      - total
-      - hasNextPage
-      - nextPageOffset
-    FormDefinitions:
-      type: object
-      properties:
-        formId:
-          type: string
-          format: uuid
-          description: Maven form identifier
-          example: 10aec305-df07-4310-89fd-596c76748d56
-        version:
-          type: string
-          description: Form version
-          format: date-time
-          example: '2020-04-08T21:19:42.123456Z'
-        name:
-          type: string
-          description: Form name
-          example: Delivery Form
-        description:
-          type: string
-          description: Description of form
-          example: Form to be completed when making a delivery
-        components:
-          description: Form definition syntax
-          type: array
-          items:
-            $ref: '#/components/schemas/FormDefinitionsComponents'
-      required:
-      - formId
-      - version
-      - name
-      - description
-      - components
     FormDefinitionsComponents:
       type: object
       properties:

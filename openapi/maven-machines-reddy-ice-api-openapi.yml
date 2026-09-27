@@ -107,75 +107,6 @@ paths:
       - api_key: []
 components:
   schemas:
-    AssetDto:
-      type: object
-      properties:
-        unitNumber:
-          type: string
-        make:
-          type: string
-        model:
-          type: string
-        year:
-          type: string
-        latitude:
-          type: number
-        longitude:
-          type: number
-        serviceStatus:
-          type: string
-        capacity:
-          type: number
-      required:
-      - unitNumber
-      - make
-      - model
-      - year
-      - latitude
-      - longitude
-      - serviceStatus
-      - capacity
-    ContactDto:
-      type: object
-      properties:
-        name:
-          type: string
-        contactPhone:
-          type: string
-        contactEmail:
-          type: string
-    TaskResponseDto:
-      type: object
-      properties:
-        companyId:
-          type: number
-        taskId:
-          type: string
-        taskType:
-          type: string
-        status:
-          type: string
-        taskName:
-          type: string
-        companyLocationId:
-          type: number
-        description:
-          type: string
-        assignedEmployeeIds:
-          type: array
-          items:
-            type: string
-        taskContext:
-          type: object
-      required:
-      - companyId
-      - taskId
-      - taskType
-      - status
-      - taskName
-      - companyLocationId
-      - assignedEmployeeIds
-      - taskContext
     ReddyIceCaseDto:
       type: object
       properties:
@@ -219,6 +150,75 @@ components:
       - caseType
       - caseSubType
       - contactInformation
+    ContactDto:
+      type: object
+      properties:
+        name:
+          type: string
+        contactPhone:
+          type: string
+        contactEmail:
+          type: string
+    TaskResponseDto:
+      type: object
+      properties:
+        companyId:
+          type: number
+        taskId:
+          type: string
+        taskType:
+          type: string
+        status:
+          type: string
+        taskName:
+          type: string
+        companyLocationId:
+          type: number
+        description:
+          type: string
+        assignedEmployeeIds:
+          type: array
+          items:
+            type: string
+        taskContext:
+          type: object
+      required:
+      - companyId
+      - taskId
+      - taskType
+      - status
+      - taskName
+      - companyLocationId
+      - assignedEmployeeIds
+      - taskContext
+    AssetDto:
+      type: object
+      properties:
+        unitNumber:
+          type: string
+        make:
+          type: string
+        model:
+          type: string
+        year:
+          type: string
+        latitude:
+          type: number
+        longitude:
+          type: number
+        serviceStatus:
+          type: string
+        capacity:
+          type: number
+      required:
+      - unitNumber
+      - make
+      - model
+      - year
+      - latitude
+      - longitude
+      - serviceStatus
+      - capacity
   securitySchemes:
     api_key:
       type: apiKey

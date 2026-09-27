@@ -429,17 +429,77 @@ components:
       required:
       - quantity
       - unit
-    PaymentOnDeliveryDto:
+    ShipmentItemDto:
       type: object
       properties:
+        description:
+          type: string
+          example: 7_LB Bags
+        sku:
+          type: string
+          example: 7_LB
+        productCode:
+          type: string
+          description: FK! - Product code must be the value of an existing Product in the system.  See sales service product_blurb table.
+          example: '200771'
+        upc:
+          type: string
+          example: 00860006114916
         required:
           type: boolean
-          example: false
-        accept:
-          $ref: '#/components/schemas/PaymentTypeDto'
+          example: true
+        quantities:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentQuantityDto'
+        pieces:
+          oneOf:
+          - type: number
+          - type: string
+          example: 200
+        weight:
+          oneOf:
+          - type: number
+          - type: string
+          example: 1444
+        palletEquivalents:
+          oneOf:
+          - type: number
+          - type: string
+          example: 1.22
+        price:
+          oneOf:
+          - type: number
+          - type: string
+          example: 1.17
+        discount:
+          oneOf:
+          - type: number
+          - type: string
+          example: 0.1
+        taxRate:
+          oneOf:
+          - type: number
+          - type: string
+          example: 0.017
       required:
-      - required
-      - accept
+      - sku
+      - productCode
+      - upc
+      - quantities
+      - pieces
+      - weight
+      - palletEquivalents
+      - price
+      - discount
+      - taxRate
+    ShipmentRequestDto:
+      type: object
+      properties:
+        associatedShipment:
+          $ref: '#/components/schemas/AssociatedShipmentDto'
+      required:
+      - associatedShipment
     PodRequirementsDto:
       type: object
       properties:
@@ -460,13 +520,29 @@ components:
       - printNameAndSignature
       - storeStampImg
       - customerDocumentImg
-    ShipmentRequestDto:
+    PaymentTypeDto:
       type: object
       properties:
-        associatedShipment:
-          $ref: '#/components/schemas/AssociatedShipmentDto'
+        check:
+          type: boolean
+          example: true
+        cash:
+          type: boolean
+          example: true
+        credit:
+          type: boolean
+          example: true
+    PaymentOnDeliveryDto:
+      type: object
+      properties:
+        required:
+          type: boolean
+          example: false
+        accept:
+          $ref: '#/components/schemas/PaymentTypeDto'
       required:
-      - associatedShipment
+      - required
+      - accept
     AssociatedShipmentDto:
       type: object
       properties:
@@ -548,82 +624,6 @@ components:
       - podRequirements
       - paymentOnDelivery
       - shipmentType
-    ShipmentItemDto:
-      type: object
-      properties:
-        description:
-          type: string
-          example: 7_LB Bags
-        sku:
-          type: string
-          example: 7_LB
-        productCode:
-          type: string
-          description: FK! - Product code must be the value of an existing Product in the system.  See sales service product_blurb table.
-          example: '200771'
-        upc:
-          type: string
-          example: 00860006114916
-        required:
-          type: boolean
-          example: true
-        quantities:
-          type: array
-          items:
-            $ref: '#/components/schemas/ShipmentQuantityDto'
-        pieces:
-          oneOf:
-          - type: number
-          - type: string
-          example: 200
-        weight:
-          oneOf:
-          - type: number
-          - type: string
-          example: 1444
-        palletEquivalents:
-          oneOf:
-          - type: number
-          - type: string
-          example: 1.22
-        price:
-          oneOf:
-          - type: number
-          - type: string
-          example: 1.17
-        discount:
-          oneOf:
-          - type: number
-          - type: string
-          example: 0.1
-        taxRate:
-          oneOf:
-          - type: number
-          - type: string
-          example: 0.017
-      required:
-      - sku
-      - productCode
-      - upc
-      - quantities
-      - pieces
-      - weight
-      - palletEquivalents
-      - price
-      - discount
-      - taxRate
-    PaymentTypeDto:
-      type: object
-      properties:
-        check:
-          type: boolean
-          example: true
-        cash:
-          type: boolean
-          example: true
-        credit:
-          type: boolean
-          example: true
     UpdateShipmentProNumberDto:
       type: object
       properties:

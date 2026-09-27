@@ -116,6 +116,34 @@ paths:
       - api_key: []
 components:
   schemas:
+    UserConfigurationOverrides:
+      type: object
+      properties:
+        eldConfig:
+          $ref: '#/components/schemas/EldConfigurationOverrides'
+    EldConfigurationOverrides:
+      type: object
+      properties:
+        timezone:
+          type: string
+          description: Optional.  Allows overriding the user's terminal timezone or default timezone set in the eld configuration.  If user has no terminal and the company has not set up a default terminal configuration, eld configuration for this user may fail
+          example: US/Eastern
+        ruleset:
+          type: string
+          description: Optional.  Allows overriding the default ruleset set in the eld configuration.  If no value is provided and no default eld configuration is set, then the ruleset will default to US Property 70Hr/8day
+          example: CALIFORNIA_INTRASTATE_PROPERTY
+        logDayStartTime:
+          type: number
+          description: Optional.  Allows setting of the log start time of the user to either noon or midnight.  Defaults to midnight if not provided.  Set 0 for midnight, or 12 for noon.  Other values will be ignored.
+          example: 12
+        exemptStatus:
+          type: boolean
+          description: Optional.  Allows setting a user as eld exempt.  Note if this value is provided, a value for exemptReason must also be provided.  DO NOT provide a value for ruleset
+          example: true
+        exemptReason:
+          type: string
+          description: Optional.  Allows setting the exempt reason for a user.  This value is only applied if the api call has also provided a value for exemptStatus.
+          example: Maintenance Mechanic
     CreateUserApiResponse:
       type: object
       properties:
@@ -184,45 +212,6 @@ components:
       - roles
       - login
       - driversLicense
-    UserTerminal:
-      type: object
-      properties:
-        externalTerminalId:
-          type: string
-          description: External identifier for terminal
-          example: PGH
-        name:
-          type: string
-          description: Name of terminal
-          example: Pittsburgh
-      required:
-      - externalTerminalId
-      - name
-    GetUsersApiResponse:
-      type: object
-      properties:
-        users:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateUserApiResponse'
-        pagination:
-          $ref: '#/components/schemas/GlobalPagination'
-      required:
-      - users
-    UserGroup:
-      type: object
-      properties:
-        externalGroupId:
-          type: string
-          description: External identifier for group
-          example: GROUP123
-        name:
-          type: string
-          description: Name of group
-          example: East Division
-      required:
-      - externalGroupId
-      - name
     CreateUserRequestDto:
       type: object
       properties:
@@ -275,77 +264,20 @@ components:
       - first
       - last
       - roles
-    UpdateUserRequestDto:
+    UserTerminal:
       type: object
       properties:
-        middle:
+        externalTerminalId:
           type: string
-          description: Middle name of user
-          example: M
-        driversLicense:
-          $ref: '#/components/schemas/DriversLicense'
-        externalUserId:
+          description: External identifier for terminal
+          example: PGH
+        name:
           type: string
-          description: Unique external identifier for user
-          example: USER123
-        login:
-          $ref: '#/components/schemas/UpdateLogin'
-        first:
-          type: string
-          description: First name of user
-          example: John
-        last:
-          type: string
-          description: Last name of user
-          example: Doe
-        active:
-          type: boolean
-          description: True for active drivers. false for inactive drivers
-          example: true
-        externalTerminalIds:
-          description: External terminal identifiers associated with this user
-          example:
-          - PGH
-          type: array
-          items:
-            type: string
-        externalGroupIds:
-          description: External group identifiers associated with this user
-          example:
-          - GROUP123
-          type: array
-          items:
-            type: string
-        roles:
-          description: Roles assigned to this user
-          example:
-          - Driver
-          type: array
-          items:
-            type: string
-    EldConfigurationOverrides:
-      type: object
-      properties:
-        timezone:
-          type: string
-          description: Optional.  Allows overriding the user's terminal timezone or default timezone set in the eld configuration.  If user has no terminal and the company has not set up a default terminal configuration, eld configuration for this user may fail
-          example: US/Eastern
-        ruleset:
-          type: string
-          description: Optional.  Allows overriding the default ruleset set in the eld configuration.  If no value is provided and no default eld configuration is set, then the ruleset will default to US Property 70Hr/8day
-          example: CALIFORNIA_INTRASTATE_PROPERTY
-        logDayStartTime:
-          type: number
-          description: Optional.  Allows setting of the log start time of the user to either noon or midnight.  Defaults to midnight if not provided.  Set 0 for midnight, or 12 for noon.  Other values will be ignored.
-          example: 12
-        exemptStatus:
-          type: boolean
-          description: Optional.  Allows setting a user as eld exempt.  Note if this value is provided, a value for exemptReason must also be provided.  DO NOT provide a value for ruleset
-          example: true
-        exemptReason:
-          type: string
-          description: Optional.  Allows setting the exempt reason for a user.  This value is only applied if the api call has also provided a value for exemptStatus.
-          example: Maintenance Mechanic
+          description: Name of terminal
+          example: Pittsburgh
+      required:
+      - externalTerminalId
+      - name
     UpdateLogin:
       type: object
       properties:
@@ -363,40 +295,6 @@ components:
           format: password
           description: Password used to log into the Maven app
           example: password1
-    Login:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-          description: Email address used to log into the Maven app. May be different than portal login email.
-          example: johnmdoe@example.com
-        phone:
-          type: string
-          description: Phone number used to log into the Maven app
-          example: '+14125555555'
-      required:
-      - email
-      - phone
-    CreateLogin:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-          description: Email address used to log into the Maven app. May be different than portal login email.
-          example: johnmdoe@example.com
-        phone:
-          type: string
-          description: Phone number used to log into the Maven app
-          example: '+14125555555'
-        password:
-          type: string
-          format: password
-          description: Password used to log into the Maven app
-          example: password1
-      required:
-      - password
     GlobalPagination:
       type: object
       properties:
@@ -416,11 +314,6 @@ components:
       - total
       - hasNextPage
       - nextPageOffset
-    UserConfigurationOverrides:
-      type: object
-      properties:
-        eldConfig:
-          $ref: '#/components/schemas/EldConfigurationOverrides'
     DriversLicense:
       type: object
       properties:
@@ -571,6 +464,113 @@ components:
       - type
       - endorsements
       - restrictions
+    CreateLogin:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: Email address used to log into the Maven app. May be different than portal login email.
+          example: johnmdoe@example.com
+        phone:
+          type: string
+          description: Phone number used to log into the Maven app
+          example: '+14125555555'
+        password:
+          type: string
+          format: password
+          description: Password used to log into the Maven app
+          example: password1
+      required:
+      - password
+    UserGroup:
+      type: object
+      properties:
+        externalGroupId:
+          type: string
+          description: External identifier for group
+          example: GROUP123
+        name:
+          type: string
+          description: Name of group
+          example: East Division
+      required:
+      - externalGroupId
+      - name
+    UpdateUserRequestDto:
+      type: object
+      properties:
+        middle:
+          type: string
+          description: Middle name of user
+          example: M
+        driversLicense:
+          $ref: '#/components/schemas/DriversLicense'
+        externalUserId:
+          type: string
+          description: Unique external identifier for user
+          example: USER123
+        login:
+          $ref: '#/components/schemas/UpdateLogin'
+        first:
+          type: string
+          description: First name of user
+          example: John
+        last:
+          type: string
+          description: Last name of user
+          example: Doe
+        active:
+          type: boolean
+          description: True for active drivers. false for inactive drivers
+          example: true
+        externalTerminalIds:
+          description: External terminal identifiers associated with this user
+          example:
+          - PGH
+          type: array
+          items:
+            type: string
+        externalGroupIds:
+          description: External group identifiers associated with this user
+          example:
+          - GROUP123
+          type: array
+          items:
+            type: string
+        roles:
+          description: Roles assigned to this user
+          example:
+          - Driver
+          type: array
+          items:
+            type: string
+    GetUsersApiResponse:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateUserApiResponse'
+        pagination:
+          $ref: '#/components/schemas/GlobalPagination'
+      required:
+      - users
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: Email address used to log into the Maven app. May be different than portal login email.
+          example: johnmdoe@example.com
+        phone:
+          type: string
+          description: Phone number used to log into the Maven app
+          example: '+14125555555'
+      required:
+      - email
+      - phone
   securitySchemes:
     api_key:
       type: apiKey

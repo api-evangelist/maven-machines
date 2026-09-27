@@ -95,6 +95,32 @@ paths:
       - api_key: []
 components:
   schemas:
+    PaginationResponseDto:
+      type: object
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Is there more data
+          example: 'true'
+        nextPageStartTime:
+          type: string
+          description: Time Stamp of the next page
+          example: '2024-05-08T13:25:11Z'
+      required:
+      - hasNextPage
+      - nextPageStartTime
+    BatchLoggingApiResponse:
+      type: object
+      properties:
+        batch:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchLoggingResponseDto'
+        pagination:
+          $ref: '#/components/schemas/PaginationResponseDto'
+      required:
+      - batch
+      - pagination
     BatchLoggingMaterialResponseDto:
       type: object
       properties:
@@ -223,32 +249,6 @@ components:
       - BatchNumber
       - BatchTotal
       - materials
-    BatchLoggingApiResponse:
-      type: object
-      properties:
-        batch:
-          type: array
-          items:
-            $ref: '#/components/schemas/BatchLoggingResponseDto'
-        pagination:
-          $ref: '#/components/schemas/PaginationResponseDto'
-      required:
-      - batch
-      - pagination
-    PaginationResponseDto:
-      type: object
-      properties:
-        hasNextPage:
-          type: boolean
-          description: Is there more data
-          example: 'true'
-        nextPageStartTime:
-          type: string
-          description: Time Stamp of the next page
-          example: '2024-05-08T13:25:11Z'
-      required:
-      - hasNextPage
-      - nextPageStartTime
     AlarmLogApiResponse:
       type: object
       properties:

@@ -250,17 +250,75 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    GetTrailersResponseApi:
+    UpdateTrailerRequestDTO:
       type: object
       properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationDTO'
-        data:
+        trailerType:
+          type: string
+        vin:
+          type: string
+          example: 1WAAA36241B704500
+        make:
+          type: string
+          example: Acme Corporation
+        model:
+          type: string
+          example: base
+        year:
+          type: string
+          example: 2020
+        assetId:
+          type: string
+          example: 231-3211321-321321
+        licensePlateNumber:
+          type: string
+          example: '555'
+        licensePlateState:
+          type: string
+          example: AT
+        status:
+          type: string
+          enum:
+          - active
+          - inactive
+        length:
+          type: number
+          example: 44
+        lengthUnits:
+          type: string
+          enum:
+          - meters
+          - feet
+        axles:
+          type: number
+          example: 8
+        heated:
+          type: boolean
+          example: false
+        liftGate:
+          type: boolean
+          example: false
+        bodyType:
+          type: string
+          example: flatbed
+        ownershipStatus:
+          type: string
+          enum:
+          - rented
+          - owned
+          - leased
+          - non-company
+          - other
+          example: non-company
+        terminal:
+          type: string
+          example: PH
+        attributes:
+          $ref: '#/components/schemas/TrailerAttributesResponse'
+        groupCodes:
           type: array
           items:
-            $ref: '#/components/schemas/TrailerDTO'
-      required:
-      - data
+            type: string
     UploadTrailersResponseApi:
       type: object
       properties:
@@ -273,6 +331,17 @@ components:
             $ref: '#/components/schemas/TrailerDTO'
       required:
       - status
+    GetTrailersResponseApi:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationDTO'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrailerDTO'
+      required:
+      - data
     TrailerAttributesResponse:
       type: object
       properties:
@@ -380,75 +449,6 @@ components:
           example: 5
       required:
       - pageNum
-    UpdateTrailerRequestDTO:
-      type: object
-      properties:
-        trailerType:
-          type: string
-        vin:
-          type: string
-          example: 1WAAA36241B704500
-        make:
-          type: string
-          example: Acme Corporation
-        model:
-          type: string
-          example: base
-        year:
-          type: string
-          example: 2020
-        assetId:
-          type: string
-          example: 231-3211321-321321
-        licensePlateNumber:
-          type: string
-          example: '555'
-        licensePlateState:
-          type: string
-          example: AT
-        status:
-          type: string
-          enum:
-          - active
-          - inactive
-        length:
-          type: number
-          example: 44
-        lengthUnits:
-          type: string
-          enum:
-          - meters
-          - feet
-        axles:
-          type: number
-          example: 8
-        heated:
-          type: boolean
-          example: false
-        liftGate:
-          type: boolean
-          example: false
-        bodyType:
-          type: string
-          example: flatbed
-        ownershipStatus:
-          type: string
-          enum:
-          - rented
-          - owned
-          - leased
-          - non-company
-          - other
-          example: non-company
-        terminal:
-          type: string
-          example: PH
-        attributes:
-          $ref: '#/components/schemas/TrailerAttributesResponse'
-        groupCodes:
-          type: array
-          items:
-            type: string
   securitySchemes:
     api_key:
       type: apiKey

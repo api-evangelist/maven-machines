@@ -232,6 +232,17 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    GetVehiclesResponseApi:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationDTO'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/VehicleDTO'
+      required:
+      - data
     UpdateVehicleRequestDTO:
       type: object
       properties:
@@ -273,58 +284,6 @@ components:
           type: array
           items:
             type: string
-    VehicleAttributesResponse:
-      type: object
-      properties:
-        Domicile:
-          type: string
-          example: UNK
-        EquipType:
-          type: string
-          example: POWER UNIT
-        EquipSpecs:
-          type: string
-          example: AA 20
-        CDL:
-          type: number
-          enum:
-          - 0
-          - 1
-    GetVehiclesResponseApi:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationDTO'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/VehicleDTO'
-      required:
-      - data
-    UploadVehiclesResponseApi:
-      type: object
-      properties:
-        status:
-          type: string
-          example: ok
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/VehicleDTO'
-      required:
-      - status
-    PaginationDTO:
-      type: object
-      properties:
-        cursor:
-          $ref: '#/components/schemas/PaginationCursor'
-        limit:
-          type: number
-          description: The number of items to be returned per page.
-          example: 10
-      required:
-      - cursor
-      - limit
     PaginationCursor:
       type: object
       properties:
@@ -380,6 +339,47 @@ components:
             type: string
       required:
       - powerUnitNumber
+    PaginationDTO:
+      type: object
+      properties:
+        cursor:
+          $ref: '#/components/schemas/PaginationCursor'
+        limit:
+          type: number
+          description: The number of items to be returned per page.
+          example: 10
+      required:
+      - cursor
+      - limit
+    VehicleAttributesResponse:
+      type: object
+      properties:
+        Domicile:
+          type: string
+          example: UNK
+        EquipType:
+          type: string
+          example: POWER UNIT
+        EquipSpecs:
+          type: string
+          example: AA 20
+        CDL:
+          type: number
+          enum:
+          - 0
+          - 1
+    UploadVehiclesResponseApi:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/VehicleDTO'
+      required:
+      - status
   securitySchemes:
     api_key:
       type: apiKey

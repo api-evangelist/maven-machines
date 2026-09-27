@@ -137,36 +137,6 @@ paths:
       - api_key: []
 components:
   schemas:
-    PaymentOnDeliveryDto:
-      type: object
-      properties:
-        required:
-          type: boolean
-          example: false
-        accept:
-          $ref: '#/components/schemas/PaymentTypeDto'
-      required:
-      - required
-      - accept
-    EligibilityShipmentDto:
-      type: object
-      properties:
-        consigneeCustomerNumber:
-          type: string
-          example: '045037666'
-        distributorId:
-          type: string
-          example: relationship123
-        shipmentItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductEligibilityItemDto'
-        podRequirements:
-          $ref: '#/components/schemas/PodRequirementsDto'
-        paymentOnDelivery:
-          $ref: '#/components/schemas/PaymentOnDeliveryDto'
-      required:
-      - shipmentItems
     ProductEligibilityItemDto:
       type: object
       properties:
@@ -228,13 +198,25 @@ components:
       - printNameAndSignature
       - storeStampImg
       - customerDocumentImg
-    EligibilityRequestDto:
+    EligibilityShipmentDto:
       type: object
       properties:
-        associatedShipment:
-          $ref: '#/components/schemas/EligibilityShipmentDto'
+        consigneeCustomerNumber:
+          type: string
+          example: '045037666'
+        distributorId:
+          type: string
+          example: relationship123
+        shipmentItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductEligibilityItemDto'
+        podRequirements:
+          $ref: '#/components/schemas/PodRequirementsDto'
+        paymentOnDelivery:
+          $ref: '#/components/schemas/PaymentOnDeliveryDto'
       required:
-      - associatedShipment
+      - shipmentItems
     PaymentTypeDto:
       type: object
       properties:
@@ -247,6 +229,24 @@ components:
         credit:
           type: boolean
           example: true
+    PaymentOnDeliveryDto:
+      type: object
+      properties:
+        required:
+          type: boolean
+          example: false
+        accept:
+          $ref: '#/components/schemas/PaymentTypeDto'
+      required:
+      - required
+      - accept
+    EligibilityRequestDto:
+      type: object
+      properties:
+        associatedShipment:
+          $ref: '#/components/schemas/EligibilityShipmentDto'
+      required:
+      - associatedShipment
   securitySchemes:
     api_key:
       type: apiKey
