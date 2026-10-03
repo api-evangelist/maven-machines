@@ -83,82 +83,24 @@ paths:
     - url: https://integrations.mavenmachines.com
 components:
   schemas:
-    TransactionSnapshotItemDto:
+    OrderCutoffRequestDto:
       type: object
       properties:
-        reference_id:
+        snapshot_datetime:
           type: number
-          example: 123456
-        reference_type:
-          type: string
-          example: ORDER
-        reference_status:
-          type: string
-          example: OPEN
-        commodity:
-          type: string
-          example: Grocery/Candy
-        weight:
+          example: 1773169696149
+          description: Unix timestamp in milliseconds
+        record_count:
           type: number
-          example: 342.6
-        cube:
-          type: number
-          example: 26.05
-        cases:
-          type: number
-          example: 10
-        pickup_location:
-          type: string
-          example: ID
-        delivery_date:
-          type: string
-          example: '2026-04-06'
-          description: Required when reference_type is ORDER
-        ignore_minimums:
-          type: boolean
-          example: false
-        delivery_location:
-          type: string
-          example: 4110C
-        route_together_key:
-          type: string
-          example: ABC123
-        route_together_sequence:
-          type: number
-          example: 1
-        amount_for_minimum_calculation:
-          type: number
-          example: 100.5
-        pickup_start_window:
-          type: string
-          example: '2026-07-04T00:00:00Z'
-          description: Required ISO 8601 datetime when reference_type is PICKUP
-        pickup_end_window:
-          type: string
-          example: '2026-07-04T23:59:59Z'
-          description: Required ISO 8601 datetime when reference_type is PICKUP
-        pickup_qualifier:
-          type:
-          - string
-          - 'null'
-          example: FIRST_COME_FIRST_SERVED
-          enum:
-          - FIRST_COME_FIRST_SERVED
-          - APPOINTMENT_REQUESTED
+          example: 97558
+        cutoff_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/CutoffItemDto'
       required:
-      - reference_id
-      - reference_type
-      - reference_status
-      - commodity
-      - weight
-      - cube
-      - cases
-      - pickup_location
-      - delivery_date
-      - ignore_minimums
-      - delivery_location
-      - pickup_start_window
-      - pickup_end_window
+      - snapshot_datetime
+      - record_count
+      - cutoff_list
     CutoffItemDto:
       type: object
       properties:
@@ -235,24 +177,82 @@ components:
       - snapshot_datetime
       - transaction_count
       - transactions
-    OrderCutoffRequestDto:
+    TransactionSnapshotItemDto:
       type: object
       properties:
-        snapshot_datetime:
+        reference_id:
           type: number
-          example: 1773169696149
-          description: Unix timestamp in milliseconds
-        record_count:
+          example: 123456
+        reference_type:
+          type: string
+          example: ORDER
+        reference_status:
+          type: string
+          example: OPEN
+        commodity:
+          type: string
+          example: Grocery/Candy
+        weight:
           type: number
-          example: 97558
-        cutoff_list:
-          type: array
-          items:
-            $ref: '#/components/schemas/CutoffItemDto'
+          example: 342.6
+        cube:
+          type: number
+          example: 26.05
+        cases:
+          type: number
+          example: 10
+        pickup_location:
+          type: string
+          example: ID
+        delivery_date:
+          type: string
+          example: '2026-04-06'
+          description: Required when reference_type is ORDER
+        ignore_minimums:
+          type: boolean
+          example: false
+        delivery_location:
+          type: string
+          example: 4110C
+        route_together_key:
+          type: string
+          example: ABC123
+        route_together_sequence:
+          type: number
+          example: 1
+        amount_for_minimum_calculation:
+          type: number
+          example: 100.5
+        pickup_start_window:
+          type: string
+          example: '2026-07-04T00:00:00Z'
+          description: Required ISO 8601 datetime when reference_type is PICKUP
+        pickup_end_window:
+          type: string
+          example: '2026-07-04T23:59:59Z'
+          description: Required ISO 8601 datetime when reference_type is PICKUP
+        pickup_qualifier:
+          type:
+          - string
+          - 'null'
+          example: FIRST_COME_FIRST_SERVED
+          enum:
+          - FIRST_COME_FIRST_SERVED
+          - APPOINTMENT_REQUESTED
       required:
-      - snapshot_datetime
-      - record_count
-      - cutoff_list
+      - reference_id
+      - reference_type
+      - reference_status
+      - commodity
+      - weight
+      - cube
+      - cases
+      - pickup_location
+      - delivery_date
+      - ignore_minimums
+      - delivery_location
+      - pickup_start_window
+      - pickup_end_window
     CredentialsResponseDto:
       type: object
       properties: {}

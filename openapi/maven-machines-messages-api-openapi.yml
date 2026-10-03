@@ -73,6 +73,49 @@ paths:
       - api_key: []
 components:
   schemas:
+    Message:
+      type: object
+      properties:
+        messageId:
+          type: string
+          description: Maven message identifier
+          example: qtPv1Sx6JnutsN8TQaQW
+        sentTime:
+          type: string
+          description: ISO8601 timestamp of when the message was originally sent.
+          example: '2020-04-09T21:50:42Z'
+        serverTime:
+          type: string
+          description: ISO8601 timestamp of when the message was created on the server.
+          example: '2020-04-09T21:50:42Z'
+        senderUserId:
+          type: number
+          description: Maven user identifier to represent the message sender.
+          example: 8923
+        senderExternalUserId:
+          type: string
+          description: Unique external identifier for the message sender.
+          example: USER_123
+        participants:
+          description: Array of message participants
+          example:
+          - userId: 8923
+            externalUserId: USER_123
+          type: array
+          items:
+            type: string
+        body:
+          type: string
+          description: Required. the body of the message. Max size 16KB.
+          example: Hello, world!
+      required:
+      - messageId
+      - sentTime
+      - serverTime
+      - senderUserId
+      - senderExternalUserId
+      - participants
+      - body
     CreateMessageResponse:
       type: object
       properties:
@@ -133,49 +176,6 @@ components:
       required:
       - nextPageStartTime
       - hasNextPage
-    Message:
-      type: object
-      properties:
-        messageId:
-          type: string
-          description: Maven message identifier
-          example: qtPv1Sx6JnutsN8TQaQW
-        sentTime:
-          type: string
-          description: ISO8601 timestamp of when the message was originally sent.
-          example: '2020-04-09T21:50:42Z'
-        serverTime:
-          type: string
-          description: ISO8601 timestamp of when the message was created on the server.
-          example: '2020-04-09T21:50:42Z'
-        senderUserId:
-          type: number
-          description: Maven user identifier to represent the message sender.
-          example: 8923
-        senderExternalUserId:
-          type: string
-          description: Unique external identifier for the message sender.
-          example: USER_123
-        participants:
-          description: Array of message participants
-          example:
-          - userId: 8923
-            externalUserId: USER_123
-          type: array
-          items:
-            type: string
-        body:
-          type: string
-          description: Required. the body of the message. Max size 16KB.
-          example: Hello, world!
-      required:
-      - messageId
-      - sentTime
-      - serverTime
-      - senderUserId
-      - senderExternalUserId
-      - participants
-      - body
     GetMessagesResponse:
       type: object
       properties:

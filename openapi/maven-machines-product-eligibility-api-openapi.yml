@@ -137,6 +137,29 @@ paths:
       - api_key: []
 components:
   schemas:
+    PaymentTypeDto:
+      type: object
+      properties:
+        check:
+          type: boolean
+          example: true
+        cash:
+          type: boolean
+          example: true
+        credit:
+          type: boolean
+          example: true
+    PaymentOnDeliveryDto:
+      type: object
+      properties:
+        required:
+          type: boolean
+          example: false
+        accept:
+          $ref: '#/components/schemas/PaymentTypeDto'
+      required:
+      - required
+      - accept
     ProductEligibilityItemDto:
       type: object
       properties:
@@ -178,6 +201,32 @@ components:
       - sku
       - productCode
       - upc
+    EligibilityRequestDto:
+      type: object
+      properties:
+        associatedShipment:
+          $ref: '#/components/schemas/EligibilityShipmentDto'
+      required:
+      - associatedShipment
+    EligibilityShipmentDto:
+      type: object
+      properties:
+        consigneeCustomerNumber:
+          type: string
+          example: '045037666'
+        distributorId:
+          type: string
+          example: relationship123
+        shipmentItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductEligibilityItemDto'
+        podRequirements:
+          $ref: '#/components/schemas/PodRequirementsDto'
+        paymentOnDelivery:
+          $ref: '#/components/schemas/PaymentOnDeliveryDto'
+      required:
+      - shipmentItems
     PodRequirementsDto:
       type: object
       properties:
@@ -198,55 +247,6 @@ components:
       - printNameAndSignature
       - storeStampImg
       - customerDocumentImg
-    EligibilityShipmentDto:
-      type: object
-      properties:
-        consigneeCustomerNumber:
-          type: string
-          example: '045037666'
-        distributorId:
-          type: string
-          example: relationship123
-        shipmentItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductEligibilityItemDto'
-        podRequirements:
-          $ref: '#/components/schemas/PodRequirementsDto'
-        paymentOnDelivery:
-          $ref: '#/components/schemas/PaymentOnDeliveryDto'
-      required:
-      - shipmentItems
-    PaymentTypeDto:
-      type: object
-      properties:
-        check:
-          type: boolean
-          example: true
-        cash:
-          type: boolean
-          example: true
-        credit:
-          type: boolean
-          example: true
-    PaymentOnDeliveryDto:
-      type: object
-      properties:
-        required:
-          type: boolean
-          example: false
-        accept:
-          $ref: '#/components/schemas/PaymentTypeDto'
-      required:
-      - required
-      - accept
-    EligibilityRequestDto:
-      type: object
-      properties:
-        associatedShipment:
-          $ref: '#/components/schemas/EligibilityShipmentDto'
-      required:
-      - associatedShipment
   securitySchemes:
     api_key:
       type: apiKey

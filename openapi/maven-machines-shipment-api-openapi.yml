@@ -415,20 +415,29 @@ components:
     CredentialsResponseDto:
       type: object
       properties: {}
-    ShipmentQuantityDto:
+    PaymentTypeDto:
       type: object
       properties:
-        quantity:
-          oneOf:
-          - type: number
-          - type: string
-          example: 196
-        unit:
-          type: string
-          example: Bags
+        check:
+          type: boolean
+          example: true
+        cash:
+          type: boolean
+          example: true
+        credit:
+          type: boolean
+          example: true
+    PaymentOnDeliveryDto:
+      type: object
+      properties:
+        required:
+          type: boolean
+          example: false
+        accept:
+          $ref: '#/components/schemas/PaymentTypeDto'
       required:
-      - quantity
-      - unit
+      - required
+      - accept
     ShipmentItemDto:
       type: object
       properties:
@@ -493,13 +502,6 @@ components:
       - price
       - discount
       - taxRate
-    ShipmentRequestDto:
-      type: object
-      properties:
-        associatedShipment:
-          $ref: '#/components/schemas/AssociatedShipmentDto'
-      required:
-      - associatedShipment
     PodRequirementsDto:
       type: object
       properties:
@@ -520,29 +522,6 @@ components:
       - printNameAndSignature
       - storeStampImg
       - customerDocumentImg
-    PaymentTypeDto:
-      type: object
-      properties:
-        check:
-          type: boolean
-          example: true
-        cash:
-          type: boolean
-          example: true
-        credit:
-          type: boolean
-          example: true
-    PaymentOnDeliveryDto:
-      type: object
-      properties:
-        required:
-          type: boolean
-          example: false
-        accept:
-          $ref: '#/components/schemas/PaymentTypeDto'
-      required:
-      - required
-      - accept
     AssociatedShipmentDto:
       type: object
       properties:
@@ -624,6 +603,27 @@ components:
       - podRequirements
       - paymentOnDelivery
       - shipmentType
+    ShipmentQuantityDto:
+      type: object
+      properties:
+        quantity:
+          oneOf:
+          - type: number
+          - type: string
+          example: 196
+        unit:
+          type: string
+          example: Bags
+      required:
+      - quantity
+      - unit
+    ShipmentRequestDto:
+      type: object
+      properties:
+        associatedShipment:
+          $ref: '#/components/schemas/AssociatedShipmentDto'
+      required:
+      - associatedShipment
     UpdateShipmentProNumberDto:
       type: object
       properties:

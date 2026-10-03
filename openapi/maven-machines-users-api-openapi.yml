@@ -116,102 +116,6 @@ paths:
       - api_key: []
 components:
   schemas:
-    UserConfigurationOverrides:
-      type: object
-      properties:
-        eldConfig:
-          $ref: '#/components/schemas/EldConfigurationOverrides'
-    EldConfigurationOverrides:
-      type: object
-      properties:
-        timezone:
-          type: string
-          description: Optional.  Allows overriding the user's terminal timezone or default timezone set in the eld configuration.  If user has no terminal and the company has not set up a default terminal configuration, eld configuration for this user may fail
-          example: US/Eastern
-        ruleset:
-          type: string
-          description: Optional.  Allows overriding the default ruleset set in the eld configuration.  If no value is provided and no default eld configuration is set, then the ruleset will default to US Property 70Hr/8day
-          example: CALIFORNIA_INTRASTATE_PROPERTY
-        logDayStartTime:
-          type: number
-          description: Optional.  Allows setting of the log start time of the user to either noon or midnight.  Defaults to midnight if not provided.  Set 0 for midnight, or 12 for noon.  Other values will be ignored.
-          example: 12
-        exemptStatus:
-          type: boolean
-          description: Optional.  Allows setting a user as eld exempt.  Note if this value is provided, a value for exemptReason must also be provided.  DO NOT provide a value for ruleset
-          example: true
-        exemptReason:
-          type: string
-          description: Optional.  Allows setting the exempt reason for a user.  This value is only applied if the api call has also provided a value for exemptStatus.
-          example: Maintenance Mechanic
-    CreateUserApiResponse:
-      type: object
-      properties:
-        externalUserId:
-          type: string
-          description: Unique external identifier for user
-          example: USER123
-        userId:
-          type: number
-          description: Unique identifier for user
-          example: 17161
-        createdOn:
-          type: string
-          description: Timestamp of record creation in the Maven system
-          example: '2020-05-01T13:01:01Z'
-        updatedOn:
-          type: string
-          description: Timestamp of last record update in the Maven system
-          example: '2020-05-01T14:59:59Z'
-        active:
-          type: boolean
-          description: True for active drivers. false for inactive drivers
-          example: true
-        first:
-          type: string
-          description: First name of user
-          example: John
-        middle:
-          type: string
-          description: Middle name of user
-          example: M
-        last:
-          type: string
-          description: Last name of user
-          example: Doe
-        terminals:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserTerminal'
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserGroup'
-        roles:
-          description: Roles assigned to this user
-          example:
-          - Driver
-          type: array
-          items:
-            type: string
-        login:
-          $ref: '#/components/schemas/Login'
-        driversLicense:
-          $ref: '#/components/schemas/DriversLicense'
-      required:
-      - externalUserId
-      - userId
-      - createdOn
-      - updatedOn
-      - active
-      - first
-      - middle
-      - last
-      - terminals
-      - groups
-      - roles
-      - login
-      - driversLicense
     CreateUserRequestDto:
       type: object
       properties:
@@ -264,21 +168,7 @@ components:
       - first
       - last
       - roles
-    UserTerminal:
-      type: object
-      properties:
-        externalTerminalId:
-          type: string
-          description: External identifier for terminal
-          example: PGH
-        name:
-          type: string
-          description: Name of terminal
-          example: Pittsburgh
-      required:
-      - externalTerminalId
-      - name
-    UpdateLogin:
+    Login:
       type: object
       properties:
         email:
@@ -290,11 +180,14 @@ components:
           type: string
           description: Phone number used to log into the Maven app
           example: '+14125555555'
-        password:
-          type: string
-          format: password
-          description: Password used to log into the Maven app
-          example: password1
+      required:
+      - email
+      - phone
+    UserConfigurationOverrides:
+      type: object
+      properties:
+        eldConfig:
+          $ref: '#/components/schemas/EldConfigurationOverrides'
     GlobalPagination:
       type: object
       properties:
@@ -314,6 +207,99 @@ components:
       - total
       - hasNextPage
       - nextPageOffset
+    UserGroup:
+      type: object
+      properties:
+        externalGroupId:
+          type: string
+          description: External identifier for group
+          example: GROUP123
+        name:
+          type: string
+          description: Name of group
+          example: East Division
+      required:
+      - externalGroupId
+      - name
+    UpdateLogin:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: Email address used to log into the Maven app. May be different than portal login email.
+          example: johnmdoe@example.com
+        phone:
+          type: string
+          description: Phone number used to log into the Maven app
+          example: '+14125555555'
+        password:
+          type: string
+          format: password
+          description: Password used to log into the Maven app
+          example: password1
+    UpdateUserRequestDto:
+      type: object
+      properties:
+        middle:
+          type: string
+          description: Middle name of user
+          example: M
+        driversLicense:
+          $ref: '#/components/schemas/DriversLicense'
+        externalUserId:
+          type: string
+          description: Unique external identifier for user
+          example: USER123
+        login:
+          $ref: '#/components/schemas/UpdateLogin'
+        first:
+          type: string
+          description: First name of user
+          example: John
+        last:
+          type: string
+          description: Last name of user
+          example: Doe
+        active:
+          type: boolean
+          description: True for active drivers. false for inactive drivers
+          example: true
+        externalTerminalIds:
+          description: External terminal identifiers associated with this user
+          example:
+          - PGH
+          type: array
+          items:
+            type: string
+        externalGroupIds:
+          description: External group identifiers associated with this user
+          example:
+          - GROUP123
+          type: array
+          items:
+            type: string
+        roles:
+          description: Roles assigned to this user
+          example:
+          - Driver
+          type: array
+          items:
+            type: string
+    UserTerminal:
+      type: object
+      properties:
+        externalTerminalId:
+          type: string
+          description: External identifier for terminal
+          example: PGH
+        name:
+          type: string
+          description: Name of terminal
+          example: Pittsburgh
+      required:
+      - externalTerminalId
+      - name
     DriversLicense:
       type: object
       properties:
@@ -464,6 +450,17 @@ components:
       - type
       - endorsements
       - restrictions
+    GetUsersApiResponse:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateUserApiResponse'
+        pagination:
+          $ref: '#/components/schemas/GlobalPagination'
+      required:
+      - users
     CreateLogin:
       type: object
       properties:
@@ -483,61 +480,49 @@ components:
           example: password1
       required:
       - password
-    UserGroup:
+    CreateUserApiResponse:
       type: object
       properties:
-        externalGroupId:
-          type: string
-          description: External identifier for group
-          example: GROUP123
-        name:
-          type: string
-          description: Name of group
-          example: East Division
-      required:
-      - externalGroupId
-      - name
-    UpdateUserRequestDto:
-      type: object
-      properties:
-        middle:
-          type: string
-          description: Middle name of user
-          example: M
-        driversLicense:
-          $ref: '#/components/schemas/DriversLicense'
         externalUserId:
           type: string
           description: Unique external identifier for user
           example: USER123
-        login:
-          $ref: '#/components/schemas/UpdateLogin'
-        first:
+        userId:
+          type: number
+          description: Unique identifier for user
+          example: 17161
+        createdOn:
           type: string
-          description: First name of user
-          example: John
-        last:
+          description: Timestamp of record creation in the Maven system
+          example: '2020-05-01T13:01:01Z'
+        updatedOn:
           type: string
-          description: Last name of user
-          example: Doe
+          description: Timestamp of last record update in the Maven system
+          example: '2020-05-01T14:59:59Z'
         active:
           type: boolean
           description: True for active drivers. false for inactive drivers
           example: true
-        externalTerminalIds:
-          description: External terminal identifiers associated with this user
-          example:
-          - PGH
+        first:
+          type: string
+          description: First name of user
+          example: John
+        middle:
+          type: string
+          description: Middle name of user
+          example: M
+        last:
+          type: string
+          description: Last name of user
+          example: Doe
+        terminals:
           type: array
           items:
-            type: string
-        externalGroupIds:
-          description: External group identifiers associated with this user
-          example:
-          - GROUP123
+            $ref: '#/components/schemas/UserTerminal'
+        groups:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/UserGroup'
         roles:
           description: Roles assigned to this user
           example:
@@ -545,32 +530,47 @@ components:
           type: array
           items:
             type: string
-    GetUsersApiResponse:
+        login:
+          $ref: '#/components/schemas/Login'
+        driversLicense:
+          $ref: '#/components/schemas/DriversLicense'
+      required:
+      - externalUserId
+      - userId
+      - createdOn
+      - updatedOn
+      - active
+      - first
+      - middle
+      - last
+      - terminals
+      - groups
+      - roles
+      - login
+      - driversLicense
+    EldConfigurationOverrides:
       type: object
       properties:
-        users:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateUserApiResponse'
-        pagination:
-          $ref: '#/components/schemas/GlobalPagination'
-      required:
-      - users
-    Login:
-      type: object
-      properties:
-        email:
+        timezone:
           type: string
-          format: email
-          description: Email address used to log into the Maven app. May be different than portal login email.
-          example: johnmdoe@example.com
-        phone:
+          description: Optional.  Allows overriding the user's terminal timezone or default timezone set in the eld configuration.  If user has no terminal and the company has not set up a default terminal configuration, eld configuration for this user may fail
+          example: US/Eastern
+        ruleset:
           type: string
-          description: Phone number used to log into the Maven app
-          example: '+14125555555'
-      required:
-      - email
-      - phone
+          description: Optional.  Allows overriding the default ruleset set in the eld configuration.  If no value is provided and no default eld configuration is set, then the ruleset will default to US Property 70Hr/8day
+          example: CALIFORNIA_INTRASTATE_PROPERTY
+        logDayStartTime:
+          type: number
+          description: Optional.  Allows setting of the log start time of the user to either noon or midnight.  Defaults to midnight if not provided.  Set 0 for midnight, or 12 for noon.  Other values will be ignored.
+          example: 12
+        exemptStatus:
+          type: boolean
+          description: Optional.  Allows setting a user as eld exempt.  Note if this value is provided, a value for exemptReason must also be provided.  DO NOT provide a value for ruleset
+          example: true
+        exemptReason:
+          type: string
+          description: Optional.  Allows setting the exempt reason for a user.  This value is only applied if the api call has also provided a value for exemptStatus.
+          example: Maintenance Mechanic
   securitySchemes:
     api_key:
       type: apiKey

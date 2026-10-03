@@ -107,6 +107,34 @@ paths:
       - api_key: []
 components:
   schemas:
+    AssetDto:
+      type: object
+      properties:
+        unitNumber:
+          type: string
+        make:
+          type: string
+        model:
+          type: string
+        year:
+          type: string
+        latitude:
+          type: number
+        longitude:
+          type: number
+        serviceStatus:
+          type: string
+        capacity:
+          type: number
+      required:
+      - unitNumber
+      - make
+      - model
+      - year
+      - latitude
+      - longitude
+      - serviceStatus
+      - capacity
     ReddyIceCaseDto:
       type: object
       properties:
@@ -191,34 +219,6 @@ components:
       - companyLocationId
       - assignedEmployeeIds
       - taskContext
-    AssetDto:
-      type: object
-      properties:
-        unitNumber:
-          type: string
-        make:
-          type: string
-        model:
-          type: string
-        year:
-          type: string
-        latitude:
-          type: number
-        longitude:
-          type: number
-        serviceStatus:
-          type: string
-        capacity:
-          type: number
-      required:
-      - unitNumber
-      - make
-      - model
-      - year
-      - latitude
-      - longitude
-      - serviceStatus
-      - capacity
   securitySchemes:
     api_key:
       type: apiKey

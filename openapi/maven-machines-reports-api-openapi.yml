@@ -172,32 +172,6 @@ components:
       - reportedDays
       - vdaDays
       - dataDays
-    GetVehiclePerformanceReportResponseDto:
-      type: object
-      properties:
-        payload:
-          type: array
-          items:
-            $ref: '#/components/schemas/VehiclePerformanceRecord'
-        pagination:
-          $ref: '#/components/schemas/VehiclePerformancePagination'
-      required:
-      - payload
-      - pagination
-    VehiclePerformanceGroup:
-      type: object
-      properties:
-        groupName:
-          type: string
-          description: Group name
-          example: Pittsburgh
-        isTerminal:
-          type: string
-          description: States of the group is a terminal
-          example: true
-      required:
-      - groupName
-      - isTerminal
     GetVehiclePerformanceReportRequestDto:
       type: object
       properties:
@@ -251,6 +225,32 @@ components:
       required:
       - cursor
       - limit
+    GetVehiclePerformanceReportResponseDto:
+      type: object
+      properties:
+        payload:
+          type: array
+          items:
+            $ref: '#/components/schemas/VehiclePerformanceRecord'
+        pagination:
+          $ref: '#/components/schemas/VehiclePerformancePagination'
+      required:
+      - payload
+      - pagination
+    VehiclePerformanceGroup:
+      type: object
+      properties:
+        groupName:
+          type: string
+          description: Group name
+          example: Pittsburgh
+        isTerminal:
+          type: string
+          description: States of the group is a terminal
+          example: true
+      required:
+      - groupName
+      - isTerminal
   securitySchemes:
     api_key:
       type: apiKey

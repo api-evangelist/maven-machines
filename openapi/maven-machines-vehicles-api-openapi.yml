@@ -232,17 +232,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    GetVehiclesResponseApi:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/PaginationDTO'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/VehicleDTO'
-      required:
-      - data
     UpdateVehicleRequestDTO:
       type: object
       properties:
@@ -284,6 +273,18 @@ components:
           type: array
           items:
             type: string
+    UploadVehiclesResponseApi:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/VehicleDTO'
+      required:
+      - status
     PaginationCursor:
       type: object
       properties:
@@ -339,18 +340,6 @@ components:
             type: string
       required:
       - powerUnitNumber
-    PaginationDTO:
-      type: object
-      properties:
-        cursor:
-          $ref: '#/components/schemas/PaginationCursor'
-        limit:
-          type: number
-          description: The number of items to be returned per page.
-          example: 10
-      required:
-      - cursor
-      - limit
     VehicleAttributesResponse:
       type: object
       properties:
@@ -368,18 +357,29 @@ components:
           enum:
           - 0
           - 1
-    UploadVehiclesResponseApi:
+    PaginationDTO:
       type: object
       properties:
-        status:
-          type: string
-          example: ok
+        cursor:
+          $ref: '#/components/schemas/PaginationCursor'
+        limit:
+          type: number
+          description: The number of items to be returned per page.
+          example: 10
+      required:
+      - cursor
+      - limit
+    GetVehiclesResponseApi:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationDTO'
         data:
           type: array
           items:
             $ref: '#/components/schemas/VehicleDTO'
       required:
-      - status
+      - data
   securitySchemes:
     api_key:
       type: apiKey
