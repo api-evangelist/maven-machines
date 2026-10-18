@@ -308,6 +308,8 @@ apis:
   humanURL: https://maven-machines.readme.io/
   baseURL: https://integrations.mavenmachines.com
   tags:
+  - Pickup Requests
+  tags_raw:
   - PickupRequests
   properties:
   - type: OpenAPI
