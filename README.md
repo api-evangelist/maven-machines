@@ -64,5 +64,173 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Maven Machines is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://www.nasdaqprivatemarket.com/
+Maven Machines (branded "Maven") is a Pittsburgh, Pennsylvania software company that builds a cloud platform for automating the planning and execution of daily trucking operations. The product suite spans route planning and optimization, dispatch execution, driver workflow, ELD / hours-of-service compliance, telematics and fleet management, delivered through a web portal for planners and dispatchers and an Android driver application. Maven publishes a public developer hub at maven-machines.readme.io covering fifteen separate OpenAPI definitions against a single production base URL, https://integrations.mavenmachines.com, secured with an `apiKey` request header. The integration model is TMS-to-Maven — master data (users, vehicles, trailers, company locations), transactional data (shipments, P&D manifests, linehaul manifests and trips, truckload trips and stops) flows in, and business activity flows back out through a polled `GET /return-events` queue and an event-sourced manifest/movement commands API. Maven also operates per-customer integration middleware services on <customer>.middleware.mavenmachines.com, several of which publish their own Swagger/OpenAPI documents publicly.
+
+**Areas:** Transportation · Logistics · Trucking · Fleet Management · Telematics · ELD · Route Optimization · Dispatch · Supply Chain · Freight
+
+## Maven Machines on APIs.io
+
+Everything profiled for Maven Machines is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/maven-machines/](https://apis.io/providers/maven-machines/)** — or go straight to one of the APIs or properties below.
+
+### APIs (28)
+
+- [Maven Machines Bulk Shipments API](https://apis.io/apis/maven-machines/maven-machines-bulk-shipments-api/) — The bulk-shipments API from Maven Machines — 1 operation(s) for bulk-shipments.
+- [Maven Machines Company Locations API](https://apis.io/apis/maven-machines/maven-machines-company-locations-api/) — The company-locations API from Maven Machines — 1 operation(s) for company-locations.
+- [Maven Machines Customers API](https://apis.io/apis/maven-machines/maven-machines-customers-api/) — The Customers API from Maven Machines — 1 operation(s) for customers.
+- [Maven Machines Eld API](https://apis.io/apis/maven-machines/maven-machines-eld-api/) — The Eld API from Maven Machines — 3 operation(s) for eld.
+- [Maven Machines Events API](https://apis.io/apis/maven-machines/maven-machines-events-api/) — The Events API from Maven Machines — 1 operation(s) for events.
+- [Maven Machines Forms API](https://apis.io/apis/maven-machines/maven-machines-forms-api/) — The forms API from Maven Machines — 2 operation(s) for forms.
+- [Maven Machines Health API](https://apis.io/apis/maven-machines/maven-machines-health-api/) — The health API from Maven Machines — 1 operation(s) for health.
+- [Maven Machines Linehaul API](https://apis.io/apis/maven-machines/maven-machines-linehaul-api/) — The Linehaul API from Maven Machines — 2 operation(s) for linehaul.
+- [Maven Machines Locations API](https://apis.io/apis/maven-machines/maven-machines-locations-api/) — The Locations API from Maven Machines — 2 operation(s) for locations.
+- [Maven Machines Manifest Number API](https://apis.io/apis/maven-machines/maven-machines-manifestnumber-api/) — The ManifestNumber API from Maven Machines — 1 operation(s) for manifestnumber.
+- [Maven Machines Manifests API](https://apis.io/apis/maven-machines/maven-machines-manifests-api/) — The manifests API from Maven Machines — 5 operation(s) for manifests.
+- [Maven Machines Marketapps API](https://apis.io/apis/maven-machines/maven-machines-marketapps-api/) — The marketapps API from Maven Machines — 1 operation(s) for marketapps.
+- [Maven Machines Messages API](https://apis.io/apis/maven-machines/maven-machines-messages-api/) — The messages API from Maven Machines — 1 operation(s) for messages.
+- [Maven Machines Orders API](https://apis.io/apis/maven-machines/maven-machines-orders-api/) — The orders API from Maven Machines — 3 operation(s) for orders.
+- [Maven Machines Pickup Requests API](https://apis.io/apis/maven-machines/maven-machines-pickuprequests-api/) — The PickupRequests API from Maven Machines — 1 operation(s) for pickuprequests.
+- [Maven Machines Product Eligibility API](https://apis.io/apis/maven-machines/maven-machines-product-eligibility-api/) — The product-eligibility API from Maven Machines — 1 operation(s) for product-eligibility.
+- [Maven Machines Reddy Ice API](https://apis.io/apis/maven-machines/maven-machines-reddy-ice-api/) — The reddy-ice API from Maven Machines — 1 operation(s) for reddy-ice.
+- [Maven Machines Reports API](https://apis.io/apis/maven-machines/maven-machines-reports-api/) — The reports API from Maven Machines — 1 operation(s) for reports.
+- [Maven Machines Return Events API](https://apis.io/apis/maven-machines/maven-machines-return-events-api/) — The Return Events API from Maven Machines — 1 operation(s) for return events.
+- [Maven Machines Servicetechs API](https://apis.io/apis/maven-machines/maven-machines-servicetechs-api/) — The servicetechs API from Maven Machines — 3 operation(s) for servicetechs.
+- [Maven Machines Shipment API](https://apis.io/apis/maven-machines/maven-machines-shipment-api/) — The shipment API from Maven Machines — 3 operation(s) for shipment.
+- [Maven Machines Shipment Locations API](https://apis.io/apis/maven-machines/maven-machines-shipment-locations-api/) — The shipment-locations API from Maven Machines — 1 operation(s) for shipment-locations.
+- [Maven Machines Smart API](https://apis.io/apis/maven-machines/maven-machines-smart-api/) — The smart API from Maven Machines — 2 operation(s) for smart.
+- [Maven Machines Trailers API](https://apis.io/apis/maven-machines/maven-machines-trailers-api/) — The Trailers API from Maven Machines — 3 operation(s) for trailers.
+- [Maven Machines Truckload API](https://apis.io/apis/maven-machines/maven-machines-truckload-api/) — The truckload API from Maven Machines — 3 operation(s) for truckload.
+- [Maven Machines Users API](https://apis.io/apis/maven-machines/maven-machines-users-api/) — The users API from Maven Machines — 1 operation(s) for users.
+- [Maven Machines Vehicles API](https://apis.io/apis/maven-machines/maven-machines-vehicles-api/) — The Vehicles API from Maven Machines — 3 operation(s) for vehicles.
+- [Maven Machines Route Plans API](https://apis.io/apis/maven-machines/maven-machines-route-plans-api/) — The Route Plans API from Maven Machines — 1 operation(s) for route plans.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Maven Machines Return Events](https://apis.io/asyncapis/maven-machines/maven-machines-return-events/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [maven-machines-mcp.yml](https://apis.io/servers/maven-machines/maven-machines-mcp-yml/)
+
+#### Overlays (22)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [_Index](https://apis.io/overlays/maven-machines/_index/)
+- [Maven Machines Aaa Cooper Middleware Overlay](https://apis.io/overlays/maven-machines/maven-machines-aaa-cooper-middleware-overlay/)
+- [Maven Machines Assets Overlay](https://apis.io/overlays/maven-machines/maven-machines-assets-overlay/)
+- [Maven Machines Averitt Middleware Overlay](https://apis.io/overlays/maven-machines/maven-machines-averitt-middleware-overlay/)
+- [Maven Machines Bozzutos Middleware Overlay](https://apis.io/overlays/maven-machines/maven-machines-bozzutos-middleware-overlay/)
+- [Maven Machines Company Locations Overlay](https://apis.io/overlays/maven-machines/maven-machines-company-locations-overlay/)
+- [Maven Machines Eld Hos Overlay](https://apis.io/overlays/maven-machines/maven-machines-eld-hos-overlay/)
+- [Maven Machines Linehaul Overlay](https://apis.io/overlays/maven-machines/maven-machines-linehaul-overlay/)
+- [Maven Machines Manifest Commands Overlay](https://apis.io/overlays/maven-machines/maven-machines-manifest-commands-overlay/)
+- [Maven Machines Market Apps Overlay](https://apis.io/overlays/maven-machines/maven-machines-market-apps-overlay/)
+- [Maven Machines Messages Overlay](https://apis.io/overlays/maven-machines/maven-machines-messages-overlay/)
+- [Maven Machines Planning And Dispatch Overlay](https://apis.io/overlays/maven-machines/maven-machines-planning-and-dispatch-overlay/)
+- [Maven Machines Reddy Ice Middleware Overlay](https://apis.io/overlays/maven-machines/maven-machines-reddy-ice-middleware-overlay/)
+- [Maven Machines Reports Overlay](https://apis.io/overlays/maven-machines/maven-machines-reports-overlay/)
+- [Maven Machines Rest Service Manual Overlay](https://apis.io/overlays/maven-machines/maven-machines-rest-service-manual-overlay/)
+- [Maven Machines Roy Miller Middleware Overlay](https://apis.io/overlays/maven-machines/maven-machines-roy-miller-middleware-overlay/)
+- [Maven Machines Shipment Locations Overlay](https://apis.io/overlays/maven-machines/maven-machines-shipment-locations-overlay/)
+- [Maven Machines Shipments Overlay](https://apis.io/overlays/maven-machines/maven-machines-shipments-overlay/)
+- [Maven Machines Smart Overlay](https://apis.io/overlays/maven-machines/maven-machines-smart-overlay/)
+- [Maven Machines Triple S Steel Middleware Overlay](https://apis.io/overlays/maven-machines/maven-machines-triple-s-steel-middleware-overlay/)
+- [Maven Machines Users Overlay](https://apis.io/overlays/maven-machines/maven-machines-users-overlay/)
+- [Maven Machines Workflow Overlay](https://apis.io/overlays/maven-machines/maven-machines-workflow-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Maven Machines Authentication](https://apis.io/security/maven-machines/maven-machines-authentication/)
+- [Maven Machines Domain Security](https://apis.io/security/maven-machines/maven-machines-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Maven Machines Plans Pricing](https://apis.io/plans/maven-machines/maven-machines-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Maven Machines Rate Limits](https://apis.io/rate-limits/maven-machines/maven-machines-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://mavenmachines.com/)
+- [Documentation](https://maven-machines.readme.io/)
+- [Getting started](https://maven-machines.readme.io/docs/basic-concepts)
+- [API reference](https://maven-machines.readme.io/reference/post-shipment)
+- [Sign up](https://accounts.mavenmachines.com/)
+- [Support](https://help.mavenmachines.com/)
+- [Blog](https://mavenmachines.com/blog/)
+- [Privacy policy](https://mavenmachines.com/privacy-policy/)
+- [GitHub](https://github.com/Maven-Machines)
+- [Status](https://mavenmachines.statuspage.io/)
+
+## API Evangelist rating
+
+**Kin Score 41.1** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 78.6 |
+| Contract quality | 59.6 |
+| Contract governance | 4.5 |
+| Operational transparency | 18.4 |
+| Developer ergonomics | 47.0 |
+| Access clarity | 23.7 |
+
+**Agent readiness 35.8** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | documented (partial credit) |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | partial |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 20.6** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/maven-machines/](https://apis.io/providers/maven-machines/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Maven Machines: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/maven-machines/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
